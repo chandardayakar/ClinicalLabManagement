@@ -1,6 +1,12 @@
-services/TestsService.class
 services/ReportsService.class
 Utils/FileSystemStorageUtil.class
-beans/Test.class
+sync/GoogleDriveAuthentication$2.class
 beans/Report.class
+sync/GoogleSyncThread.class
+sync/GoogleDriveAuthentication$1.class
+sync/SyncStatus.class
+services/SyncService.class
 beans/Field.class
+services/TestsService.class
+sync/GoogleDriveAuthentication.class
+beans/Test.class

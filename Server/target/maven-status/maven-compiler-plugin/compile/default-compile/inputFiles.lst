@@ -1,6 +1,10 @@
-/Users/cgadi/Desktop/Metrics_Caliculator/YCSB-master/Server/src/main/java/beans/Field.java
-/Users/cgadi/Desktop/Metrics_Caliculator/YCSB-master/Server/src/main/java/beans/Report.java
-/Users/cgadi/Desktop/Metrics_Caliculator/YCSB-master/Server/src/main/java/services/ReportsService.java
-/Users/cgadi/Desktop/Metrics_Caliculator/YCSB-master/Server/src/main/java/beans/Test.java
-/Users/cgadi/Desktop/Metrics_Caliculator/YCSB-master/Server/src/main/java/services/TestsService.java
-/Users/cgadi/Desktop/Metrics_Caliculator/YCSB-master/Server/src/main/java/Utils/FileSystemStorageUtil.java
+/Users/cgadi/gitCode/ClinicalLabManagement/Server/src/main/java/beans/Field.java
+/Users/cgadi/gitCode/ClinicalLabManagement/Server/src/main/java/beans/Report.java
+/Users/cgadi/gitCode/ClinicalLabManagement/Server/src/main/java/sync/GoogleDriveAuthentication.java
+/Users/cgadi/gitCode/ClinicalLabManagement/Server/src/main/java/sync/GoogleSyncThread.java
+/Users/cgadi/gitCode/ClinicalLabManagement/Server/src/main/java/Utils/FileSystemStorageUtil.java
+/Users/cgadi/gitCode/ClinicalLabManagement/Server/src/main/java/beans/Test.java
+/Users/cgadi/gitCode/ClinicalLabManagement/Server/src/main/java/services/TestsService.java
+/Users/cgadi/gitCode/ClinicalLabManagement/Server/src/main/java/sync/SyncStatus.java
+/Users/cgadi/gitCode/ClinicalLabManagement/Server/src/main/java/services/ReportsService.java
+/Users/cgadi/gitCode/ClinicalLabManagement/Server/src/main/java/services/SyncService.java
