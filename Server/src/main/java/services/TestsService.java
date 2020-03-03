@@ -9,6 +9,7 @@ import org.apache.commons.io.IOUtils;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringWriter;
@@ -19,21 +20,25 @@ public class TestsService {
 
 
   @GET
-  public String getAllTests() {
+  public Response getAllTests() {
     JsonObject allTests = FileSystemStorageUtil.getAllTests();
 
-    return allTests.toString();
+    return Response.ok(allTests.toString())
+        .header("Access-Control-Allow-Origin", "*")
+        .build();
   }
 
 
   @GET
   @Path("{testId}")
-  public String getTest(@PathParam("testId") String testId) {
+  public Response getTest(@PathParam("testId") String testId) {
     Test test = FileSystemStorageUtil.getTest(testId);
 
     ObjectMapper mapper = new ObjectMapper();
     try {
-      return mapper.writeValueAsString(test);
+      return Response.ok(mapper.writeValueAsString(test))
+          .header("Access-Control-Allow-Origin", "*")
+          .build();
     } catch (JsonProcessingException e) {
       e.printStackTrace();
     }

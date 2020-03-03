@@ -12,6 +12,7 @@ import org.apache.commons.io.IOUtils;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringWriter;
@@ -22,21 +23,25 @@ import java.util.List;
 public class ReportsService {
 
   @GET
-  public String getAllReports() {
+  public Response getAllReports() {
     JsonObject allReports = FileSystemStorageUtil.getAllReports();
 
-    return allReports.toString();
+    return Response.ok(allReports.toString())
+        .header("Access-Control-Allow-Origin", "*")
+        .build();
   }
 
 
   @GET
   @Path("{reportId}")
-  public String getReport(@PathParam("reportId") String reportName) {
+  public Response getReport(@PathParam("reportId") String reportName) {
     Report report = FileSystemStorageUtil.getReport(reportName);
 
     ObjectMapper mapper = new ObjectMapper();
     try {
-      return mapper.writeValueAsString(report);
+      return Response.ok(mapper.writeValueAsString(report))
+          .header("Access-Control-Allow-Origin", "*")
+          .build();
     } catch (JsonProcessingException e) {
       e.printStackTrace();
     }
@@ -46,7 +51,7 @@ public class ReportsService {
 
   @POST
   @Consumes(MediaType.APPLICATION_JSON)
-  public String createReport(InputStream is) {
+  public Response createReport(InputStream is) {
     StringWriter writer = new StringWriter();
     try {
       IOUtils.copy(is, writer, StandardCharsets.UTF_8);
@@ -63,7 +68,9 @@ public class ReportsService {
       String json = "{\"ReportId\" = \"" + reportId + "\"}";
       JsonObject jsonObject = new JsonParser().parse(json).getAsJsonObject();
 
-      return jsonObject.toString();
+      return Response.ok(jsonObject.toString())
+          .header("Access-Control-Allow-Origin", "*")
+          .build();
     } catch (IOException e) {
       e.printStackTrace();
     }
@@ -90,7 +97,7 @@ public class ReportsService {
 
       storedTest.setFields(test.getFields());
 
-      storedReport.setTest(testName,storedTest);
+      storedReport.setTest(testName, storedTest);
 
       FileSystemStorageUtil.updateReport(reportId, storedReport);
 

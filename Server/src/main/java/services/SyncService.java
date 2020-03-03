@@ -14,13 +14,17 @@ public class SyncService {
   @Path("/googleauthurl")
   @GET
   public Response getGoogleAuthUrl(){
-    return Response.ok(GoogleDriveAuthentication.generatePermissionUrl()).build();
+    return Response.ok(GoogleDriveAuthentication.generatePermissionUrl())
+        .header("Access-Control-Allow-Origin", "*")
+        .build();
   }
 
   @Path("/status")
   @GET
-  public String getStatus() {
-    return SyncStatus.getSyncStatus();
+  public Response getStatus() {
+    return Response.ok(SyncStatus.getSyncStatus())
+        .header("Access-Control-Allow-Origin", "*")
+        .build();
   }
 
   @Path("/startsync")
@@ -45,16 +49,22 @@ public class SyncService {
     } catch (Exception e) {
       SyncStatus.setSyncStatus("ERROR");
       e.printStackTrace();
-      return Response.status(500).type("text/plain").entity("Check Logs and try again later").build();
+      return Response.status(500).type("text/plain").entity("Check Logs and try again later")
+          .header("Access-Control-Allow-Origin", "*")
+          .build();
     }
 
-    return Response.ok(SyncStatus.getSyncStatus()).build();
+    return Response.ok(SyncStatus.getSyncStatus())
+        .header("Access-Control-Allow-Origin", "*")
+        .build();
   }
 
   @Path("/stopsync")
   @POST
   public Response stopSync(){
     SyncStatus.setSyncStatus("STOP");
-    return Response.ok().build();
+    return Response.ok()
+        .header("Access-Control-Allow-Origin", "*")
+        .build();
   }
 }
