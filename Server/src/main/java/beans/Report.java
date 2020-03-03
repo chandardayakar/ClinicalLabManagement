@@ -2,8 +2,9 @@ package beans;
 
 import Utils.FileSystemStorageUtil;
 
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class Report {
 
@@ -17,7 +18,7 @@ public class Report {
 
   private List<String> testNames;
 
-  private List<Test> tests;
+  private Map<String, Test> tests;
 
   public String getPatientName() {
     return patientName;
@@ -59,19 +60,27 @@ public class Report {
     this.testNames = testNames;
   }
 
-  public List<Test> getTests() {
+  public Map<String, Test> getTests() {
     return tests;
   }
 
-  public void setTests(List<Test> tests) {
+  public void setTests(Map<String, Test> tests) {
     this.tests = tests;
   }
 
-  public void populateTests(){
-    if(testNames == null || testNames.isEmpty()){
+  public Test getTest(String testName) {
+    return tests.get(testName);
+  }
+
+  public void setTest(String testName, Test test) {
+    tests.put(testName, test);
+  }
+
+  public void populateTests() {
+    if (testNames == null || testNames.isEmpty()) {
       return;
     }
-    tests = new ArrayList<Test>();
-    testNames.forEach(a -> tests.add(FileSystemStorageUtil.getTest(a)));
+    tests = new HashMap<String, Test>();
+    testNames.forEach(a -> tests.put(a, FileSystemStorageUtil.getTest(a)));
   }
 }

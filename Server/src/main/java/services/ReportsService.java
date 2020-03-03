@@ -1,7 +1,9 @@
 package services;
 
 import Utils.FileSystemStorageUtil;
+import beans.Field;
 import beans.Report;
+import beans.Test;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.JsonObject;
@@ -14,6 +16,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringWriter;
 import java.nio.charset.StandardCharsets;
+import java.util.List;
 
 @Path("/reports")
 public class ReportsService {
@@ -69,18 +72,27 @@ public class ReportsService {
   }
 
   @PUT
-  @Path("{reportId}")
+  @Path("{reportId}/{testname}")
   @Consumes(MediaType.APPLICATION_JSON)
-  public void updateReport(@PathParam("reportId") String reportId, InputStream is) {
+  public void updateReport(@PathParam("reportId") String reportId,
+                           @PathParam("testname") String testName,
+                           InputStream is) {
     StringWriter writer = new StringWriter();
     try {
       IOUtils.copy(is, writer, StandardCharsets.UTF_8);
       String payload = writer.toString();
 
       ObjectMapper mapper = new ObjectMapper();
-      Report report = mapper.readValue(payload, Report.class);
+      Test test = mapper.readValue(payload, Test.class);
 
-      FileSystemStorageUtil.updateReport(reportId, report);
+      Report storedReport = FileSystemStorageUtil.getReport(reportId);
+      Test storedTest = storedReport.getTest(testName);
+
+      storedTest.setFields(test.getFields());
+
+      storedReport.setTest(testName,storedTest);
+
+      FileSystemStorageUtil.updateReport(reportId, storedReport);
 
     } catch (IOException e) {
       e.printStackTrace();

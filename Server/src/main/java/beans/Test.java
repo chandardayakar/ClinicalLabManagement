@@ -1,6 +1,7 @@
 package beans;
 
 import java.util.List;
+import java.util.Set;
 
 public class Test {
 
@@ -8,7 +9,7 @@ public class Test {
 
   private String cost;
 
-  private List<Field> fields;
+  private Set<Field> fields;
 
   public String getTestName() {
     return testName;
@@ -26,11 +27,11 @@ public class Test {
     this.cost = cost;
   }
 
-  public List<Field> getFields() {
+  public Set<Field> getFields() {
     return fields;
   }
 
-  public void setFields(List<Field> fields) {
+  public void setFields(Set<Field> fields) {
     this.fields = fields;
   }
 }
