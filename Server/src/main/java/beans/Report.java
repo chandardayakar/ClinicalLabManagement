@@ -16,9 +16,9 @@ public class Report {
 
   private String mobile;
 
-  private List<String> testNames;
+  private String testName;
 
-  private Map<String, Test> tests;
+  private Test test;
 
   public String getPatientName() {
     return patientName;
@@ -52,35 +52,19 @@ public class Report {
     this.mobile = mobile;
   }
 
-  public List<String> getTestNames() {
-    return testNames;
+  public String getTestName() {
+    return testName;
   }
 
-  public void setTestNames(List<String> testNames) {
-    this.testNames = testNames;
+  public void setTestName(String testName) {
+    this.testName = testName;
   }
 
-  public Map<String, Test> getTests() {
-    return tests;
+  public Test getTest() {
+    return test;
   }
 
-  public void setTests(Map<String, Test> tests) {
-    this.tests = tests;
-  }
-
-  public Test getTest(String testName) {
-    return tests.get(testName);
-  }
-
-  public void setTest(String testName, Test test) {
-    tests.put(testName, test);
-  }
-
-  public void populateTests() {
-    if (testNames == null || testNames.isEmpty()) {
-      return;
-    }
-    tests = new HashMap<String, Test>();
-    testNames.forEach(a -> tests.put(a, FileSystemStorageUtil.getTest(a)));
+  public void setTest(Test test) {
+    this.test = test;
   }
 }

@@ -1,6 +1,7 @@
 services/ReportsService.class
 Utils/FileSystemStorageUtil.class
 sync/GoogleDriveAuthentication$2.class
+Test.class
 beans/Report.class
 sync/GoogleSyncThread.class
 sync/GoogleDriveAuthentication$1.class
