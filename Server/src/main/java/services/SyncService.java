@@ -43,7 +43,9 @@ public class SyncService {
         if (SyncStatus.getSyncStatus().equals("RUNNING") || SyncStatus.getSyncStatus().equals("RUNNING")) {
             JsonObject jsonRes = new JsonObject();
             jsonRes.addProperty("result", "Sync already running");
-            return Response.ok(jsonRes.toString()).build();
+            return Response.ok(jsonRes.toString())
+                    .header("Access-Control-Allow-Origin", "*")
+                    .build();
         }
 
         try {

@@ -21,6 +21,7 @@ public class TestsService {
 
 
     @GET
+    @Produces(MediaType.APPLICATION_JSON)
     public Response getAllTests() {
         JsonObject allTests = FileSystemStorageUtil.getAllTests();
 
@@ -31,6 +32,7 @@ public class TestsService {
 
 
     @GET
+    @Produces(MediaType.APPLICATION_JSON)
     @Path("{testId}")
     public Response getTest(@PathParam("testId") String testId) {
         Test test = FileSystemStorageUtil.getTest(testId);
@@ -42,9 +44,11 @@ public class TestsService {
                     .build();
         } catch (JsonProcessingException e) {
             e.printStackTrace();
+            return Response.serverError().entity(e.getMessage())
+                    .header("Access-Control-Allow-Origin", "*")
+                    .build();
         }
 
-        return null;
     }
 
     @POST
@@ -60,10 +64,15 @@ public class TestsService {
 
             FileSystemStorageUtil.storeTest(test.getTestName(), test);
 
-            return Response.created(URI.create(test.getTestName())).build();
+            return Response.created(URI.create(test.getTestName()))
+                    .header("Access-Control-Allow-Origin", "*")
+                    .build();
         } catch (IOException e) {
             e.printStackTrace();
-            return Response.serverError().build();
+            return Response.serverError()
+                    .entity(e.getMessage())
+                    .header("Access-Control-Allow-Origin", "*")
+                    .build();
         }
     }
 
