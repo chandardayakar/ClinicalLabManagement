@@ -30,13 +30,13 @@ public class FileSystemStorageUtil {
                     JsonReader reader = new JsonReader(new FileReader(allTests));
                     Gson gson = new Gson();
                     JsonObject json = gson.fromJson(reader, JsonObject.class);
-                    JsonArray array = (JsonArray) json.getAsJsonArray("values");
+                    JsonArray array = (JsonArray) json.getAsJsonArray("tests");
                     JsonObject testInfo = new JsonObject();
                     testInfo.addProperty("name", testName);
                     testInfo.addProperty("price", test.getCost());
                     array.add(testInfo);
                     json = new JsonObject();
-                    json.add("values", array);
+                    json.add("tests", array);
 
                     FileWriter writer = new FileWriter(allTests);
                     writer.write(json.toString());
@@ -109,7 +109,15 @@ public class FileSystemStorageUtil {
                 JsonReader reader = new JsonReader(new FileReader(allReports));
                 Gson gson = new Gson();
                 JsonObject json = gson.fromJson(reader, JsonObject.class);
-                json.addProperty(reportName, report.getPatientName());
+                JsonArray reports = json.getAsJsonArray("reports");
+
+                JsonObject temp = new JsonObject();
+                temp.addProperty("patientName",report.getPatientName());
+                temp.addProperty("mobile",report.getMobile());
+                temp.addProperty("reportId",reportName);
+                reports.add(temp);
+
+                json.add("reports",reports);
 
                 FileWriter writer = new FileWriter(allReports);
                 writer.write(json.toString());
