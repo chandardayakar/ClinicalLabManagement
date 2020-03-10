@@ -19,7 +19,6 @@ public class SyncService {
         JsonObject jsonResult = new JsonObject();
         jsonResult.addProperty("result", GoogleDriveAuthentication.generatePermissionUrl());
         return Response.ok(jsonResult.toString())
-                .header("Access-Control-Allow-Origin", "*")
                 .build();
     }
 
@@ -30,7 +29,6 @@ public class SyncService {
         JsonObject jsonResult = new JsonObject();
         jsonResult.addProperty("result", SyncStatus.getSyncStatus());
         return Response.ok(jsonResult.toString())
-                .header("Access-Control-Allow-Origin", "*")
                 .build();
     }
 
@@ -44,7 +42,6 @@ public class SyncService {
             JsonObject jsonRes = new JsonObject();
             jsonRes.addProperty("result", "Sync already running");
             return Response.ok(jsonRes.toString())
-                    .header("Access-Control-Allow-Origin", "*")
                     .build();
         }
 
@@ -60,13 +57,11 @@ public class SyncService {
             SyncStatus.setSyncStatus("ERROR");
             e.printStackTrace();
             return Response.serverError().type("text/plain").entity("Check Logs and try again later")
-                    .header("Access-Control-Allow-Origin", "*")
                     .build();
         }
         JsonObject jsonResult = new JsonObject();
         jsonResult.addProperty("result", SyncStatus.getSyncStatus());
         return Response.ok(jsonResult.toString())
-                .header("Access-Control-Allow-Origin", "*")
                 .build();
     }
 
@@ -75,7 +70,6 @@ public class SyncService {
     public Response stopSync() {
         SyncStatus.setSyncStatus("STOP");
         return Response.ok()
-                .header("Access-Control-Allow-Origin", "*")
                 .build();
     }
 }

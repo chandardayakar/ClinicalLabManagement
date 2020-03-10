@@ -30,9 +30,7 @@ public class ReportsService {
     @Produces(MediaType.APPLICATION_JSON)
     public Response getAllReports() {
         JsonObject allReports = FileSystemStorageUtil.getAllReports();
-
         return Response.ok(allReports.toString())
-                .header("Access-Control-Allow-Origin", "*")
                 .build();
     }
 
@@ -46,12 +44,10 @@ public class ReportsService {
         ObjectMapper mapper = new ObjectMapper();
         try {
             return Response.ok(mapper.writeValueAsString(report))
-                    .header("Access-Control-Allow-Origin", "*")
                     .build();
         } catch (JsonProcessingException e) {
             e.printStackTrace();
             return Response.serverError().entity(e.getMessage())
-                    .header("Access-Control-Allow-Origin", "*")
                     .build();
         }
 
@@ -76,7 +72,6 @@ public class ReportsService {
             JsonArray tests = jsonPayload.getAsJsonArray("testNames");
             if (tests == null || tests.size() == 0) {
                 return Response.serverError().entity("Cannot create Reports with no Tests")
-                        .header("Access-Control-Allow-Origin", "*")
                         .build();
             }
 
@@ -89,7 +84,6 @@ public class ReportsService {
                      test = FileSystemStorageUtil.getTest(testName);
                 } catch (Exception e) {
                     return Response.serverError().entity("Unable to find Test with Name - " + testName)
-                            .header("Access-Control-Allow-Origin", "*")
                             .build();
                 }
                 Report report = mapper.readValue(payload, Report.class);
@@ -99,7 +93,6 @@ public class ReportsService {
 
                 if(report.getPatientName() == null || report.getPatientName().isEmpty()){
                     return Response.serverError().entity("Unable to create a test without Patient Name")
-                            .header("Access-Control-Allow-Origin", "*")
                             .build();
                 }
 
@@ -113,13 +106,11 @@ public class ReportsService {
 
             resJson.add("reportIds", reportIdArray);
             return Response.ok(resJson.toString())
-                    .header("Access-Control-Allow-Origin", "*")
                     .build();
         } catch (IOException e) {
             e.printStackTrace();
 
             return Response.serverError().entity("Failed to create Reports, check logs and try again")
-                    .header("Access-Control-Allow-Origin", "*")
                     .build();
         }
     }
@@ -147,13 +138,11 @@ public class ReportsService {
             FileSystemStorageUtil.updateReport(reportId, storedReport);
 
             return Response.ok()
-                    .header("Access-Control-Allow-Origin", "*")
                     .build();
 
         } catch (IOException e) {
             e.printStackTrace();
             return Response.serverError().entity("Report Updating Failed check server logs for more details")
-                    .header("Access-Control-Allow-Origin", "*")
                     .build();
         } finally {
             try {
@@ -171,19 +160,16 @@ public class ReportsService {
                                @HeaderParam("reportName") String reportName) {
         if (reportName == null || reportName.isEmpty()) {
             return Response.serverError()
-                    .header("Access-Control-Allow-Origin", "*")
                     .entity("Report Name cannot be null").build();
         }
         String filePath = null;
         try {
             filePath = FileSystemStorageUtil.saveReport(reportName, is);
             return Response.created(new URI(filePath))
-                    .header("Access-Control-Allow-Origin", "*")
                     .build();
         } catch (IOException | URISyntaxException e) {
             e.printStackTrace();
             return Response.serverError().entity("Report Saving Failed check server logs for more details")
-                    .header("Access-Control-Allow-Origin", "*")
                     .build();
         }
     }
@@ -193,23 +179,19 @@ public class ReportsService {
     public Response downloadReport(@PathParam("reportId") String reportId) {
         if (reportId == null || reportId.isEmpty()) {
             return Response.serverError()
-                    .header("Access-Control-Allow-Origin", "*")
                     .entity("Report Name cannot be null").build();
         }
         try {
             InputStream is = FileSystemStorageUtil.downloadReport(reportId);
             return Response.ok(is, MediaType.APPLICATION_OCTET_STREAM_TYPE)
-                    .header("Access-Control-Allow-Origin", "*")
                     .build();
         } catch (Exception e) {
             e.printStackTrace();
             if (e.getMessage().contains("not Found")) {
                 return Response.status(404)
-                        .header("Access-Control-Allow-Origin", "*")
                         .entity("Report Not Found").build();
             }
             return Response.serverError().entity("Server error occurred, please check logs for more details")
-                    .header("Access-Control-Allow-Origin", "*")
                     .build();
         }
     }

@@ -26,7 +26,6 @@ public class TestsService {
         JsonObject allTests = FileSystemStorageUtil.getAllTests();
 
         return Response.ok(allTests.toString())
-                .header("Access-Control-Allow-Origin", "*")
                 .build();
     }
 
@@ -40,12 +39,10 @@ public class TestsService {
         ObjectMapper mapper = new ObjectMapper();
         try {
             return Response.ok(mapper.writeValueAsString(test))
-                    .header("Access-Control-Allow-Origin", "*")
                     .build();
         } catch (JsonProcessingException e) {
             e.printStackTrace();
             return Response.serverError().entity(e.getMessage())
-                    .header("Access-Control-Allow-Origin", "*")
                     .build();
         }
 
@@ -65,13 +62,11 @@ public class TestsService {
             FileSystemStorageUtil.storeTest(test.getTestName(), test);
 
             return Response.created(URI.create(test.getTestName()))
-                    .header("Access-Control-Allow-Origin", "*")
                     .build();
         } catch (IOException e) {
             e.printStackTrace();
             return Response.serverError()
                     .entity(e.getMessage())
-                    .header("Access-Control-Allow-Origin", "*")
                     .build();
         }
     }
