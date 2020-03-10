@@ -88,7 +88,7 @@ public class ReportsService {
                 try {
                      test = FileSystemStorageUtil.getTest(testName);
                 } catch (Exception e) {
-                    Response.serverError().entity("Unable to find Test with Name - " + testName)
+                    return Response.serverError().entity("Unable to find Test with Name - " + testName)
                             .header("Access-Control-Allow-Origin", "*")
                             .build();
                 }
@@ -96,6 +96,12 @@ public class ReportsService {
 
                 report.setTestName(testName);
                 report.setTest(test);
+
+                if(report.getPatientName() == null || report.getPatientName().isEmpty()){
+                    return Response.serverError().entity("Unable to create a test without Patient Name")
+                            .header("Access-Control-Allow-Origin", "*")
+                            .build();
+                }
 
                 String reportId = report.getPatientName() + "_" + report.getTestName() + "_" + System.currentTimeMillis();
 
