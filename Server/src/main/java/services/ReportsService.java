@@ -154,17 +154,17 @@ public class ReportsService {
     }
 
     @POST
-    @Path("save")
+    @Path("{reportId}/save")
     @Produces(MediaType.APPLICATION_JSON)
     public Response saveReport(InputStream is,
-                               @HeaderParam("reportName") String reportName) {
-        if (reportName == null || reportName.isEmpty()) {
+                               @PathParam("reportId") String reportId) {
+        if (reportId == null || reportId.isEmpty()) {
             return Response.serverError()
                     .entity("Report Name cannot be null").build();
         }
         String filePath = null;
         try {
-            filePath = FileSystemStorageUtil.saveReport(reportName, is);
+            filePath = FileSystemStorageUtil.saveReport(reportId, is);
             return Response.created(new URI(filePath))
                     .build();
         } catch (IOException | URISyntaxException e) {
@@ -175,7 +175,7 @@ public class ReportsService {
     }
 
     @GET
-    @Path("download/{reportId}")
+    @Path("{reportId}/download")
     public Response downloadReport(@PathParam("reportId") String reportId) {
         if (reportId == null || reportId.isEmpty()) {
             return Response.serverError()
