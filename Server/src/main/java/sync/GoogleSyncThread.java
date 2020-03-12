@@ -1,5 +1,6 @@
 package sync;
 
+import Utils.FileSystemStorageUtil;
 import com.google.api.client.auth.oauth2.BearerToken;
 import com.google.api.client.auth.oauth2.Credential;
 import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
@@ -34,7 +35,7 @@ public class GoogleSyncThread implements Runnable {
       while (!SyncStatus.getSyncStatus().equals("STOP")) {
         SyncStatus.setSyncStatus("RUNNING");
 
-        String reportsFolderPath = this.getClass().getResource("Reports").getFile();
+        String reportsFolderPath = getClass().getClassLoader().getResource("Reports").getFile();
         File reportsFolder = new File(reportsFolderPath);
 
         long lastModifiedTime = reportsFolder.lastModified();
