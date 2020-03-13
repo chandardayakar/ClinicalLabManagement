@@ -1,0 +1,44 @@
+<nav class="navbar navbar-expand-md bg-dark navbar-dark fixed-top">
+  <a class="navbar-brand" href="#">Clinic</a>
+  <button
+    class="navbar-toggler"
+    type="button"
+    data-toggle="collapse"
+    data-target="#navbarCollapse"
+    aria-controls="navbarCollapse"
+    aria-expanded="false"
+    aria-label="Toggle navigation"
+  >
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarCollapse">
+    <ul class="navbar-nav mr-auto">
+      <!-- <li class="nav-item">
+        <a class="nav-link" routerLink="/home">Home</a>
+      </li>-->
+      <li class="nav-item">
+        <a class="nav-link" routerLink="/report/create">Generate Report</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" routerLink="/reports">Get Reports</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" routerLink="/test/create">Add Test</a>
+      </li>
+      <div *ngIf="!!currentUser">
+        <li class="nav-item">
+          <button (click)="doLogout()" class="btn btn-danger navbar-btn">
+            Logout!
+          </button>
+        </li>
+      </div>
+      <div *ngIf="!currentUser">
+        <li class="nav-item">
+          <button (click)="doLogin()" class="btn btn-success navbar-btn">
+            Login!
+          </button>
+        </li>
+      </div>
+    </ul>
+  </div>
+</nav>

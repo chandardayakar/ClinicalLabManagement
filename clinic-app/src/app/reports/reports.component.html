@@ -1,0 +1,49 @@
+<div class="jumbotron create-report-wrapper">
+  <div class="container-fluid create-report-container">
+    <div class="report-title-header row">
+      <div class="report-title col">
+        Reports vault
+      </div>
+      <div class="filter col">
+        <input
+          class="form-control mr-sm-2"
+          type="search"
+          placeholder="Search"
+          aria-label="Search"
+          (keyup)="filterReports($event)"
+          (search)="filterReports($event)"
+        />
+      </div>
+    </div>
+    <div class="reports-list">
+      <table class="table table-hover">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Contact</th>
+          </tr>
+        </thead>
+        <tbody>
+          <div
+            *ngIf="displayReports.length !== 0; then thenBlock; else elseBlock"
+          ></div>
+          <ng-template #thenBlock>
+            <tr
+              *ngFor="let report of displayReports"
+              (click)="getReport(report.reportId)"
+            >
+              <td>{{ report.patientName }}</td>
+              <td>{{ report.mobile }}</td>
+            </tr>
+          </ng-template>
+          <ng-template #elseBlock>
+            <tr>
+              <td></td>
+              <td>No records.</td>
+            </tr>
+          </ng-template>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

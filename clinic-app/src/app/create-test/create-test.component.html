@@ -1,0 +1,97 @@
+<div class="jumbotron create-test-wrapper">
+  <div class="container-fluid create-test-container">
+    <div class="test-title-header row">
+      <div class="test-title col">
+        New Test
+      </div>
+      <div class="col create-test-submit-wrapper">
+        <button
+          class="btn btn-success"
+          (click)="saveTest()"
+          [disabled]="fields.length <= 0 || this.testForm.status === 'INVALID'"
+        >
+          Add
+        </button>
+      </div>
+    </div>
+    <div class="create-test-form-wrapper">
+      <form [formGroup]="testForm" class="create-test-form">
+        <div class="row form-user-details">
+          <div class="form-group col">
+            <label>Name</label>
+            <input
+              formControlName="testName"
+              type="text"
+              class="form-control"
+              placeholder="Enter name of the test"
+            />
+          </div>
+          <div class="form-group col">
+            <label>Price</label>
+            <input
+              formControlName="cost"
+              type="text"
+              class="form-control"
+              placeholder="Enter a price"
+            />
+          </div>
+        </div>
+        <div class="row form-user-tests">
+          <div class="col">
+            <table class="table table-hover">
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Biological Reference Intervals</th>
+                  <th style="text-align: end;">
+                    <img
+                      class="icon"
+                      src="../../assets/plus.png"
+                      (click)="addField()"
+                    />
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                <div
+                  *ngIf="fields.length !== 0; then thenBlock; else elseBlock"
+                ></div>
+                <ng-template #thenBlock>
+                  <tr *ngFor="let field of fields">
+                    <td>
+                      <input
+                        class="field-name form-control"
+                        value="{{ field.name }}"
+                        (change)="updateField($event, field.id)"
+                      />
+                    </td>
+                    <td>
+                      <input
+                        class="field-refValue form-control"
+                        value="{{ field.refValue }}"
+                        (change)="updateField($event, field.id)"
+                      />
+                    </td>
+                    <td style="text-align: end;">
+                      <img
+                        class="icon pull-right"
+                        src="../../assets/remove.png"
+                        (click)="removeField(field)"
+                      />
+                    </td>
+                  </tr>
+                </ng-template>
+                <ng-template #elseBlock>
+                  <tr>
+                    <td></td>
+                    <td>Add atleast one field to generate a test!.</td>
+                  </tr>
+                </ng-template>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

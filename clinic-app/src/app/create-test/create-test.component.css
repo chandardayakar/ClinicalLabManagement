@@ -1,0 +1,42 @@
+.create-test-container {
+  background-color: #fff;
+  height: 100%;
+  border-radius: 25px;
+}
+.create-test-wrapper {
+  padding-top: 85px;
+  padding-bottom: 56px;
+  height: 100%;
+}
+.test-title {
+  font-size: 1.5em;
+  font-weight: bold;
+  padding: 15px;
+}
+.test-total {
+  font-size: 1em;
+  font-weight: bold;
+  padding: 15px;
+}
+.test-title-header {
+  border-bottom: 2px solid green;
+}
+.create-test-form-wrapper {
+  height: calc(100% - 68px);
+}
+.create-test-form {
+  height: 100%;
+  padding-top: 15px;
+}
+.form-user-details {
+  height: 86px;
+}
+.form-user-tests {
+  height: calc(100% - 86px);
+  overflow: auto;
+}
+.create-test-submit-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}

@@ -1,0 +1,42 @@
+.create-report-container {
+  background-color: #fff;
+  height: 100%;
+  border-radius: 25px;
+}
+.create-report-wrapper {
+  padding-top: 85px;
+  padding-bottom: 56px;
+  height: 100%;
+}
+.report-title {
+  font-size: 1.5em;
+  font-weight: bold;
+  padding: 15px;
+}
+.report-total {
+  font-size: 1em;
+  font-weight: bold;
+  padding: 15px;
+}
+.report-title-header {
+  border-bottom: 2px solid green;
+}
+.create-report-form-wrapper {
+  height: calc(100% - 68px);
+}
+.create-report-form {
+  height: 100%;
+  padding-top: 15px;
+}
+.form-user-details {
+  height: 86px;
+}
+.form-user-tests {
+  height: calc(100% - 86px);
+  overflow: auto;
+}
+.create-report-submit-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}

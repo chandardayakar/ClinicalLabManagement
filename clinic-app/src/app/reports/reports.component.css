@@ -1,0 +1,28 @@
+.create-report-container {
+  background-color: #fff;
+  height: 100%;
+  border-radius: 25px;
+}
+.create-report-wrapper {
+  padding-top: 85px;
+  padding-bottom: 56px;
+  height: 100%;
+}
+.report-title {
+  font-size: 1.5em;
+  font-weight: bold;
+  padding: 15px;
+}
+.report-title-header {
+  border-bottom: 2px solid green;
+}
+.reports-list {
+  height: calc(100% - 68px);
+  overflow-y: auto;
+}
+tr {
+  cursor: pointer;
+}
+.filter {
+  padding: 15px;
+}
