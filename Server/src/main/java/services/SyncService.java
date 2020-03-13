@@ -67,9 +67,12 @@ public class SyncService {
 
     @Path("/stopsync")
     @POST
+    @Produces(MediaType.APPLICATION_JSON)
     public Response stopSync() {
         SyncStatus.setSyncStatus("STOP");
-        return Response.ok()
+        JsonObject jsonResult = new JsonObject();
+        jsonResult.addProperty("result", SyncStatus.getSyncStatus());
+        return Response.ok(jsonResult.toString())
                 .build();
     }
 }
