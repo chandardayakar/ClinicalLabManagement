@@ -10,6 +10,7 @@ import com.google.api.client.json.jackson2.JacksonFactory;
 import com.google.api.services.drive.Drive;
 
 import java.io.*;
+import java.net.URL;
 import java.security.GeneralSecurityException;
 
 public class GoogleSyncThread implements Runnable {
@@ -39,11 +40,11 @@ public class GoogleSyncThread implements Runnable {
         File reportsFolder = new File(reportsFolderPath);
 
         long lastModifiedTime = reportsFolder.lastModified();
-
-        File reportsLastSynced = new File(this.getClass().getResource("Reports" + File.pathSeparator + "lastSynced").getFile());
+        File reportsLastSynced = new File(this.getClass().getClassLoader().getResource("Reports" + File.separator + "lastSynced").getFile());
         FileReader fr = new FileReader(reportsLastSynced);
         BufferedReader br = new BufferedReader(fr);
-        long lastSyncedTime = Long.valueOf(br.readLine());
+        String value = br.readLine();
+        long lastSyncedTime = Long.valueOf(value!=null?value:"0");
 
         if (lastModifiedTime != lastSyncedTime) {
           syncToGdrive(reportsFolder, "Reports");
@@ -52,15 +53,16 @@ public class GoogleSyncThread implements Runnable {
           fw.close();
         }
 
-        String testsFolderPath = this.getClass().getResource("Tests").getFile();
-        File testsFolder = new File(reportsFolderPath);
+        String testsFolderPath = this.getClass().getClassLoader().getResource("Tests").getFile();
+        File testsFolder = new File(testsFolderPath);
 
         lastModifiedTime = reportsFolder.lastModified();
 
-        File testsLastSynced = new File(this.getClass().getResource("Tests" + File.pathSeparator + "lastSynced").getFile());
+        File testsLastSynced = new File(this.getClass().getClassLoader().getResource("Tests" + File.separator + "lastSynced").getFile());
         fr = new FileReader(reportsLastSynced);
         br = new BufferedReader(fr);
-        lastSyncedTime = Long.valueOf(br.readLine());
+        value = br.readLine();
+        lastSyncedTime = Long.valueOf(value!=null?value:"0");
 
         if (lastModifiedTime != lastSyncedTime) {
           syncToGdrive(testsFolder, "Tests");
