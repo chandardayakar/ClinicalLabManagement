@@ -90,6 +90,33 @@ public class FileSystemStorageUtil {
         return null;
     }
 
+    public static void deleteTest(String testName, String cost) {
+        FileSystemStorageUtil u = new FileSystemStorageUtil();
+
+        File file = new File(u.getClass().getClassLoader().getResource("Tests" + File.separator + testName).getFile());
+
+        try {
+            File allTests = new File(file.getPath() + File.pathSeparator + "allTests");
+            JsonReader reader = new JsonReader(new FileReader(allTests));
+            Gson gson = new Gson();
+            JsonObject json = gson.fromJson(reader, JsonObject.class);
+            JsonArray array = (JsonArray) json.getAsJsonArray("tests");
+
+            JsonObject testInfo = new JsonObject();
+            testInfo.addProperty("name", testName);
+            testInfo.addProperty("price", cost);
+
+            array.remove(testInfo);
+
+            File test = new File(file.getPath() + File.pathSeparator + testName);
+
+            test.delete();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
 
     public static void storeReport(String reportName, Report report) {
 
@@ -112,12 +139,12 @@ public class FileSystemStorageUtil {
                 JsonArray reports = json.getAsJsonArray("reports");
 
                 JsonObject temp = new JsonObject();
-                temp.addProperty("patientName",report.getPatientName());
-                temp.addProperty("mobile",report.getMobile());
-                temp.addProperty("reportId",reportName);
+                temp.addProperty("patientName", report.getPatientName());
+                temp.addProperty("mobile", report.getMobile());
+                temp.addProperty("reportId", reportName);
                 reports.add(temp);
 
-                json.add("reports",reports);
+                json.add("reports", reports);
 
                 FileWriter writer = new FileWriter(allReports);
                 writer.write(json.toString());
@@ -187,7 +214,7 @@ public class FileSystemStorageUtil {
         FileSystemStorageUtil u = new FileSystemStorageUtil();
         File reportsFolder = new File(u.getClass().getClassLoader().getResource("Reports").getFile());
 
-        return saveFile(reportsFolder.getPath(),reportName,is);
+        return saveFile(reportsFolder.getPath(), reportName, is);
     }
 
     public static String saveFile(String path, String fileName, InputStream is) throws IOException {
@@ -204,7 +231,7 @@ public class FileSystemStorageUtil {
         File reportsFolder = new File(u.getClass().getClassLoader().getResource("Reports").getFile());
 
         File report = new File(reportsFolder.getPath() + "/" + reportId);
-        if(!report.exists()){
+        if (!report.exists()) {
             throw new Exception("Report not found");
         }
 
