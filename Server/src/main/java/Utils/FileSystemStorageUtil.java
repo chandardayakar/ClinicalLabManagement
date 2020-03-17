@@ -79,14 +79,17 @@ public class FileSystemStorageUtil {
 
         File file = new File(u.getClass().getClassLoader().getResource("Tests" + File.separator + testName).getFile());
 
-        try {
-            JsonReader reader = new JsonReader(new FileReader(file));
-            Gson gson = new Gson();
-            Test test = gson.fromJson(reader, Test.class);
-            return test;
-        } catch (IOException e) {
-            e.printStackTrace();
+        if(file.exists()){
+            try {
+                JsonReader reader = new JsonReader(new FileReader(file));
+                Gson gson = new Gson();
+                Test test = gson.fromJson(reader, Test.class);
+                return test;
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
+
         return null;
     }
 

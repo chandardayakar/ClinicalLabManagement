@@ -63,6 +63,12 @@ public class TestsService {
             ObjectMapper mapper = new ObjectMapper();
             Test test = mapper.readValue(payload, Test.class);
 
+            Test check = FileSystemStorageUtil.getTest(test.getTestName());
+
+            if (check != null) {
+                return Response.serverError().entity("Test with given name already exists, - " + check.getTestName()).build();
+            }
+
             FileSystemStorageUtil.storeTest(test.getTestName(), test);
 
             return Response.created(URI.create(test.getTestName()))
