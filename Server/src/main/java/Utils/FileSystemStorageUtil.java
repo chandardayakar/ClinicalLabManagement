@@ -150,6 +150,7 @@ public class FileSystemStorageUtil {
                 temp.addProperty("patientName", report.getPatientName());
                 temp.addProperty("mobile", report.getMobile());
                 temp.addProperty("reportId", reportName);
+                temp.addProperty("testName", report.getTestName());
                 reports.add(temp);
 
                 json.add("reports", reports);
