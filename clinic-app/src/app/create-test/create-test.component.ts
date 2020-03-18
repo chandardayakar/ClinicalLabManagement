@@ -67,6 +67,12 @@ export class CreateTestComponent implements OnInit {
           return ele.id === fieldId;
         })
       ].refValue = ev.currentTarget.value;
+    } else if (ev.currentTarget.classList.contains("field-unit")) {
+      this.fields[
+        this.fields.findIndex(ele => {
+          return ele.id === fieldId;
+        })
+        ].unit = ev.currentTarget.value;
     }
   }
   removeField(field) {

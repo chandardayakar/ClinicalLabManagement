@@ -42,6 +42,7 @@
               <thead>
                 <tr>
                   <th>Name</th>
+                  <th>Unit</th>
                   <th>Biological Reference Intervals</th>
                   <th style="text-align: end;">
                     <img
@@ -62,6 +63,13 @@
                       <input
                         class="field-name form-control"
                         value="{{ field.name }}"
+                        (change)="updateField($event, field.id)"
+                      />
+                    </td>
+                    <td>
+                      <input
+                        class="field-unit form-control"
+                        value="{{ field.unit }}"
                         (change)="updateField($event, field.id)"
                       />
                     </td>

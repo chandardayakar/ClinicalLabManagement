@@ -77,9 +77,14 @@ public class FileSystemStorageUtil {
     public static Test getTest(String testName) {
         FileSystemStorageUtil u = new FileSystemStorageUtil();
 
-        File file = new File(u.getClass().getClassLoader().getResource("Tests" + File.separator + testName).getFile());
+        File file = null;
+        try {
+            file = new File(u.getClass().getClassLoader().getResource("Tests" + File.separator + testName).getFile());
+        } catch (NullPointerException e) {
+            return null;
+        }
 
-        if(file.exists()){
+        if (file.exists()) {
             try {
                 JsonReader reader = new JsonReader(new FileReader(file));
                 Gson gson = new Gson();

@@ -4,46 +4,56 @@ import java.util.Objects;
 
 public class Field {
 
-  private String value;
+    private String value;
 
-  private String refValue;
+    private String refValue;
 
-  private String name;
+    private String unit;
 
-  public String getValue() {
-    return value;
-  }
+    private String name;
 
-  public void setValue(String value) {
-    this.value = value;
-  }
+    public String getValue() {
+        return value;
+    }
 
-  public String getRefValue() {
-    return refValue;
-  }
+    public void setValue(String value) {
+        this.value = value;
+    }
 
-  public void setRefValue(String refValue) {
-    this.refValue = refValue;
-  }
+    public String getRefValue() {
+        return refValue;
+    }
 
-  public String getName() {
-    return name;
-  }
+    public void setRefValue(String refValue) {
+        this.refValue = refValue;
+    }
 
-  public void setName(String name) {
-    this.name = name;
-  }
+    public String getName() {
+        return name;
+    }
 
-  @Override
-  public boolean equals(Object o) {
-    if (this == o) return true;
-    if (o == null || getClass() != o.getClass()) return false;
-    Field field = (Field) o;
-    return Objects.equals(name, field.name);
-  }
+    public void setName(String name) {
+        this.name = name;
+    }
 
-  @Override
-  public int hashCode() {
-    return Objects.hash(value, refValue, name);
-  }
+    public String getUnit() {
+        return unit;
+    }
+
+    public void setUnit(String unit) {
+        this.unit = unit;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Field field = (Field) o;
+        return Objects.equals(name, field.name);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(value, refValue, name);
+    }
 }
