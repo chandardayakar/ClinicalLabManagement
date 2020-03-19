@@ -27,7 +27,16 @@
               type="text"
               class="form-control"
               placeholder="Enter name"
+              [class.is-invalid]="patientName.invalid && patientName.touched"
             />
+            <div *ngIf="patientName.invalid && patientName.touched">
+              <small class="text-danger" *ngIf="patientName.errors?.required"
+                >Patient name is required</small
+              >
+              <small class="text-danger" *ngIf="patientName.errors?.minlength"
+                >Patient name must be at least 3 characters</small
+              >
+            </div>
           </div>
           <div class="form-group col">
             <label>Phone number</label>
@@ -36,7 +45,16 @@
               type="text"
               class="form-control"
               placeholder="Enter a valid phone number"
+              [class.is-invalid]="mobile.invalid && mobile.touched"
             />
+            <div *ngIf="mobile.invalid && mobile.touched">
+              <small class="text-danger" *ngIf="mobile.errors?.required"
+                >Mobile number is required</small
+              >
+              <small class="text-danger" *ngIf="mobile.errors?.minlength"
+                >Mobile number must be at least 10 digits</small
+              >
+            </div>
           </div>
         </div>
         <div class="row form-user-details">
@@ -47,7 +65,13 @@
               type="text"
               class="form-control"
               placeholder="Enter Age"
+              [class.is-invalid]="age.invalid && age.touched"
             />
+            <div *ngIf="age.invalid && age.touched">
+              <small class="text-danger" *ngIf="age.errors?.required"
+                >Age is required</small
+              >
+            </div>
           </div>
           <div class="form-group col">
             <label>Gender</label>
@@ -55,20 +79,27 @@
               formControlName="gender"
               (change)="changeGender($event)"
               class="form-control"
+              [class.is-invalid]="gender.invalid && gender.touched"
             >
               <option value="">Choose gender</option>
               <option *ngFor="let gender of genders">{{ gender }}</option>
             </select>
+            <div *ngIf="gender.invalid && gender.touched">
+              <small class="text-danger" *ngIf="gender.errors?.required"
+                >Gender is required</small
+              >
+            </div>
           </div>
         </div>
-        <div class="row form-user-tests">
-          <div class="col">
+        <div #loading class="loading"></div>
+        <div class="row form-user-tests-wrapper">
+          <div class="col form-user-tests-container">
             <table class="table table-hover">
               <thead>
                 <tr>
-                  <th>Name</th>
-                  <th>Price</th>
-                  <th style="text-align: end;">
+                  <th><label>Name</label></th>
+                  <th><label>Price</label></th>
+                  <th style="text-align: end;width:8%;">
                     <img
                       class="icon"
                       src="../../assets/plus.png"
@@ -89,7 +120,7 @@
                   <tr *ngFor="let test of getSelectedTests()">
                     <td>{{ test.name }}</td>
                     <td>{{ test.price }}</td>
-                    <td style="text-align: end;">
+                    <td style="text-align: end;width:8%;">
                       <img
                         class="icon pull-right"
                         src="../../assets/remove.png"
@@ -100,7 +131,6 @@
                 </ng-template>
                 <ng-template #elseBlock>
                   <tr>
-                    <td></td>
                     <td>Add atleast one test to generate a report!.</td>
                   </tr>
                 </ng-template>
@@ -109,6 +139,52 @@
           </div>
         </div>
       </form>
+    </div>
+  </div>
+</div>
+<div class="container-fluid">
+  <div class="row no-gutters">
+    <div class="col">
+      <h1>Tests</h1>
+    </div>
+  </div>
+
+  <div class="row no-gutters">
+    <div class="col">
+      <img src="../../assets/logo.svg" alt="logotipo" class="logotipo" />
+    </div>
+  </div>
+  <!-- div class="col">
+      <h2></h2>
+      <p>91 886 73 76</p>    
+      <div class="address">
+        <p>geral@nreparacoes.com</p>
+        <p>Av. Dr. Ribeiro de Magalhães, 1391</p>
+        <p>Centro Comercial 123, Loja BD</p>
+        <p>4610-108 Felgueiras</p>
+      </div>
+    </div>
+  </div -->
+
+  <div class="row no-gutters">
+    <table class="table table-hover">
+      <tbody>
+        <tr>
+          <td>Name:</td>
+          <td>{{ patientName.value }}</td>
+        </tr>
+        <tr>
+          <td>Date:</td>
+          <td>{{ today }}</td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="row no-gutters">
+      <ul>
+        <li *ngFor="let test of printTests">
+          {{ getReportId(test) }}
+        </li>
+      </ul>
     </div>
   </div>
 </div>

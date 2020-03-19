@@ -24,7 +24,16 @@
               type="text"
               class="form-control"
               placeholder="Enter name of the test"
+              [class.is-invalid]="testName.invalid && testName.touched"
             />
+            <div *ngIf="testName.invalid && testName.touched">
+              <small class="text-danger" *ngIf="testName.errors?.required"
+                >Provide a test name</small
+              >
+              <small class="text-danger" *ngIf="testName.errors?.minlength"
+                >test name should br atleast 3 characters</small
+              >
+            </div>
           </div>
           <div class="form-group col">
             <label>Price</label>
@@ -33,18 +42,25 @@
               type="text"
               class="form-control"
               placeholder="Enter a price"
+              [class.is-invalid]="cost.invalid && cost.touched"
             />
+            <div *ngIf="cost.invalid && cost.touched">
+              <small class="text-danger" *ngIf="cost.errors?.required"
+                >Please the price of the test</small
+              >
+            </div>
           </div>
         </div>
-        <div class="row form-user-tests">
-          <div class="col">
+        <div #loading class="loading" style="display: none;"></div>
+        <div class="row form-user-tests-wrapper">
+          <div class="col form-user-tests-container">
             <table class="table table-hover">
               <thead>
                 <tr>
-                  <th>Name</th>
-                  <th>Unit</th>
-                  <th>Biological Reference Intervals</th>
-                  <th style="text-align: end;">
+                  <th><label>Name</label></th>
+                  <th><label>Biological Reference Intervals</label></th>
+                  <th><label>Units</label></th>
+                  <th style="text-align: end;width:8%;">
                     <img
                       class="icon"
                       src="../../assets/plus.png"
@@ -68,19 +84,19 @@
                     </td>
                     <td>
                       <input
-                        class="field-unit form-control"
-                        value="{{ field.unit }}"
-                        (change)="updateField($event, field.id)"
-                      />
-                    </td>
-                    <td>
-                      <input
                         class="field-refValue form-control"
                         value="{{ field.refValue }}"
                         (change)="updateField($event, field.id)"
                       />
                     </td>
-                    <td style="text-align: end;">
+                    <td>
+                      <input
+                        class="field-unit form-control"
+                        value="{{ field.unit }}"
+                        (change)="updateField($event, field.id)"
+                      />
+                    </td>
+                    <td style="text-align: end;width:8%;">
                       <img
                         class="icon pull-right"
                         src="../../assets/remove.png"
@@ -91,7 +107,6 @@
                 </ng-template>
                 <ng-template #elseBlock>
                   <tr>
-                    <td></td>
                     <td>Add atleast one field to generate a test!.</td>
                   </tr>
                 </ng-template>

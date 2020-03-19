@@ -10,6 +10,7 @@
         </button>
       </div>
     </div>
+    <div #loading class="loading"></div>
     <div class="create-report-form-wrapper">
       <form [formGroup]="reportForm" class="create-report-form">
         <div class="row form-user-details">
@@ -51,24 +52,23 @@
           </div>
         </div>
         <div class="row">
-          <div class="form-group col">
-            <label>Test Name:</label>
-            <label>{{ testName }}</label>
+          <div class="col">
+            <label>Test Name:{{ testName }}</label>
           </div>
         </div>
-        <div class="row form-user-tests">
-          <div class="col">
+        <div class="row form-user-tests-wrapper">
+          <div class="col form-user-tests-container">
             <table class="table table-hover">
               <thead>
                 <tr>
-                  <th>Name</th>
-                  <th>Observed values</th>
-                  <th>Units</th>
-                  <th>Biological Reference Intervals</th>
+                  <th><label>Name</label></th>
+                  <th><label>Observed values</label></th>
+                  <th><label>Units</label></th>
+                  <th><label>Biological Reference Intervals</label></th>
                 </tr>
               </thead>
               <tbody>
-                <tr *ngFor="let field of testFileds">
+                <tr *ngFor="let field of testFields">
                   <td>{{ field.name }}</td>
                   <td>
                     <input

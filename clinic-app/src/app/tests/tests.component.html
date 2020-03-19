@@ -1,0 +1,47 @@
+<div class="jumbotron create-test-wrapper">
+  <div class="container-fluid create-test-container">
+    <div class="test-title-header row">
+      <div class="test-title col">
+        Tests vault
+      </div>
+      <div class="filter col">
+        <input
+          class="form-control mr-sm-2"
+          type="search"
+          placeholder="Search by name"
+          aria-label="Search"
+          (keyup)="filterTests($event)"
+          (search)="filterTests($event)"
+        />
+      </div>
+    </div>
+    <div #loading class="loading"></div>
+    <div class="tests-list">
+      <table class="table table-hover">
+        <thead>
+          <tr>
+            <th><label>Name</label></th>
+            <th><label>Price</label></th>
+          </tr>
+        </thead>
+        <tbody>
+          <div
+            *ngIf="displayTests.length !== 0; then thenBlock; else elseBlock"
+          ></div>
+          <ng-template #thenBlock>
+            <tr *ngFor="let test of displayTests" (click)="getTest(test.name)">
+              <td>{{ test.name }}</td>
+              <td>{{ test.price }}</td>
+            </tr>
+          </ng-template>
+          <ng-template #elseBlock>
+            <tr>
+              <td></td>
+              <td>No records.</td>
+            </tr>
+          </ng-template>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

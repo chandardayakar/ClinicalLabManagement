@@ -1,0 +1,95 @@
+<div class="jumbotron edit-test-wrapper">
+  <div class="container-fluid edit-test-container">
+    <div class="test-title-header row">
+      <div class="test-title col">
+        {{ this.testName }}
+      </div>
+      <div class="col edit-test-submit-wrapper">
+        <button
+          class="btn btn-success"
+          (click)="saveTest()"
+          [disabled]="testFields.length <= 0"
+        >
+          Save
+        </button>
+      </div>
+    </div>
+    <div #loading class="loading"></div>
+    <div class="edit-test-form-wrapper">
+      <form [formGroup]="testForm" class="edit-test-form">
+        <div class="row form-user-details">
+          <div class="form-group col">
+            <label>Name</label>
+            <input
+              formControlName="testName"
+              type="text"
+              class="form-control"
+              placeholder="Enter name"
+            />
+          </div>
+          <div class="form-group col">
+            <label>Price</label>
+            <input
+              formControlName="cost"
+              type="text"
+              class="form-control"
+              placeholder="Enter price"
+            />
+          </div>
+        </div>
+        <div class="row form-user-tests-wrapper">
+          <div class="col form-user-tests-container">
+            <table class="table table-hover">
+              <thead>
+                <tr>
+                  <th><label>Name</label></th>
+                  <th><label>Units</label></th>
+                  <th><label>Biological Reference Intervals</label></th>
+                  <th style="text-align: end; width:8%;">
+                    <img
+                      class="icon"
+                      src="../../assets/plus.png"
+                      (click)="addField()"
+                    />
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let field of testFields">
+                  <td>
+                    <input
+                      class="form-control"
+                      value="{{ field.name }}"
+                      (change)="updateField($event, field.id)"
+                    />
+                  </td>
+                  <td>
+                    <input
+                      class="form-control"
+                      value="{{ field.unit }}"
+                      (change)="updateField($event, field.id)"
+                    />
+                  </td>
+                  <td>
+                    <input
+                      class="form-control"
+                      value="{{ field.refValue }}"
+                      (change)="updateField($event, field.id)"
+                    />
+                  </td>
+                  <td style="text-align: end; width:8%;">
+                    <img
+                      class="icon pull-right"
+                      src="../../assets/remove.png"
+                      (click)="removeField(field)"
+                    />
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

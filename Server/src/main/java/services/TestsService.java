@@ -105,7 +105,7 @@ public class TestsService {
             }
             if (test.getFields() != null) {
                 Set<Field> fields = test.getFields();
-                fields.addAll(storedTest.getFields());
+//                fields.addAll(storedTest.getFields());
 
                 storedTest.setFields(fields);
             }

@@ -1,9 +1,9 @@
-.create-test-container {
+.edit-test-container {
   background-color: #fff;
   height: 100%;
   border-radius: 25px;
 }
-.create-test-wrapper {
+.edit-test-wrapper {
   padding-top: 85px;
   padding-bottom: 56px;
   height: 100%;
@@ -21,10 +21,10 @@
 .test-title-header {
   border-bottom: 2px solid green;
 }
-.create-test-form-wrapper {
+.edit-test-form-wrapper {
   height: calc(100% - 68px);
 }
-.create-test-form {
+.edit-test-form {
   height: 100%;
   padding-top: 15px;
 }
@@ -32,22 +32,22 @@
   height: 86px;
 }
 .form-user-tests-wrapper {
-  padding-top: 16px;
   height: calc(100% - 86px);
+}
+.edit-test-submit-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
 }
 
 .form-user-tests-container,
 table {
   height: 100%;
 }
-.create-test-submit-wrapper {
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-}
+
 tbody {
   display: block;
-  height: calc(100% - 34px);
+  height: calc(100% - 32px);
   overflow: auto;
 }
 thead,

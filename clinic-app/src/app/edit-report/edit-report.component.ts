@@ -1,5 +1,5 @@
 import { ReportsService } from "./../services/reports.service";
-import { Component, OnInit, Input } from "@angular/core";
+import { Component, OnInit, Input, ViewChild, ElementRef } from "@angular/core";
 import { NgbActiveModal } from "@ng-bootstrap/ng-bootstrap";
 import { FormBuilder, Validators } from "@angular/forms";
 import { TestsService } from "../services/tests.service";
@@ -14,9 +14,10 @@ export class EditReportComponent implements OnInit {
   public reportForm;
   public report;
   public testName;
-  public testFileds = [];
+  public testFields = [];
   public reportId;
   public genders = ["male", "female"];
+  @ViewChild("loading", { read: ElementRef }) loading: ElementRef;
   constructor(
     private fb: FormBuilder,
     private reportsService: ReportsService,
@@ -29,6 +30,7 @@ export class EditReportComponent implements OnInit {
     );
     this.reportsService.getReport(this.reportId).subscribe(
       response => {
+        this.loading.nativeElement.style.display = "none";
         this.updateValues(response);
       },
       error => {
@@ -45,12 +47,14 @@ export class EditReportComponent implements OnInit {
     });
   }
   saveReport() {
-    this.testFileds.forEach(function(v) {
+    this.loading.nativeElement.style.display = "block";
+    this.testFields.forEach(function(v) {
       delete v.id;
     });
-    let data = { fields: this.testFileds };
+    let data = { fields: this.testFields };
     this.reportsService.saveReport(this.reportId, data).subscribe(
       response => {
+        this.loading.nativeElement.style.display = "none";
         this.toastService.show("Report updated!!", {
           classname: "bg-success text-light"
         });
@@ -74,12 +78,12 @@ export class EditReportComponent implements OnInit {
       element.id = fieldCounter;
       fieldCounter++;
     });
-    this.testFileds = response.test.fields;
+    this.testFields = response.test.fields;
     this.testName = response.testName;
   }
   updateField(ev, fieldId) {
-    this.testFileds[
-      this.testFileds.findIndex(ele => {
+    this.testFields[
+      this.testFields.findIndex(ele => {
         return ele.id === fieldId;
       })
     ].value = ev.currentTarget.value;

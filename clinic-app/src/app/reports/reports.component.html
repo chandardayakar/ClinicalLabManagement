@@ -8,19 +8,22 @@
         <input
           class="form-control mr-sm-2"
           type="search"
-          placeholder="Search"
+          placeholder="Search by reportid/patient name"
           aria-label="Search"
           (keyup)="filterReports($event)"
           (search)="filterReports($event)"
         />
       </div>
     </div>
+    <div #loading class="loading"></div>
     <div class="reports-list">
       <table class="table table-hover">
         <thead>
           <tr>
-            <th>Name</th>
-            <th>Contact</th>
+            <th><label>ReportId</label></th>
+            <th><label>Name</label></th>
+            <th><label>Contact</label></th>
+            <th><label>Test</label></th>
           </tr>
         </thead>
         <tbody>
@@ -32,8 +35,10 @@
               *ngFor="let report of displayReports"
               (click)="getReport(report.reportId)"
             >
+              <td>{{ report.reportId }}</td>
               <td>{{ report.patientName }}</td>
               <td>{{ report.mobile }}</td>
+              <td>{{ report.testName }}</td>
             </tr>
           </ng-template>
           <ng-template #elseBlock>

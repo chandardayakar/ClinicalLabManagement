@@ -31,12 +31,28 @@
 .form-user-details {
   height: 86px;
 }
-.form-user-tests {
-  height: calc(100% - 86px);
-  overflow: auto;
+.form-user-tests-wrapper {
+  height: calc(100% - 210px);
 }
 .create-report-submit-wrapper {
   display: flex;
   align-items: center;
   justify-content: flex-end;
+}
+
+.form-user-tests-container,
+table {
+  height: 100%;
+}
+
+tbody {
+  display: block;
+  height: calc(100% - 32px);
+  overflow: auto;
+}
+thead,
+tbody tr {
+  display: table;
+  width: 100%;
+  table-layout: fixed;
 }

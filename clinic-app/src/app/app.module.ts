@@ -22,6 +22,8 @@ import { GoogleLoginProvider } from "angularx-social-login";
 import { ErrorInterceptor } from "./interceptors/error.interceptor";
 import { JwtInterceptor } from "./interceptors/jwt.interceptors";
 import { CreateTestComponent } from "./create-test/create-test.component";
+import { TestsComponent } from './tests/tests.component';
+import { EditTestComponent } from './edit-test/edit-test.component';
 
 const googleLoginOptions: LoginOpt = {
   scope: "https://www.googleapis.com/auth/drive"
@@ -31,7 +33,7 @@ let config = new AuthServiceConfig([
   {
     id: GoogleLoginProvider.PROVIDER_ID,
     provider: new GoogleLoginProvider(
-      "838886148448-vv5ri97504u3sd4cgq0fpcg9pgvfg4mn.apps.googleusercontent.com",
+      "838886148448-v8mumj7hida3kn4tdr945o8gbhriu2kd.apps.googleusercontent.com",
       googleLoginOptions
     )
   }
@@ -52,7 +54,9 @@ export function provideConfig() {
     ReportsComponent,
     ToastsContainer,
     EditReportComponent,
-    CreateTestComponent
+    CreateTestComponent,
+    TestsComponent,
+    EditTestComponent
   ],
   imports: [
     BrowserModule,

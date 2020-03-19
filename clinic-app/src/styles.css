@@ -37,3 +37,23 @@ button:disabled {
   width: 2em;
   height: 2em;
 }
+
+label {
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  width: 100%;
+  margin-bottom: 0 !important;
+}
+
+.table thead th {
+  padding-bottom: 0;
+  padding-top: 0;
+}
+.loading {
+  background-image: url(assets/spinner.gif);
+  background-repeat: no-repeat;
+  background-position: top;
+  height: 100%;
+  width: 100%;
+}

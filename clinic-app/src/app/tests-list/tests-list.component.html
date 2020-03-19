@@ -1,5 +1,5 @@
 <div class="modal-header">
-  <h4 class="modal-title">Select a test to add</h4>
+  <h4 class="modal-title">Select test(s)</h4>
   <div></div>
   <button
     type="button"
@@ -10,6 +10,7 @@
     <span aria-hidden="true">&times;</span>
   </button>
 </div>
+<div #loading class="loading"></div>
 <div class="modal-body">
   <table class="table table-hover">
     <thead class="thead-dark">
@@ -30,7 +31,7 @@
         <td>
           <input
             type="checkbox"
-            [checked]="selectedTests.indexOf(test.id) >= 0"
+            [checked]="selectedTests.indexOf(test.name) >= 0"
             (click)="selectTest($event, test)"
           />
         </td>

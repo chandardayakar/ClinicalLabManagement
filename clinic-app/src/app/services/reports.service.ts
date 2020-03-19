@@ -23,7 +23,6 @@ export class ReportsService {
   createReport(reportForm, selectedTests) {
     let formData = reportForm.getRawValue();
     formData.testNames = selectedTests;
-    console.log("Reports Saved!!");
     return this._http.post<any>(this.reports, formData);
   }
 }

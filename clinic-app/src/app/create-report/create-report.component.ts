@@ -2,7 +2,7 @@ import { ReportsService } from "./../services/reports.service";
 import { ToastService } from "./../shared/toast-service";
 import { TestsService } from "./../services/tests.service";
 import { TestsListComponent } from "./../tests-list/tests-list.component";
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, ViewChild, ElementRef } from "@angular/core";
 import { FormBuilder, Validators } from "@angular/forms";
 import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
 
@@ -15,7 +15,11 @@ export class CreateReportComponent implements OnInit {
   public reportForm;
   public selectedTests = [];
   public availableTests = [];
-  public genders = ["male", "female"];
+  public genders = ["male", "female", "Others"];
+  public today = new Date().toDateString();
+  public printTests = [];
+  public counter;
+  @ViewChild("loading", { read: ElementRef }) loading: ElementRef;
   constructor(
     private fb: FormBuilder,
     private modalService: NgbModal,
@@ -25,6 +29,7 @@ export class CreateReportComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.counter = 0;
     this.reportForm = this.fb.group({
       patientName: ["", [Validators.required, Validators.minLength(3)]],
       age: [null, [Validators.required]],
@@ -40,6 +45,7 @@ export class CreateReportComponent implements OnInit {
     });
     this._testService.getTests().subscribe(
       response => {
+        this.loading.nativeElement.style.display = "none";
         this.availableTests = response.tests;
       },
       error => {
@@ -73,13 +79,17 @@ export class CreateReportComponent implements OnInit {
   }
   saveReport() {
     if (confirm("Are you sure to create a report?")) {
+      this.loading.nativeElement.style.display = "block";
       this.reportService
         .createReport(this.reportForm, this.selectedTests)
         .subscribe(
           response => {
+            this.loading.nativeElement.style.display = "none";
             this.toastService.show("Report generated!!", {
               classname: "bg-success text-light"
             });
+            this.printTests = [...response.reportIds];
+            this.counter = 0;
             this.reportForm.reset();
             this.selectedTests.splice(0, this.selectedTests.length);
           },
@@ -99,5 +109,24 @@ export class CreateReportComponent implements OnInit {
       }
     });
     return !!total ? total : 0;
+  }
+  get patientName() {
+    return this.reportForm.get("patientName");
+  }
+  get age() {
+    return this.reportForm.get("age");
+  }
+  get gender() {
+    return this.reportForm.get("gender");
+  }
+  get mobile() {
+    return this.reportForm.get("mobile");
+  }
+  getReportId(test) {
+    this.counter++;
+    if (this.counter === this.printTests.length) {
+      window.print();
+    }
+    return test;
   }
 }

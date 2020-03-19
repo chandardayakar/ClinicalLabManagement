@@ -1,6 +1,6 @@
 import { Router, ActivatedRoute } from "@angular/router";
 import { ReportsService } from "./../services/reports.service";
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, ViewChild, ElementRef } from "@angular/core";
 import { ToastService } from "../shared/toast-service";
 
 @Component({
@@ -11,6 +11,7 @@ import { ToastService } from "../shared/toast-service";
 export class ReportsComponent implements OnInit {
   public reports = [];
   public displayReports = [];
+  @ViewChild("loading", { read: ElementRef }) loading: ElementRef;
   constructor(
     private _reportsService: ReportsService,
     private router: Router,
@@ -21,6 +22,7 @@ export class ReportsComponent implements OnInit {
   ngOnInit(): void {
     this._reportsService.getReports().subscribe(
       response => {
+        this.loading.nativeElement.style.display = "none";
         this.reports = response.reports;
         this.displayReports = response.reports;
       },
@@ -37,7 +39,10 @@ export class ReportsComponent implements OnInit {
   filterReports(event) {
     if (event.target.value.length > 0)
       this.displayReports = this.reports.filter(value => {
-        return value.patientName.includes(event.target.value);
+        return (
+          value.patientName.includes(event.target.value) ||
+          value.reportId.includes(event.target.value)
+        );
       });
     else {
       this.displayReports = [...this.reports];

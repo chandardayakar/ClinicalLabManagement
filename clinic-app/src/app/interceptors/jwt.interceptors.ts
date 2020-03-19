@@ -12,7 +12,7 @@ import { AuthenticationService } from "./../services/auth-service.service";
 
 @Injectable()
 export class JwtInterceptor implements HttpInterceptor {
-  public baseUrl = "http://35.239.65.5:8888/Server/rest";
+  public baseUrl = "http://localhost:8888/Server/rest";
   constructor(private authenticationService: AuthenticationService) {}
 
   intercept(

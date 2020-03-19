@@ -1,6 +1,6 @@
 import { ToastService } from "./../shared/toast-service";
 import { TestsService } from "./../services/tests.service";
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, ViewChild, ElementRef } from "@angular/core";
 import { FormBuilder, Validators } from "@angular/forms";
 
 @Component({
@@ -12,6 +12,7 @@ export class CreateTestComponent implements OnInit {
   public fields = [];
   public testForm;
   public fieldCounter = 1;
+  @ViewChild("loading", { read: ElementRef }) loading: ElementRef;
   constructor(
     private fb: FormBuilder,
     private testsService: TestsService,
@@ -25,6 +26,7 @@ export class CreateTestComponent implements OnInit {
     });
   }
   saveTest() {
+    this.loading.nativeElement.style.display = "block";
     this.fields.forEach(function(v) {
       delete v.id;
     });
@@ -32,6 +34,7 @@ export class CreateTestComponent implements OnInit {
     data.fields = this.fields;
     this.testsService.saveTest(data).subscribe(
       response => {
+        this.loading.nativeElement.style.display = "none";
         this.toastService.show("Test saved!!", {
           classname: "bg-success text-light"
         });
@@ -72,7 +75,7 @@ export class CreateTestComponent implements OnInit {
         this.fields.findIndex(ele => {
           return ele.id === fieldId;
         })
-        ].unit = ev.currentTarget.value;
+      ].unit = ev.currentTarget.value;
     }
   }
   removeField(field) {
@@ -83,5 +86,11 @@ export class CreateTestComponent implements OnInit {
       }),
       1
     );
+  }
+  get testName() {
+    return this.testForm.get("testName");
+  }
+  get cost() {
+    return this.testForm.get("cost");
   }
 }
