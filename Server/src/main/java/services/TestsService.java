@@ -18,6 +18,7 @@ import java.io.InputStream;
 import java.io.StringWriter;
 import java.net.URI;
 import java.nio.charset.StandardCharsets;
+import java.util.HashSet;
 import java.util.Set;
 
 @Path("/tests")
@@ -105,11 +106,10 @@ public class TestsService {
             }
             if (test.getFields() != null) {
                 Set<Field> fields = test.getFields();
-                fields.addAll(storedTest.getFields());
-
                 storedTest.setFields(fields);
             }
 
+            FileSystemStorageUtil.storeTest(storedTest.getTestName(),storedTest);
             return Response.ok().build();
         } catch (IOException e) {
             e.printStackTrace();
