@@ -105,11 +105,10 @@ public class TestsService {
             }
             if (test.getFields() != null) {
                 Set<Field> fields = test.getFields();
-//                fields.addAll(storedTest.getFields());
 
                 storedTest.setFields(fields);
             }
-
+            FileSystemStorageUtil.storeTest(storedTest.getTestName(),storedTest);
             return Response.ok().build();
         } catch (IOException e) {
             e.printStackTrace();
