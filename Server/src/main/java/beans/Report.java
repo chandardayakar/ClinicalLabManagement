@@ -1,64 +1,86 @@
 package beans;
 
+import java.util.Date;
+
 public class Report {
 
-  private String patientName;
+    private String patientName;
 
-  private String age;
+    private String age;
 
-  private String gender;
+    private String gender;
 
-  private String mobile;
+    private String mobile;
 
-  private String testName;
+    private String testName;
 
-  private Test test;
+    private Test test;
 
-  public String getPatientName() {
-    return patientName;
-  }
+    private Date created;
 
-  public void setPatientName(String patientName) {
-    this.patientName = patientName;
-  }
+    private Date lastModified;
 
-  public String getAge() {
-    return age;
-  }
+    public String getPatientName() {
+        return patientName;
+    }
 
-  public void setAge(String age) {
-    this.age = age;
-  }
+    public void setPatientName(String patientName) {
+        this.patientName = patientName;
+    }
 
-  public String getGender() {
-    return gender;
-  }
+    public String getAge() {
+        return age;
+    }
 
-  public void setGender(String gender) {
-    this.gender = gender;
-  }
+    public void setAge(String age) {
+        this.age = age;
+    }
 
-  public String getMobile() {
-    return mobile;
-  }
+    public String getGender() {
+        return gender;
+    }
 
-  public void setMobile(String mobile) {
-    this.mobile = mobile;
-  }
+    public void setGender(String gender) {
+        this.gender = gender;
+    }
 
-  public String getTestName() {
-    return testName;
-  }
+    public String getMobile() {
+        return mobile;
+    }
 
-  public void setTestName(String testName) {
-    this.testName = testName;
-  }
+    public void setMobile(String mobile) {
+        this.mobile = mobile;
+    }
 
-  public Test getTest() {
-    return test;
-  }
+    public String getTestName() {
+        return testName;
+    }
 
-  public void setTest(Test test) {
-    this.test = test;
-  }
+    public void setTestName(String testName) {
+        this.testName = testName;
+    }
+
+    public Test getTest() {
+        return test;
+    }
+
+    public void setTest(Test test) {
+        this.test = test;
+    }
+
+    public Date getCreated() {
+        return created;
+    }
+
+    public void setCreated(Date created) {
+        this.created = created;
+    }
+
+    public Date getLastModified() {
+        return lastModified;
+    }
+
+    public void setLastModified(Date lastModified) {
+        this.lastModified = lastModified;
+    }
 }

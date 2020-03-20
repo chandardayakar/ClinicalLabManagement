@@ -1,5 +1,6 @@
 package services;
 
+import Utils.Utils;
 import com.google.gson.JsonObject;
 import sync.GoogleDriveAuthentication;
 import sync.GoogleSyncThread;
@@ -56,7 +57,8 @@ public class SyncService {
         } catch (Exception e) {
             SyncStatus.setSyncStatus("ERROR");
             e.printStackTrace();
-            return Response.serverError().type("text/plain").entity("Check Logs and try again later")
+            JsonObject err = Utils.errorMessageToJson("Check Logs and try again later");
+            return Response.serverError().entity(err)
                     .build();
         }
         JsonObject jsonResult = new JsonObject();

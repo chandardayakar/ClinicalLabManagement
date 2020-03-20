@@ -1,5 +1,6 @@
 package services;
 
+import Utils.Utils;
 import storage.FileSystemStorage;
 import beans.Field;
 import beans.Test;
@@ -45,7 +46,8 @@ public class TestsService {
                     .build();
         } catch (JsonProcessingException e) {
             e.printStackTrace();
-            return Response.serverError().entity(e.getMessage())
+            JsonObject err = Utils.errorMessageToJson(e.getMessage());
+            return Response.serverError().entity(err)
                     .build();
         }
 
@@ -65,7 +67,8 @@ public class TestsService {
             Test check = FileSystemStorage.getTest(test.getTestName());
 
             if (check != null) {
-                return Response.serverError().entity("Test with given name already exists, - " + check.getTestName()).build();
+                JsonObject err = Utils.errorMessageToJson("Test with given name already exists, - " + check.getTestName());
+                return Response.serverError().entity(err).build();
             }
 
             FileSystemStorage.storeTest(test.getTestName(), test);
@@ -74,8 +77,9 @@ public class TestsService {
                     .build();
         } catch (IOException e) {
             e.printStackTrace();
+            JsonObject err = Utils.errorMessageToJson(e.getMessage());
             return Response.serverError()
-                    .entity(e.getMessage())
+                    .entity(err)
                     .build();
         }
     }
@@ -96,7 +100,8 @@ public class TestsService {
             Test storedTest = FileSystemStorage.getTest(testId);
 
             if (storedTest == null) {
-                return Response.serverError().entity("Test with the given name not found. - " + testId).build();
+                JsonObject err = Utils.errorMessageToJson("Test with the given name not found. - " + testId);
+                return Response.serverError().entity(err).build();
             }
 
             if (!Strings.isNullOrEmpty(test.getCost())) {
@@ -112,7 +117,7 @@ public class TestsService {
         } catch (IOException e) {
             e.printStackTrace();
             return Response.serverError()
-                    .entity(e.getMessage())
+                    .entity(Utils.errorMessageToJson(e.getMessage()))
                     .build();
         }
     }
@@ -122,7 +127,8 @@ public class TestsService {
     public Response deleteTest(@PathParam("testId") String testId) {
         Test test = FileSystemStorage.getTest(testId);
         if (test == null) {
-            return Response.serverError().entity("Test with the given name not found. - " + testId).build();
+            JsonObject err = Utils.errorMessageToJson("Test with the given name not found. - " + testId);
+            return Response.serverError().entity(err).build();
         }
 
         FileSystemStorage.deleteTest(test.getTestName(), test.getCost());

@@ -1,5 +1,7 @@
 package services;
 
+import Utils.Utils;
+import com.google.api.client.json.Json;
 import storage.FileSystemStorage;
 import beans.Report;
 import beans.Test;
@@ -21,6 +23,7 @@ import java.io.StringWriter;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
+import java.util.Date;
 import java.util.Iterator;
 
 @Path("/reports")
@@ -47,7 +50,8 @@ public class ReportsService {
                     .build();
         } catch (JsonProcessingException e) {
             e.printStackTrace();
-            return Response.serverError().entity(e.getMessage())
+            JsonObject err = Utils.errorMessageToJson(e.getMessage());
+            return Response.serverError().entity(err)
                     .build();
         }
 
@@ -71,7 +75,8 @@ public class ReportsService {
             JsonObject jsonPayload = new Gson().fromJson(payload, JsonObject.class);
             JsonArray tests = jsonPayload.getAsJsonArray("testNames");
             if (tests == null || tests.size() == 0) {
-                return Response.serverError().entity("Cannot create Reports with no Tests")
+                JsonObject err = Utils.errorMessageToJson("Cannot create Reports with no Tests");
+                return Response.serverError().entity(err)
                         .build();
             }
 
@@ -83,7 +88,8 @@ public class ReportsService {
                 try {
                      test = FileSystemStorage.getTest(testName);
                 } catch (Exception e) {
-                    return Response.serverError().entity("Unable to find Test with Name - " + testName)
+                    JsonObject err = Utils.errorMessageToJson("Unable to find Test with Name - " + testName);
+                    return Response.serverError().entity(err)
                             .build();
                 }
                 Report report = mapper.readValue(payload, Report.class);
@@ -92,9 +98,13 @@ public class ReportsService {
                 report.setTest(test);
 
                 if(report.getPatientName() == null || report.getPatientName().isEmpty()){
-                    return Response.serverError().entity("Unable to create a test without Patient Name")
+                    JsonObject err = Utils.errorMessageToJson("Unable to create a test without Patient Name");
+                    return Response.serverError().entity(err)
                             .build();
                 }
+
+                report.setCreated(new Date(System.currentTimeMillis()));
+                report.setLastModified(new Date(System.currentTimeMillis()));
 
                 String reportId = report.getPatientName() + "_" + report.getTestName() + "_" + System.currentTimeMillis();
 
@@ -109,8 +119,8 @@ public class ReportsService {
                     .build();
         } catch (IOException e) {
             e.printStackTrace();
-
-            return Response.serverError().entity("Failed to create Reports, check logs and try again")
+            JsonObject err = Utils.errorMessageToJson("Failed to create Reports, check logs and try again");
+            return Response.serverError().entity(err)
                     .build();
         }
     }
@@ -135,6 +145,8 @@ public class ReportsService {
 
             storedReport.setTest(storedTest);
 
+            storedReport.setLastModified(new Date(System.currentTimeMillis()));
+
             FileSystemStorage.updateReport(reportId, storedReport);
 
             return Response.ok()
@@ -142,7 +154,8 @@ public class ReportsService {
 
         } catch (IOException e) {
             e.printStackTrace();
-            return Response.serverError().entity("Report Updating Failed check server logs for more details")
+            JsonObject err = Utils.errorMessageToJson("Report Updating Failed check server logs for more details");
+            return Response.serverError().entity(err)
                     .build();
         } finally {
             try {
@@ -159,8 +172,9 @@ public class ReportsService {
     public Response saveReport(InputStream is,
                                @PathParam("reportId") String reportId) {
         if (reportId == null || reportId.isEmpty()) {
+            JsonObject err = Utils.errorMessageToJson("Report Name cannot be null");
             return Response.serverError()
-                    .entity("Report Name cannot be null").build();
+                    .entity(err).build();
         }
         String filePath = null;
         try {
@@ -169,7 +183,8 @@ public class ReportsService {
                     .build();
         } catch (IOException | URISyntaxException e) {
             e.printStackTrace();
-            return Response.serverError().entity("Report Saving Failed check server logs for more details")
+            JsonObject err = Utils.errorMessageToJson("Report Saving Failed check server logs for more details");
+            return Response.serverError().entity(err)
                     .build();
         }
     }
@@ -178,8 +193,9 @@ public class ReportsService {
     @Path("{reportId}/download")
     public Response downloadReport(@PathParam("reportId") String reportId) {
         if (reportId == null || reportId.isEmpty()) {
+            JsonObject err = Utils.errorMessageToJson("Report Name cannot be null");
             return Response.serverError()
-                    .entity("Report Name cannot be null").build();
+                    .entity(err).build();
         }
         try {
             InputStream is = FileSystemStorage.downloadReport(reportId);
@@ -191,7 +207,8 @@ public class ReportsService {
                 return Response.status(404)
                         .entity("Report Not Found").build();
             }
-            return Response.serverError().entity("Server error occurred, please check logs for more details")
+            JsonObject err = Utils.errorMessageToJson("Server error occurred, please check logs for more details");
+            return Response.serverError().entity(err)
                     .build();
         }
     }

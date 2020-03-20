@@ -24,6 +24,8 @@
             <th><label>Name</label></th>
             <th><label>Contact</label></th>
             <th><label>Test</label></th>
+            <th><label>Created</label></th>
+            <th><label>Last Modified</label></th>
           </tr>
         </thead>
         <tbody>
@@ -39,6 +41,8 @@
               <td>{{ report.patientName }}</td>
               <td>{{ report.mobile }}</td>
               <td>{{ report.testName }}</td>
+              <td>{{ report.created }}</td>
+              <td>{{ report.lastModified }}</td>
             </tr>
           </ng-template>
           <ng-template #elseBlock>

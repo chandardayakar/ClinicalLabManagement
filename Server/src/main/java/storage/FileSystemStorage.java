@@ -1,15 +1,20 @@
 package storage;
 
+import Utils.DateDeserializer;
 import beans.Report;
 import beans.Test;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.stream.JsonReader;
 import org.apache.commons.io.FileUtils;
 
 import java.io.*;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Iterator;
 
 public class FileSystemStorage {
 
@@ -148,6 +153,9 @@ public class FileSystemStorage {
                 temp.addProperty("mobile", report.getMobile());
                 temp.addProperty("reportId", reportName);
                 temp.addProperty("testName", report.getTestName());
+                temp.addProperty("created", new SimpleDateFormat().format(report.getCreated()));
+                temp.addProperty("lastModified", new SimpleDateFormat().format(report.getLastModified()));
+
                 reports.add(temp);
 
                 json.add("reports", reports);
@@ -175,6 +183,8 @@ public class FileSystemStorage {
 
         File file = new File(reportsFolder.getAbsolutePath() + File.separator + reportId);
         try {
+
+            updateReportLastModifiedDate(reportId,new SimpleDateFormat().format(report.getLastModified()));
             ObjectMapper objectMapper = new ObjectMapper();
             objectMapper.writeValue(file, report);
         } catch (IOException e) {
@@ -207,7 +217,8 @@ public class FileSystemStorage {
         ObjectMapper objectMapper = new ObjectMapper();
         try {
             JsonReader reader = new JsonReader(new FileReader(file));
-            Gson gson = new Gson();
+            Gson gson = new GsonBuilder().registerTypeAdapter(Date.class, new DateDeserializer()).create();
+
             Report report = gson.fromJson(reader, Report.class);
             return report;
         } catch (IOException e) {
@@ -243,5 +254,36 @@ public class FileSystemStorage {
 
         InputStream is = FileUtils.openInputStream(report);
         return is;
+    }
+
+    private static void updateReportLastModifiedDate(String reportId, String lastmodified) {
+
+        FileSystemStorage u = new FileSystemStorage();
+        File allReports = new File(u.getClass().getClassLoader().getResource("Reports" + File.separator + "allReports").getFile());
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        try {
+            JsonReader reader = new JsonReader(new FileReader(allReports));
+            Gson gson = new Gson();
+            JsonObject json = gson.fromJson(reader, JsonObject.class);
+            JsonArray reports = json.getAsJsonArray("reports");
+
+
+            Iterator itr = reports.iterator();
+
+            while (itr.hasNext()) {
+                JsonObject next = (JsonObject) itr.next();
+                if (next.get("reportId").getAsString().equals(reportId))
+                    next.addProperty("lastModified", lastmodified);
+
+            }
+            json.add("reports", reports);
+
+            FileWriter writer = new FileWriter(allReports);
+            writer.write(json.toString());
+            writer.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }
