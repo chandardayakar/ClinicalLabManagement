@@ -1,6 +1,5 @@
 package sync;
 
-import Utils.FileSystemStorageUtil;
 import com.google.api.client.auth.oauth2.BearerToken;
 import com.google.api.client.auth.oauth2.Credential;
 import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
@@ -10,7 +9,6 @@ import com.google.api.client.json.jackson2.JacksonFactory;
 import com.google.api.services.drive.Drive;
 
 import java.io.*;
-import java.net.URL;
 import java.security.GeneralSecurityException;
 
 public class GoogleSyncThread implements Runnable {

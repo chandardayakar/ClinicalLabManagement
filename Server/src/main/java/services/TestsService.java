@@ -1,11 +1,10 @@
 package services;
 
-import Utils.FileSystemStorageUtil;
+import storage.FileSystemStorage;
 import beans.Field;
 import beans.Test;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.api.client.util.StringUtils;
 import com.google.common.base.Strings;
 import com.google.gson.JsonObject;
 import org.apache.commons.io.IOUtils;
@@ -27,7 +26,7 @@ public class TestsService {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response getAllTests() {
-        JsonObject allTests = FileSystemStorageUtil.getAllTests();
+        JsonObject allTests = FileSystemStorage.getAllTests();
 
         return Response.ok(allTests.toString())
                 .build();
@@ -38,7 +37,7 @@ public class TestsService {
     @Produces(MediaType.APPLICATION_JSON)
     @Path("{testId}")
     public Response getTest(@PathParam("testId") String testId) {
-        Test test = FileSystemStorageUtil.getTest(testId);
+        Test test = FileSystemStorage.getTest(testId);
 
         ObjectMapper mapper = new ObjectMapper();
         try {
@@ -63,13 +62,13 @@ public class TestsService {
             ObjectMapper mapper = new ObjectMapper();
             Test test = mapper.readValue(payload, Test.class);
 
-            Test check = FileSystemStorageUtil.getTest(test.getTestName());
+            Test check = FileSystemStorage.getTest(test.getTestName());
 
             if (check != null) {
                 return Response.serverError().entity("Test with given name already exists, - " + check.getTestName()).build();
             }
 
-            FileSystemStorageUtil.storeTest(test.getTestName(), test);
+            FileSystemStorage.storeTest(test.getTestName(), test);
 
             return Response.created(URI.create(test.getTestName()))
                     .build();
@@ -94,7 +93,7 @@ public class TestsService {
             ObjectMapper mapper = new ObjectMapper();
             Test test = mapper.readValue(payload, Test.class);
 
-            Test storedTest = FileSystemStorageUtil.getTest(testId);
+            Test storedTest = FileSystemStorage.getTest(testId);
 
             if (storedTest == null) {
                 return Response.serverError().entity("Test with the given name not found. - " + testId).build();
@@ -108,7 +107,7 @@ public class TestsService {
 
                 storedTest.setFields(fields);
             }
-            FileSystemStorageUtil.storeTest(storedTest.getTestName(),storedTest);
+            FileSystemStorage.storeTest(storedTest.getTestName(),storedTest);
             return Response.ok().build();
         } catch (IOException e) {
             e.printStackTrace();
@@ -121,12 +120,12 @@ public class TestsService {
     @DELETE
     @Path("{testId}")
     public Response deleteTest(@PathParam("testId") String testId) {
-        Test test = FileSystemStorageUtil.getTest(testId);
+        Test test = FileSystemStorage.getTest(testId);
         if (test == null) {
             return Response.serverError().entity("Test with the given name not found. - " + testId).build();
         }
 
-        FileSystemStorageUtil.deleteTest(test.getTestName(), test.getCost());
+        FileSystemStorage.deleteTest(test.getTestName(), test.getCost());
 
         return Response.ok().build();
     }

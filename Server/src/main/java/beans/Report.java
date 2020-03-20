@@ -1,11 +1,5 @@
 package beans;
 
-import Utils.FileSystemStorageUtil;
-
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 public class Report {
 
   private String patientName;

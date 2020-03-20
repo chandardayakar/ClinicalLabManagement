@@ -1,6 +1,6 @@
 package services;
 
-import Utils.FileSystemStorageUtil;
+import storage.FileSystemStorage;
 import beans.Report;
 import beans.Test;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -29,7 +29,7 @@ public class ReportsService {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response getAllReports() {
-        JsonObject allReports = FileSystemStorageUtil.getAllReports();
+        JsonObject allReports = FileSystemStorage.getAllReports();
         return Response.ok(allReports.toString())
                 .build();
     }
@@ -39,7 +39,7 @@ public class ReportsService {
     @Path("{reportId}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getReport(@PathParam("reportId") String reportName) {
-        Report report = FileSystemStorageUtil.getReport(reportName);
+        Report report = FileSystemStorage.getReport(reportName);
 
         ObjectMapper mapper = new ObjectMapper();
         try {
@@ -81,7 +81,7 @@ public class ReportsService {
                 Test test =  null;
                 String testName = element.getAsString();
                 try {
-                     test = FileSystemStorageUtil.getTest(testName);
+                     test = FileSystemStorage.getTest(testName);
                 } catch (Exception e) {
                     return Response.serverError().entity("Unable to find Test with Name - " + testName)
                             .build();
@@ -98,7 +98,7 @@ public class ReportsService {
 
                 String reportId = report.getPatientName() + "_" + report.getTestName() + "_" + System.currentTimeMillis();
 
-                FileSystemStorageUtil.storeReport(reportId, report);
+                FileSystemStorage.storeReport(reportId, report);
 
                 reportIdArray.add(reportId);
 
@@ -128,14 +128,14 @@ public class ReportsService {
             ObjectMapper mapper = new ObjectMapper();
             Test test = mapper.readValue(payload, Test.class);
 
-            Report storedReport = FileSystemStorageUtil.getReport(reportId);
+            Report storedReport = FileSystemStorage.getReport(reportId);
             Test storedTest = storedReport.getTest();
 
             storedTest.setFields(test.getFields());
 
             storedReport.setTest(storedTest);
 
-            FileSystemStorageUtil.updateReport(reportId, storedReport);
+            FileSystemStorage.updateReport(reportId, storedReport);
 
             return Response.ok()
                     .build();
@@ -164,7 +164,7 @@ public class ReportsService {
         }
         String filePath = null;
         try {
-            filePath = FileSystemStorageUtil.saveReport(reportId, is);
+            filePath = FileSystemStorage.saveReport(reportId, is);
             return Response.created(new URI(filePath))
                     .build();
         } catch (IOException | URISyntaxException e) {
@@ -182,7 +182,7 @@ public class ReportsService {
                     .entity("Report Name cannot be null").build();
         }
         try {
-            InputStream is = FileSystemStorageUtil.downloadReport(reportId);
+            InputStream is = FileSystemStorage.downloadReport(reportId);
             return Response.ok(is, MediaType.APPLICATION_OCTET_STREAM_TYPE)
                     .build();
         } catch (Exception e) {
