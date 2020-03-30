@@ -99,8 +99,8 @@ export class EditReportComponent implements OnInit {
     WinPrint.document.close();
     WinPrint.setTimeout(function() {
       WinPrint.focus();
-      // WinPrint.print();
-      //WinPrint.close();
+      WinPrint.print();
+      WinPrint.close();
     }, 1000);
   }
   get patientName() {
