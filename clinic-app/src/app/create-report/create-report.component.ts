@@ -15,10 +15,10 @@ export class CreateReportComponent implements OnInit {
   public reportForm;
   public selectedTests = [];
   public availableTests = [];
+  public printTests = [];
   public genders = ["male", "female", "Others"];
   public today = new Date().toDateString();
-  public printTests = [];
-  public counter;
+  public reportIds = [];
   @ViewChild("loading", { read: ElementRef }) loading: ElementRef;
   constructor(
     private fb: FormBuilder,
@@ -29,7 +29,6 @@ export class CreateReportComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.counter = 0;
     this.reportForm = this.fb.group({
       patientName: ["", [Validators.required, Validators.minLength(3)]],
       age: [null, [Validators.required]],
@@ -81,17 +80,34 @@ export class CreateReportComponent implements OnInit {
     if (confirm("Are you sure to create a report?")) {
       this.loading.nativeElement.style.display = "block";
       this.reportService
-        .createReport(this.reportForm, this.selectedTests)
+        .createReport(this.reportForm.getRawValue(), this.selectedTests)
         .subscribe(
           response => {
             this.loading.nativeElement.style.display = "none";
             this.toastService.show("Report generated!!", {
               classname: "bg-success text-light"
             });
-            this.printTests = [...response.reportIds];
-            this.counter = 0;
-            this.reportForm.reset();
-            this.selectedTests.splice(0, this.selectedTests.length);
+            var prtContent = document.getElementById("print");
+            var self = this;
+            var WinPrint = window.open(
+              "",
+              "",
+              "left=0,top=0,width=800,height=900,toolbar=0,scrollbars=0,status=0"
+            );
+            WinPrint.document.write(prtContent.innerHTML);
+            this.selectedTests.map((value, index) => {
+              WinPrint.document.getElementById(
+                value
+              ).innerHTML = response.reportIds[index].toString();
+            });
+            WinPrint.document.close();
+            WinPrint.setTimeout(function() {
+              WinPrint.focus();
+              WinPrint.print();
+              WinPrint.close();
+              self.reportForm.reset();
+              self.selectedTests.splice(0, self.selectedTests.length);
+            }, 1000);
           },
           error => {
             this.toastService.show(error.statusText, {
@@ -122,11 +138,9 @@ export class CreateReportComponent implements OnInit {
   get mobile() {
     return this.reportForm.get("mobile");
   }
-  getReportId(test) {
-    this.counter++;
-    if (this.counter === this.printTests.length) {
-      window.print();
-    }
-    return test;
+  getDate() {
+    var d = new Date();
+    var n = d.toLocaleDateString();
+    return n;
   }
 }

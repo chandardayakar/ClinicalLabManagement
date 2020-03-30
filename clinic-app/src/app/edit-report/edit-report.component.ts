@@ -88,4 +88,31 @@ export class EditReportComponent implements OnInit {
       })
     ].value = ev.currentTarget.value;
   }
+  printReport() {
+    var prtContent = document.getElementById("print");
+    var WinPrint = window.open(
+      "",
+      "",
+      "left=0,top=0,width=800,height=900,toolbar=0,scrollbars=0,status=0"
+    );
+    WinPrint.document.write(prtContent.innerHTML);
+    WinPrint.document.close();
+    WinPrint.setTimeout(function() {
+      WinPrint.focus();
+      // WinPrint.print();
+      //WinPrint.close();
+    }, 1000);
+  }
+  get patientName() {
+    return this.reportForm.get("patientName");
+  }
+  get age() {
+    return this.reportForm.get("age");
+  }
+  get gender() {
+    return this.reportForm.get("gender");
+  }
+  get mobile() {
+    return this.reportForm.get("mobile");
+  }
 }

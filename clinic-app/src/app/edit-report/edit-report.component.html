@@ -8,6 +8,10 @@
         <button class="btn btn-success" (click)="saveReport()">
           Save
         </button>
+        <span style="padding:5px"></span>
+        <button class="btn btn-success" (click)="printReport()">
+          Print
+        </button>
       </div>
     </div>
     <div #loading class="loading"></div>
@@ -86,5 +90,71 @@
         </div>
       </form>
     </div>
+  </div>
+</div>
+<div id="print">
+  <div
+    style="border-bottom: black;border-bottom-width: thick;border-bottom-style: solid;"
+  >
+    <h1>Report Summary</h1>
+  </div>
+  <div style="padding-top: 25px; max-height: 100px;">
+    <div
+      style="display: flex;height: 600px;flex-wrap: wrap;align-content: space-between;"
+    >
+      <div style="min-width: 100%;">
+        <table>
+          <tr>
+            <td><label>Name:</label></td>
+            <td>
+              <span style="font-weight: bold;">{{ patientName.value }}</span>
+            </td>
+          </tr>
+          <tr>
+            <td><label>Age:</label></td>
+            <td>
+              <span style="font-weight: bold;">{{ age.value }}</span>
+            </td>
+          </tr>
+          <tr>
+            <td><label>Contact:</label></td>
+            <td>
+              <span style="font-weight: bold;">{{ mobile.value }}</span>
+            </td>
+          </tr>
+          <tr>
+            <td><label>Gender:</label></td>
+            <td>
+              <span style="font-weight: bold;">{{ gender.value }}</span>
+            </td>
+          </tr>
+        </table>
+      </div>
+    </div>
+  </div>
+  <div
+    style="display: flex;align-items: center;justify-content: center;max-height: 20px;border-bottom: black;border-bottom-width: thin;border-bottom-style: solid;"
+  >
+    <h2 style="padding-bottom:10px">{{ testName }}</h2>
+  </div>
+  <div>
+    <table style="display:table;width: 100%;border: black solid;">
+      <thead>
+        <tr>
+          <th><label>Name</label></th>
+          <th><label>Observed values</label></th>
+          <th><label>Units</label></th>
+          <th><label>Biological Reference Intervals</label></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let field of testFields" style="text-align: center;">
+          <td>{{ field.name }}</td>
+          <td>{{ field.value }}</td>
+          <td>{{ field.unit }}</td>
+          <td>{{ field.refValue }}</td>
+        </tr>
+      </tbody>
+    </table>
   </div>
 </div>

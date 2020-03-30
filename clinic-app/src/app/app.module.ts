@@ -22,8 +22,8 @@ import { GoogleLoginProvider } from "angularx-social-login";
 import { ErrorInterceptor } from "./interceptors/error.interceptor";
 import { JwtInterceptor } from "./interceptors/jwt.interceptors";
 import { CreateTestComponent } from "./create-test/create-test.component";
-import { TestsComponent } from './tests/tests.component';
-import { EditTestComponent } from './edit-test/edit-test.component';
+import { TestsComponent } from "./tests/tests.component";
+import { EditTestComponent } from "./edit-test/edit-test.component";
 
 const googleLoginOptions: LoginOpt = {
   scope: "https://www.googleapis.com/auth/drive"

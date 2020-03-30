@@ -20,9 +20,8 @@ export class ReportsService {
     return this._http.put<any>(this.reports + "/" + id, data);
   }
 
-  createReport(reportForm, selectedTests) {
-    let formData = reportForm.getRawValue();
-    formData.testNames = selectedTests;
-    return this._http.post<any>(this.reports, formData);
+  createReport(data, selectedTests) {
+    data.testNames = selectedTests;
+    return this._http.post<any>(this.reports, data);
   }
 }

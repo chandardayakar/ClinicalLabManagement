@@ -142,49 +142,74 @@
     </div>
   </div>
 </div>
-<div class="container-fluid">
-  <div class="row no-gutters">
-    <div class="col">
-      <h1>Tests</h1>
-    </div>
+<div id="print">
+  <div
+    style="border-bottom: black;border-bottom-width: thick;border-bottom-style: solid;"
+  >
+    <h1>Report Summary</h1>
   </div>
-
-  <div class="row no-gutters">
-    <div class="col">
-      <img src="../../assets/logo.svg" alt="logotipo" class="logotipo" />
-    </div>
-  </div>
-  <!-- div class="col">
-      <h2></h2>
-      <p>91 886 73 76</p>    
-      <div class="address">
-        <p>geral@nreparacoes.com</p>
-        <p>Av. Dr. Ribeiro de Magalhães, 1391</p>
-        <p>Centro Comercial 123, Loja BD</p>
-        <p>4610-108 Felgueiras</p>
+  <div style="padding-top: 25px; max-height: 100px;">
+    <div
+      style="display: flex;height: 600px;flex-wrap: wrap;align-content: space-between;"
+    >
+      <div style="min-width: 50%;">
+        <table>
+          <tr>
+            <td><label>Name:</label></td>
+            <td>
+              <span style="font-weight: bold;">{{ patientName.value }}</span>
+            </td>
+          </tr>
+          <tr>
+            <td><label>Age:</label></td>
+            <td>
+              <span style="font-weight: bold;">{{ age.value }}</span>
+            </td>
+          </tr>
+          <tr>
+            <td><label>Contact:</label></td>
+            <td>
+              <span style="font-weight: bold;">{{ mobile.value }}</span>
+            </td>
+          </tr>
+          <tr>
+            <td><label>Gender:</label></td>
+            <td>
+              <span style="font-weight: bold;">{{ gender.value }}</span>
+            </td>
+          </tr>
+        </table>
+      </div>
+      <div style="min-width: 50%;">
+        <table>
+          <tr>
+            <td><label> Date:</label></td>
+            <td>
+              <span style="font-weight: bold;">{{ getDate() }}</span>
+            </td>
+          </tr>
+          <tr>
+            <td><label> Total:</label></td>
+            <td>
+              <span style="font-weight: bold;">{{ getTotalAmount() }}</span>
+            </td>
+          </tr>
+        </table>
       </div>
     </div>
-  </div -->
-
-  <div class="row no-gutters">
-    <table class="table table-hover">
-      <tbody>
-        <tr>
-          <td>Name:</td>
-          <td>{{ patientName.value }}</td>
-        </tr>
-        <tr>
-          <td>Date:</td>
-          <td>{{ today }}</td>
-        </tr>
-      </tbody>
+  </div>
+  <div
+    style="display: flex;align-items: center;justify-content: center;max-height: 20px;border-bottom: black;border-bottom-width: thin;border-bottom-style: solid;"
+  >
+    <h2 style="padding-bottom:10px">Tests</h2>
+  </div>
+  <div>
+    <table style="display:table;width: 100%;border: black solid;">
+      <tr *ngFor="let test of getSelectedTests()">
+        <td>{{ test.name }}</td>
+        <td>{{ test.price }}</td>
+        <td id="{{ test.name }}"></td>
+      </tr>
     </table>
-    <div class="row no-gutters">
-      <ul>
-        <li *ngFor="let test of printTests">
-          {{ getReportId(test) }}
-        </li>
-      </ul>
-    </div>
   </div>
 </div>
