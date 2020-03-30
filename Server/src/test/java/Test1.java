@@ -1,4 +1,4 @@
-import Utils.FileSystemStorageUtil;
+import storage.FileSystemStorage;
 import beans.Report;
 
 public class Test1 {
@@ -10,10 +10,10 @@ public class Test1 {
     report.setGender("Male");
     report.setMobile("8790242424");
     report.setPatientName("abc");
-    FileSystemStorageUtil.storeReport("report2", report);
+    FileSystemStorage.storeReport("report2", report);
 
-    System.out.println(FileSystemStorageUtil.getAllReports());
-    FileSystemStorageUtil.getReport("report1");
+    System.out.println(FileSystemStorage.getAllReports());
+    FileSystemStorage.getReport("report1");
 
 
   }

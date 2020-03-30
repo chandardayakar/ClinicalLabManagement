@@ -1,8 +1,12 @@
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 public class Test {
 
     public static void main(String[] args) {
-        String s = "hai %s hai";
-        s =String.format(s,"hai");
-        System.out.println(s);
+        Date t = new Date(System.currentTimeMillis());
+        SimpleDateFormat dateFormat = new SimpleDateFormat();
+        System.out.println(dateFormat.format(t));
+        System.out.println(t.toString());
     }
 }
