@@ -17,6 +17,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringWriter;
 import java.net.URI;
+import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.Set;
 
@@ -73,7 +74,8 @@ public class TestsService {
 
             FileSystemStorage.storeTest(test.getTestName(), test);
 
-            return Response.created(URI.create(test.getTestName()))
+
+            return Response.created(URI.create(URLEncoder.encode(test.getTestName(), "UTF-8")))
                     .build();
         } catch (IOException e) {
             e.printStackTrace();
@@ -104,17 +106,14 @@ public class TestsService {
                 return Response.serverError().entity(err).build();
             }
 
-            if (!Strings.isNullOrEmpty(test.getCost())) {
-                storedTest.setCost(test.getCost());
+            test.setTestName(storedTest.getTestName());
+            if(test.getCost() == null){
+                test.setCost(storedTest.getCost());
             }
-            if (test.getFields() != null) {
-                Set<Field> fields = test.getFields();
 
-                storedTest.setFields(fields);
-            }
-            FileSystemStorage.storeTest(storedTest.getTestName(),storedTest);
+            FileSystemStorage.updateTest(storedTest,test);
             return Response.ok().build();
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
             return Response.serverError()
                     .entity(Utils.errorMessageToJson(e.getMessage()))

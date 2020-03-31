@@ -83,10 +83,13 @@ public class ReportsService {
             Iterator<JsonElement> iterator = tests.iterator();
             while (iterator.hasNext()) {
                 JsonElement element = iterator.next();
-                Test test =  null;
+                Test test = null;
                 String testName = element.getAsString();
                 try {
-                     test = FileSystemStorage.getTest(testName);
+                    test = FileSystemStorage.getTest(testName);
+                    if (test == null) {
+                        throw new Exception();
+                    }
                 } catch (Exception e) {
                     JsonObject err = Utils.errorMessageToJson("Unable to find Test with Name - " + testName);
                     return Response.serverError().entity(err)
@@ -97,7 +100,7 @@ public class ReportsService {
                 report.setTestName(testName);
                 report.setTest(test);
 
-                if(report.getPatientName() == null || report.getPatientName().isEmpty()){
+                if (report.getPatientName() == null || report.getPatientName().isEmpty()) {
                     JsonObject err = Utils.errorMessageToJson("Unable to create a test without Patient Name");
                     return Response.serverError().entity(err)
                             .build();
@@ -115,7 +118,7 @@ public class ReportsService {
             }
 
             resJson.add("reportIds", reportIdArray);
-            return Response.ok(resJson.toString())
+            return Response.created(URI.create("")).entity(resJson.toString())
                     .build();
         } catch (IOException e) {
             e.printStackTrace();
