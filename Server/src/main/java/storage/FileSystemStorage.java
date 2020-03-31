@@ -159,7 +159,7 @@ public class FileSystemStorage {
         try {
             File file = new File(URLDecoder.decode(path, "UTF-8"));
 
-            File allTests = new File(file.getPath() + File.pathSeparator + "allTests");
+            File allTests = new File(u.getClass().getClassLoader().getResource("Tests" + File.separator + "allTests").getFile());
             JsonReader reader = new JsonReader(new FileReader(allTests));
             Gson gson = new Gson();
             JsonObject json = gson.fromJson(reader, JsonObject.class);
@@ -170,6 +170,13 @@ public class FileSystemStorage {
             testInfo.addProperty("price", cost);
 
             array.remove(testInfo);
+
+            json = new JsonObject();
+            json.add("tests", array);
+
+            FileWriter writer = new FileWriter(allTests);
+            writer.write(json.toString());
+            writer.close();
 
             File test = new File(file.getPath() + File.pathSeparator + testName);
 
