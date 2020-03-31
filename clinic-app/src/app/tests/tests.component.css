@@ -20,7 +20,7 @@
   height: calc(100% - 68px);
   overflow-y: auto;
 }
-tr {
+tr td:first-child {
   cursor: pointer;
 }
 .filter {

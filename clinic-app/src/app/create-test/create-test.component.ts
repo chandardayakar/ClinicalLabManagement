@@ -42,7 +42,8 @@ export class CreateTestComponent implements OnInit {
         this.fields.splice(0, this.fields.length);
       },
       error => {
-        this.toastService.show(error.statusText, {
+        this.loading.nativeElement.style.display = "none";
+        this.toastService.show(error, {
           classname: "bg-danger text-light"
         });
       }

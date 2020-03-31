@@ -32,14 +32,14 @@ export class EditTestComponent implements OnInit {
       },
       error => {
         this.loading.nativeElement.style.display = "none";
-        this.toastService.show(error.statusText, {
+        this.toastService.show(error, {
           classname: "bg-danger text-light"
         });
       }
     );
     this.testForm = this.fb.group({
       testName: [{ value: "", disabled: true }],
-      cost: [{ value: null, disabled: true }]
+      cost: [{ value: null }]
     });
   }
   saveTest() {
@@ -47,7 +47,10 @@ export class EditTestComponent implements OnInit {
     this.testFields.forEach(function(v) {
       delete v.id;
     });
-    let data = { fields: this.testFields };
+    let data = {
+      fields: this.testFields,
+      cost: this.testForm.get("cost").value
+    };
     this.testService.updateTest(this.testId, data).subscribe(
       response => {
         this.loading.nativeElement.style.display = "none";
@@ -57,7 +60,7 @@ export class EditTestComponent implements OnInit {
       },
       error => {
         this.loading.nativeElement.style.display = "none";
-        this.toastService.show(error.statusText, {
+        this.toastService.show(error, {
           classname: "bg-danger text-light"
         });
       }

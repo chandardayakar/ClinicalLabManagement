@@ -48,7 +48,8 @@ export class CreateReportComponent implements OnInit {
         this.availableTests = response.tests;
       },
       error => {
-        this.toastService.show(error.statusText, {
+        this.loading.nativeElement.style.display = "none";
+        this.toastService.show(error, {
           classname: "bg-danger text-light"
         });
       }
@@ -110,7 +111,8 @@ export class CreateReportComponent implements OnInit {
             }, 1000);
           },
           error => {
-            this.toastService.show(error.statusText, {
+            this.loading.nativeElement.style.display = "none";
+            this.toastService.show(error, {
               classname: "bg-danger text-light"
             });
           }

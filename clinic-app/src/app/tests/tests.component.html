@@ -29,9 +29,16 @@
             *ngIf="displayTests.length !== 0; then thenBlock; else elseBlock"
           ></div>
           <ng-template #thenBlock>
-            <tr *ngFor="let test of displayTests" (click)="getTest(test.name)">
-              <td>{{ test.name }}</td>
+            <tr *ngFor="let test of displayTests">
+              <td (click)="getTest(test.name)">{{ test.name }}</td>
               <td>{{ test.price }}</td>
+              <td style="text-align: end; width:8%;">
+                <img
+                  class="icon pull-right"
+                  src="../../assets/remove.png"
+                  (click)="deleteTest(test.name)"
+                />
+              </td>
             </tr>
           </ng-template>
           <ng-template #elseBlock>

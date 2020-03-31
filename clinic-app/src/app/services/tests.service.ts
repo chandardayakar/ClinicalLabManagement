@@ -19,4 +19,7 @@ export class TestsService {
   updateTest(id, data) {
     return this._http.put<any>(this.testsUrl + "/" + id, data);
   }
+  deleteTest(id) {
+    return this._http.delete<any>(this.testsUrl + "/" + id);
+  }
 }

@@ -34,7 +34,8 @@ export class EditReportComponent implements OnInit {
         this.updateValues(response);
       },
       error => {
-        this.toastService.show(error.statusText, {
+        this.loading.nativeElement.style.display = "none";
+        this.toastService.show(error, {
           classname: "bg-danger text-light"
         });
       }
@@ -60,7 +61,8 @@ export class EditReportComponent implements OnInit {
         });
       },
       error => {
-        this.toastService.show(error.statusText, {
+        this.loading.nativeElement.style.display = "none";
+        this.toastService.show(error, {
           classname: "bg-danger text-light"
         });
       }

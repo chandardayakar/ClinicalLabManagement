@@ -26,7 +26,8 @@ export class TestsComponent implements OnInit {
         this.displayTests = response.tests;
       },
       error => {
-        this.toastService.show(error.statusText, {
+        this.loading.nativeElement.style.display = "none";
+        this.toastService.show(error, {
           classname: "bg-danger text-light"
         });
       }
@@ -43,5 +44,25 @@ export class TestsComponent implements OnInit {
   }
   getTest(id) {
     this.router.navigate(["/test", id]);
+  }
+  deleteTest(id) {
+    this.loading.nativeElement.style.display = "block";
+    this._testService.deleteTest(id).subscribe(
+      response => {
+        this.loading.nativeElement.style.display = "none";
+        this.tests.splice(
+          this.tests.findIndex(ele => {
+            return ele.name === name;
+          }),
+          1
+        );
+      },
+      error => {
+        this.loading.nativeElement.style.display = "none";
+        this.toastService.show(error, {
+          classname: "bg-danger text-light"
+        });
+      }
+    );
   }
 }

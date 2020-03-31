@@ -27,7 +27,8 @@ export class ReportsComponent implements OnInit {
         this.displayReports = response.reports;
       },
       error => {
-        this.toastService.show(error.statusText, {
+        this.loading.nativeElement.style.display = "none";
+        this.toastService.show(error, {
           classname: "bg-danger text-light"
         });
       }
