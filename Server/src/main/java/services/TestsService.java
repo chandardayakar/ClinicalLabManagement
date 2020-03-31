@@ -17,6 +17,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringWriter;
 import java.net.URI;
+import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.Set;
 
@@ -47,7 +48,7 @@ public class TestsService {
         } catch (JsonProcessingException e) {
             e.printStackTrace();
             JsonObject err = Utils.errorMessageToJson(e.getMessage());
-            return Response.serverError().entity(err)
+            return Response.serverError().entity(err.toString())
                     .build();
         }
 
@@ -68,18 +69,19 @@ public class TestsService {
 
             if (check != null) {
                 JsonObject err = Utils.errorMessageToJson("Test with given name already exists, - " + check.getTestName());
-                return Response.serverError().entity(err).build();
+                return Response.serverError().entity(err.toString()).build();
             }
 
             FileSystemStorage.storeTest(test.getTestName(), test);
 
-            return Response.created(URI.create(test.getTestName()))
+
+            return Response.created(URI.create(URLEncoder.encode(test.getTestName(), "UTF-8")))
                     .build();
         } catch (IOException e) {
             e.printStackTrace();
             JsonObject err = Utils.errorMessageToJson(e.getMessage());
             return Response.serverError()
-                    .entity(err)
+                    .entity(err.toString())
                     .build();
         }
     }
@@ -101,23 +103,20 @@ public class TestsService {
 
             if (storedTest == null) {
                 JsonObject err = Utils.errorMessageToJson("Test with the given name not found. - " + testId);
-                return Response.serverError().entity(err).build();
+                return Response.serverError().entity(err.toString()).build();
             }
 
-            if (!Strings.isNullOrEmpty(test.getCost())) {
-                storedTest.setCost(test.getCost());
+            test.setTestName(storedTest.getTestName());
+            if(test.getCost() == null){
+                test.setCost(storedTest.getCost());
             }
-            if (test.getFields() != null) {
-                Set<Field> fields = test.getFields();
 
-                storedTest.setFields(fields);
-            }
-            FileSystemStorage.storeTest(storedTest.getTestName(),storedTest);
+            FileSystemStorage.updateTest(storedTest,test);
             return Response.ok().build();
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
             return Response.serverError()
-                    .entity(Utils.errorMessageToJson(e.getMessage()))
+                    .entity(Utils.errorMessageToJson(e.getMessage()).toString())
                     .build();
         }
     }
@@ -128,7 +127,7 @@ public class TestsService {
         Test test = FileSystemStorage.getTest(testId);
         if (test == null) {
             JsonObject err = Utils.errorMessageToJson("Test with the given name not found. - " + testId);
-            return Response.serverError().entity(err).build();
+            return Response.serverError().entity(err.toString()).build();
         }
 
         FileSystemStorage.deleteTest(test.getTestName(), test.getCost());

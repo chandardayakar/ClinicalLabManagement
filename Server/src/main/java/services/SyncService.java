@@ -58,7 +58,7 @@ public class SyncService {
             SyncStatus.setSyncStatus("ERROR");
             e.printStackTrace();
             JsonObject err = Utils.errorMessageToJson("Check Logs and try again later");
-            return Response.serverError().entity(err)
+            return Response.serverError().entity(err.toString())
                     .build();
         }
         JsonObject jsonResult = new JsonObject();
