@@ -48,7 +48,7 @@ public class TestsService {
         } catch (JsonProcessingException e) {
             e.printStackTrace();
             JsonObject err = Utils.errorMessageToJson(e.getMessage());
-            return Response.serverError().entity(err)
+            return Response.serverError().entity(err.toString())
                     .build();
         }
 
@@ -69,7 +69,7 @@ public class TestsService {
 
             if (check != null) {
                 JsonObject err = Utils.errorMessageToJson("Test with given name already exists, - " + check.getTestName());
-                return Response.serverError().entity(err).build();
+                return Response.serverError().entity(err.toString()).build();
             }
 
             FileSystemStorage.storeTest(test.getTestName(), test);
@@ -81,7 +81,7 @@ public class TestsService {
             e.printStackTrace();
             JsonObject err = Utils.errorMessageToJson(e.getMessage());
             return Response.serverError()
-                    .entity(err)
+                    .entity(err.toString())
                     .build();
         }
     }
@@ -103,7 +103,7 @@ public class TestsService {
 
             if (storedTest == null) {
                 JsonObject err = Utils.errorMessageToJson("Test with the given name not found. - " + testId);
-                return Response.serverError().entity(err).build();
+                return Response.serverError().entity(err.toString()).build();
             }
 
             test.setTestName(storedTest.getTestName());
@@ -116,7 +116,7 @@ public class TestsService {
         } catch (Exception e) {
             e.printStackTrace();
             return Response.serverError()
-                    .entity(Utils.errorMessageToJson(e.getMessage()))
+                    .entity(Utils.errorMessageToJson(e.getMessage()).toString())
                     .build();
         }
     }
@@ -127,7 +127,7 @@ public class TestsService {
         Test test = FileSystemStorage.getTest(testId);
         if (test == null) {
             JsonObject err = Utils.errorMessageToJson("Test with the given name not found. - " + testId);
-            return Response.serverError().entity(err).build();
+            return Response.serverError().entity(err.toString()).build();
         }
 
         FileSystemStorage.deleteTest(test.getTestName(), test.getCost());
