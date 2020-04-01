@@ -152,12 +152,14 @@ public class FileSystemStorage {
 
     }
 
-    public static void deleteTest(String testName, String cost) {
+    public static void deleteTest(String testName, String cost) throws Exception {
         FileSystemStorage u = new FileSystemStorage();
 
         String path = u.getClass().getClassLoader().getResource("Tests" + File.separator + testName).getPath();
         try {
-            File file = new File(URLDecoder.decode(path, "UTF-8"));
+            File test = new File(URLDecoder.decode(path, "UTF-8"));
+
+            FileUtils.forceDelete(test);
 
             File allTests = new File(u.getClass().getClassLoader().getResource("Tests" + File.separator + "allTests").getFile());
             JsonReader reader = new JsonReader(new FileReader(allTests));
@@ -178,12 +180,9 @@ public class FileSystemStorage {
             writer.write(json.toString());
             writer.close();
 
-            File test = new File(file.getPath() + File.pathSeparator + testName);
-
-            test.delete();
-
         } catch (IOException e) {
             e.printStackTrace();
+            throw new Exception("Test cannot be deleted due to - "+ e.getMessage());
         }
     }
 

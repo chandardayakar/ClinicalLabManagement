@@ -130,7 +130,12 @@ public class TestsService {
             return Response.serverError().entity(err.toString()).build();
         }
 
-        FileSystemStorage.deleteTest(test.getTestName(), test.getCost());
+        try {
+            FileSystemStorage.deleteTest(test.getTestName(), test.getCost());
+        } catch (Exception e) {
+            JsonObject err = Utils.errorMessageToJson(e.getMessage());
+            return Response.serverError().entity(err.toString()).build();
+        }
 
         return Response.ok().build();
     }
