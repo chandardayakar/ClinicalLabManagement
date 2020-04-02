@@ -28,8 +28,7 @@ public class FileSystemStorage {
 
             File allTests = new File(u.getClass().getClassLoader().getResource("Tests" + File.separator + "allTests").getFile());
 
-            try {
-                JsonReader reader = new JsonReader(new FileReader(allTests));
+            try(JsonReader reader = new JsonReader(new FileReader(allTests))) {
                 Gson gson = new Gson();
                 JsonObject json = gson.fromJson(reader, JsonObject.class);
                 JsonArray array = (JsonArray) json.getAsJsonArray("tests");
@@ -54,6 +53,7 @@ public class FileSystemStorage {
             }
             ObjectMapper objectMapper = new ObjectMapper();
             objectMapper.writeValue(file, test);
+
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -64,8 +64,7 @@ public class FileSystemStorage {
         File file = new File(u.getClass().getClassLoader().getResource("Tests" + File.separator + "allTests").getFile());
 
         JsonObject json = new JsonObject();
-        try {
-            JsonReader reader = new JsonReader(new FileReader(file));
+        try(JsonReader reader = new JsonReader(new FileReader(file))) {
             Gson gson = new Gson();
             json = gson.fromJson(reader, JsonObject.class);
 
@@ -87,8 +86,7 @@ public class FileSystemStorage {
         }
 
         if (file.exists()) {
-            try {
-                JsonReader reader = new JsonReader(new FileReader(file));
+            try (JsonReader reader = new JsonReader(new FileReader(file))){
                 Gson gson = new Gson();
                 Test test = gson.fromJson(reader, Test.class);
                 return test;
@@ -99,15 +97,13 @@ public class FileSystemStorage {
 
         return null;
     }
-
     public static void updateTest(Test oldTest, Test newTest) throws Exception
     {
         FileSystemStorage u = new FileSystemStorage();
 
         File allTests = new File(u.getClass().getClassLoader().getResource("Tests" + File.separator + "allTests").getFile());
 
-        try {
-            JsonReader reader = new JsonReader(new FileReader(allTests));
+        try(JsonReader reader = new JsonReader(new FileReader(allTests))) {
             Gson gson = new Gson();
             JsonObject json = gson.fromJson(reader, JsonObject.class);
             JsonArray array = (JsonArray) json.getAsJsonArray("tests");
@@ -165,6 +161,7 @@ public class FileSystemStorage {
             JsonReader reader = new JsonReader(new FileReader(allTests));
             Gson gson = new Gson();
             JsonObject json = gson.fromJson(reader, JsonObject.class);
+            reader.close();
             JsonArray array = (JsonArray) json.getAsJsonArray("tests");
 
             JsonObject testInfo = new JsonObject();
@@ -201,8 +198,7 @@ public class FileSystemStorage {
             File allReports = new File(u.getClass().getClassLoader().getResource("Reports" + File.separator + "allReports").getFile());
 
             ObjectMapper objectMapper = new ObjectMapper();
-            try {
-                JsonReader reader = new JsonReader(new FileReader(allReports));
+            try(JsonReader reader = new JsonReader(new FileReader(allReports))) {
                 Gson gson = new Gson();
                 JsonObject json = gson.fromJson(reader, JsonObject.class);
                 JsonArray reports = json.getAsJsonArray("reports");
@@ -256,9 +252,7 @@ public class FileSystemStorage {
         File file = new File(u.getClass().getClassLoader().getResource("Reports" + File.separator + "allReports").getFile());
 
         JsonObject json = new JsonObject();
-        try {
-
-            JsonReader reader = new JsonReader(new FileReader(file));
+        try(JsonReader reader = new JsonReader(new FileReader(file))) {
             Gson gson = new Gson();
             json = gson.fromJson(reader, JsonObject.class);
 
@@ -282,6 +276,7 @@ public class FileSystemStorage {
             Gson gson = new GsonBuilder().registerTypeAdapter(Date.class, new DateDeserializer()).create();
 
             Report report = gson.fromJson(reader, Report.class);
+            reader.close();
             return report;
         } catch (IOException e) {
             e.printStackTrace();
@@ -324,8 +319,7 @@ public class FileSystemStorage {
         File allReports = new File(u.getClass().getClassLoader().getResource("Reports" + File.separator + "allReports").getFile());
 
         ObjectMapper objectMapper = new ObjectMapper();
-        try {
-            JsonReader reader = new JsonReader(new FileReader(allReports));
+        try (JsonReader reader = new JsonReader(new FileReader(allReports))){
             Gson gson = new Gson();
             JsonObject json = gson.fromJson(reader, JsonObject.class);
             JsonArray reports = json.getAsJsonArray("reports");
