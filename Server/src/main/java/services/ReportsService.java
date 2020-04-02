@@ -1,18 +1,14 @@
 package services;
 
+import Utils.DateSerializer;
 import Utils.Utils;
-import com.google.api.client.json.Json;
-import storage.FileSystemStorage;
 import beans.Report;
 import beans.Test;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.gson.Gson;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
+import com.google.gson.*;
 import org.apache.commons.io.IOUtils;
+import storage.FileSystemStorage;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
@@ -44,17 +40,10 @@ public class ReportsService {
     public Response getReport(@PathParam("reportId") String reportName) {
         Report report = FileSystemStorage.getReport(reportName);
 
-        ObjectMapper mapper = new ObjectMapper();
-        try {
-            return Response.ok(mapper.writeValueAsString(report))
-                    .build();
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-            JsonObject err = Utils.errorMessageToJson(e.getMessage());
-            return Response.serverError().entity(err.toString())
-                    .build();
-        }
+        Gson gson = new GsonBuilder().registerTypeAdapter(Date.class, new DateSerializer()).create();
 
+        return Response.ok(gson.toJson(report))
+                .build();
     }
 
     @POST

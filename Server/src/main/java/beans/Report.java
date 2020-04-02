@@ -20,6 +20,12 @@ public class Report {
 
     private Date lastModified;
 
+    private Date sampleCollectionDate;
+
+    private Date reportingDate;
+
+    private String referrebBy;
+
     public String getPatientName() {
         return patientName;
     }
@@ -82,5 +88,29 @@ public class Report {
 
     public void setLastModified(Date lastModified) {
         this.lastModified = lastModified;
+    }
+
+    public Date getSampleCollectionDate() {
+        return sampleCollectionDate;
+    }
+
+    public void setSampleCollectionDate(Date sampleCollectionDate) {
+        this.sampleCollectionDate = sampleCollectionDate;
+    }
+
+    public Date getReportingDate() {
+        return reportingDate;
+    }
+
+    public void setReportingDate(Date reportingDate) {
+        this.reportingDate = reportingDate;
+    }
+
+    public String getReferrebBy() {
+        return referrebBy;
+    }
+
+    public void setReferrebBy(String referrebBy) {
+        this.referrebBy = referrebBy;
     }
 }
