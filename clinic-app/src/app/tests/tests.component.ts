@@ -52,7 +52,7 @@ export class TestsComponent implements OnInit {
         this.loading.nativeElement.style.display = "none";
         this.tests.splice(
           this.tests.findIndex(ele => {
-            return ele.name === name;
+            return ele.name === id;
           }),
           1
         );
