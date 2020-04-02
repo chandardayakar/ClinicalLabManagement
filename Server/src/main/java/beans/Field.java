@@ -4,6 +4,8 @@ import java.util.Objects;
 
 public class Field {
 
+    private int fieldId;
+
     private String value;
 
     private String refValue;
@@ -42,6 +44,14 @@ public class Field {
 
     public void setUnit(String unit) {
         this.unit = unit;
+    }
+
+    public int getFieldId() {
+        return fieldId;
+    }
+
+    public void setFieldId(int fieldId) {
+        this.fieldId = fieldId;
     }
 
     @Override
