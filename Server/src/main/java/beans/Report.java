@@ -24,7 +24,7 @@ public class Report {
 
     private Date reportingDate;
 
-    private String referrebBy;
+    private String referredBy;
 
     public String getPatientName() {
         return patientName;
@@ -106,11 +106,11 @@ public class Report {
         this.reportingDate = reportingDate;
     }
 
-    public String getReferrebBy() {
-        return referrebBy;
+    public String getReferredBy() {
+        return referredBy;
     }
 
-    public void setReferrebBy(String referrebBy) {
-        this.referrebBy = referrebBy;
+    public void setReferredBy(String referredBy) {
+        this.referredBy = referredBy;
     }
 }
