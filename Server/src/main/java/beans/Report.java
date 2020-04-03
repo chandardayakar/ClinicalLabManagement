@@ -20,9 +20,9 @@ public class Report {
 
     private Date lastModified;
 
-    private Date sampleCollectionDate;
+    private DateObj sampleCollectionDate;
 
-    private Date reportingDate;
+    private DateObj reportingDate;
 
     private String referredBy;
 
@@ -90,19 +90,19 @@ public class Report {
         this.lastModified = lastModified;
     }
 
-    public Date getSampleCollectionDate() {
+    public DateObj getSampleCollectionDate() {
         return sampleCollectionDate;
     }
 
-    public void setSampleCollectionDate(Date sampleCollectionDate) {
+    public void setSampleCollectionDate(DateObj sampleCollectionDate) {
         this.sampleCollectionDate = sampleCollectionDate;
     }
 
-    public Date getReportingDate() {
+    public DateObj getReportingDate() {
         return reportingDate;
     }
 
-    public void setReportingDate(Date reportingDate) {
+    public void setReportingDate(DateObj reportingDate) {
         this.reportingDate = reportingDate;
     }
 
