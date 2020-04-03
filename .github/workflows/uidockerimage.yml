@@ -1,4 +1,4 @@
-name: Docker Image CI
+name: UIDockerImage
 
 on:
   push:
@@ -16,3 +16,5 @@ jobs:
     - uses: actions/checkout@v2
     - name: Build the Docker image
       run: docker build . --file clinic-app/Dockerfile --tag clinic-app:$(date +%s)
+    - name: Docker Push
+      uses: mkhasim/clinic-app:v1
