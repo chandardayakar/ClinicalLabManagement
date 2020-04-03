@@ -4,6 +4,8 @@ import java.util.Date;
 
 public class Report {
 
+    private String reportId;
+
     private String patientName;
 
     private String age;
@@ -25,6 +27,14 @@ public class Report {
     private DateObj reportingDate;
 
     private String referredBy;
+
+    public String getReportId() {
+        return reportId;
+    }
+
+    public void setReportId(String reportId) {
+        this.reportId = reportId;
+    }
 
     public String getPatientName() {
         return patientName;

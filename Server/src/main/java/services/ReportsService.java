@@ -3,6 +3,7 @@ package services;
 import Utils.DateSerializer;
 import Utils.Utils;
 import beans.Report;
+import beans.Search;
 import beans.Test;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -17,7 +18,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringWriter;
 import java.net.URI;
-import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
 import java.util.Date;
 import java.util.Iterator;
@@ -27,10 +27,20 @@ public class ReportsService {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getAllReports() {
+    public Response getAllReports(@QueryParam("Search") String searchQuery) {
+
         JsonObject allReports = FileSystemStorage.getAllReports();
-        return Response.ok(allReports.toString())
-                .build();
+        if (searchQuery != null) {
+            Search search = Utils.parseSearch(searchQuery);
+            JsonObject reports = FileSystemStorage.searchReports(search);
+
+            return Response.ok(reports.toString()).build();
+        } else {
+
+            return Response.ok(allReports.toString())
+                    .build();
+        }
+
     }
 
 
@@ -145,23 +155,23 @@ public class ReportsService {
                 storedReport.setMobile(report.getMobile());
             }
 
-            if(report.getAge() != null){
+            if (report.getAge() != null) {
                 storedReport.setAge(report.getAge());
             }
 
-            if(report.getGender() != null){
+            if (report.getGender() != null) {
                 storedReport.setGender(storedReport.getGender());
             }
 
-            if(report.getReportingDate() != null){
+            if (report.getReportingDate() != null) {
                 storedReport.setReportingDate(report.getReportingDate());
             }
 
-            if(report.getSampleCollectionDate() != null){
+            if (report.getSampleCollectionDate() != null) {
                 storedReport.setSampleCollectionDate(report.getSampleCollectionDate());
             }
 
-            if(report.getReferredBy() != null){
+            if (report.getReferredBy() != null) {
                 storedReport.setReferredBy(report.getReferredBy());
             }
 

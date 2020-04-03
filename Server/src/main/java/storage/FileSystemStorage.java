@@ -2,22 +2,27 @@ package storage;
 
 import Utils.DateDeserializer;
 import beans.Report;
+import beans.Search;
 import beans.Test;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
+import com.google.gson.*;
+import com.google.gson.reflect.TypeToken;
 import com.google.gson.stream.JsonReader;
+import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.io.FileUtils;
 
 import java.io.*;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Type;
 import java.net.URI;
 import java.net.URLDecoder;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
+import java.util.List;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 public class FileSystemStorage {
 
@@ -353,5 +358,50 @@ public class FileSystemStorage {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public static JsonObject searchReports(Search search) {
+
+        JsonObject allReports = getAllReports();
+
+        JsonArray resArray = new JsonArray();
+
+        JsonArray reports = allReports.getAsJsonArray("reports");
+        Gson gson = new GsonBuilder()
+                .registerTypeAdapter(Date.class, new DateDeserializer())
+                .create();
+        Type type = new TypeToken<List<Report>>() {
+        }.getType();
+        ArrayList<Report> reportsArray = gson.fromJson(reports, type);
+
+
+        List<Report> filteredArray = reportsArray.parallelStream().filter(a -> {
+            try {
+                String value = (String) PropertyUtils.getProperty(a, search.getKey());
+                switch (search.getOperator()) {
+                    case eq: {
+                        if (value.contains(search.getValue())) {
+                            return true;
+                        } else {
+                            return false;
+                        }
+                    }
+                    default:
+                        return false;
+                }
+
+            } catch (Exception e) {
+                e.printStackTrace();
+                return false;
+            }
+        }).collect(Collectors.toList());
+
+        JsonElement element = gson.toJsonTree(filteredArray, new TypeToken<List<Report>>() {
+        }.getType());
+
+        JsonObject result = new JsonObject();
+        result.add("reports", element.getAsJsonArray());
+
+        return result;
     }
 }
