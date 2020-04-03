@@ -1,9 +1,9 @@
 ### STAGE 1: Build ###
 FROM node AS build
 WORKDIR /usr/src/app
-COPY clinic-app/package.json ./
+COPY package.json ./
 RUN npm install
-COPY clinic-app/. .
+COPY . .
 RUN npm run build
 
 ### STAGE 2: Run ###
