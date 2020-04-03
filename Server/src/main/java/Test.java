@@ -7,6 +7,6 @@ public class Test {
 
     public static void main(String[] args) {
         Date t = new Date(1585827068001L);
-        System.out.println(new JsonParser().parse("hai"));
+        System.out.println(System.getenv());
     }
 }

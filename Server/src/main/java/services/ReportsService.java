@@ -205,7 +205,7 @@ public class ReportsService {
             filePath = FileSystemStorage.saveReport(reportId, is);
             return Response.created(new URI(filePath))
                     .build();
-        } catch (IOException | URISyntaxException e) {
+        } catch (Exception e) {
             e.printStackTrace();
             JsonObject err = Utils.errorMessageToJson("Report Saving Failed check server logs for more details");
             return Response.serverError().entity(err.toString())

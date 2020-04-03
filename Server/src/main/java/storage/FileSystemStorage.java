@@ -17,18 +17,29 @@ import java.net.URLDecoder;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Iterator;
+import java.util.logging.Logger;
 
 public class FileSystemStorage {
 
 
+    public static String getDataPath() throws Exception {
+        String dataFolderPath = System.getenv("clinic_app_data_folder");
+        if (dataFolderPath == null) {
+            throw new Exception("Data folder not configured");
+        }
+        if (dataFolderPath.endsWith(File.separator)) {
+            dataFolderPath = dataFolderPath.substring(0, dataFolderPath.indexOf(File.separator));
+        }
+        return dataFolderPath;
+    }
+
     public static void storeTest(String testName, Test test) {
-        FileSystemStorage u = new FileSystemStorage();
 
         try {
 
-            File allTests = new File(u.getClass().getClassLoader().getResource("Tests" + File.separator + "allTests").getFile());
+            File allTests = new File(getDataPath() + File.separator + "Tests" + File.separator + "allTests");
 
-            try(JsonReader reader = new JsonReader(new FileReader(allTests))) {
+            try (JsonReader reader = new JsonReader(new FileReader(allTests))) {
                 Gson gson = new Gson();
                 JsonObject json = gson.fromJson(reader, JsonObject.class);
                 JsonArray array = (JsonArray) json.getAsJsonArray("tests");
@@ -45,7 +56,7 @@ public class FileSystemStorage {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            File testFolder = new File(u.getClass().getClassLoader().getResource("Tests").getFile());
+            File testFolder = new File(getDataPath() + File.separator + "Tests");
             File file = new File(testFolder.getAbsolutePath() + File.separator + testName);
 
             if (!file.exists()) {
@@ -54,39 +65,42 @@ public class FileSystemStorage {
             ObjectMapper objectMapper = new ObjectMapper();
             objectMapper.writeValue(file, test);
 
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
     public static JsonObject getAllTests() {
-        FileSystemStorage u = new FileSystemStorage();
-        File file = new File(u.getClass().getClassLoader().getResource("Tests" + File.separator + "allTests").getFile());
-
+        File file = null;
+        try {
+            file = new File(getDataPath() + File.separator + "Tests" + File.separator + "allTests");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         JsonObject json = new JsonObject();
-        try(JsonReader reader = new JsonReader(new FileReader(file))) {
+        try (JsonReader reader = new JsonReader(new FileReader(file))) {
+
             Gson gson = new Gson();
             json = gson.fromJson(reader, JsonObject.class);
 
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return json;
     }
 
     public static Test getTest(String testName) {
-        FileSystemStorage u = new FileSystemStorage();
 
         File file = null;
         try {
-            String path = u.getClass().getClassLoader().getResource("Tests" + File.separator + testName).getPath();
+            String path = getDataPath() + File.separator + "Tests" + File.separator + testName;
             file = new File(URLDecoder.decode(path, "UTF-8"));
-        } catch (NullPointerException | UnsupportedEncodingException e) {
+        } catch (Exception e) {
             return null;
         }
 
         if (file.exists()) {
-            try (JsonReader reader = new JsonReader(new FileReader(file))){
+            try (JsonReader reader = new JsonReader(new FileReader(file))) {
                 Gson gson = new Gson();
                 Test test = gson.fromJson(reader, Test.class);
                 return test;
@@ -97,13 +111,12 @@ public class FileSystemStorage {
 
         return null;
     }
-    public static void updateTest(Test oldTest, Test newTest) throws Exception
-    {
-        FileSystemStorage u = new FileSystemStorage();
 
-        File allTests = new File(u.getClass().getClassLoader().getResource("Tests" + File.separator + "allTests").getFile());
+    public static void updateTest(Test oldTest, Test newTest) throws Exception {
 
-        try(JsonReader reader = new JsonReader(new FileReader(allTests))) {
+        File allTests = new File(getDataPath() + File.separator + "Tests" + File.separator + "allTests");
+
+        try (JsonReader reader = new JsonReader(new FileReader(allTests))) {
             Gson gson = new Gson();
             JsonObject json = gson.fromJson(reader, JsonObject.class);
             JsonArray array = (JsonArray) json.getAsJsonArray("tests");
@@ -131,7 +144,7 @@ public class FileSystemStorage {
                 throw new Exception("Test does not exist");
             }
 
-            File testFolder = new File(u.getClass().getClassLoader().getResource("Tests").getFile());
+            File testFolder = new File(getDataPath() + File.separator + "Tests");
             File file = new File(testFolder.getAbsolutePath() + File.separator + oldTest.getTestName());
 
             if (!file.exists()) {
@@ -140,8 +153,6 @@ public class FileSystemStorage {
             ObjectMapper objectMapper = new ObjectMapper();
             objectMapper.writeValue(file, newTest);
 
-        } catch (IOException e) {
-            e.printStackTrace();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -149,15 +160,14 @@ public class FileSystemStorage {
     }
 
     public static void deleteTest(String testName, String cost) throws Exception {
-        FileSystemStorage u = new FileSystemStorage();
 
-        String path = u.getClass().getClassLoader().getResource("Tests" + File.separator + testName).getPath();
+        String path = getDataPath() + File.separator + "Tests" + File.separator + testName;
         try {
             File test = new File(URLDecoder.decode(path, "UTF-8"));
 
             FileUtils.forceDelete(test);
 
-            File allTests = new File(u.getClass().getClassLoader().getResource("Tests" + File.separator + "allTests").getFile());
+            File allTests = new File(getDataPath() + File.separator + "Tests" + File.separator + "allTests");
             JsonReader reader = new JsonReader(new FileReader(allTests));
             Gson gson = new Gson();
             JsonObject json = gson.fromJson(reader, JsonObject.class);
@@ -179,26 +189,22 @@ public class FileSystemStorage {
 
         } catch (IOException e) {
             e.printStackTrace();
-            throw new Exception("Test cannot be deleted due to - "+ e.getMessage());
+            throw new Exception("Test cannot be deleted due to - " + e.getMessage());
         }
     }
 
 
     public static void storeReport(String reportName, Report report) {
 
-        FileSystemStorage u = new FileSystemStorage();
-
-        File reportsFolder = new File(u.getClass().getClassLoader().getResource("Reports").getFile());
-
-        File file = new File(reportsFolder.getAbsolutePath() + File.separator + reportName);
-
-
         try {
+            File reportsFolder = new File(getDataPath() + File.separator + "Reports");
 
-            File allReports = new File(u.getClass().getClassLoader().getResource("Reports" + File.separator + "allReports").getFile());
+            File file = new File(reportsFolder.getAbsolutePath() + File.separator + reportName);
+
+            File allReports = new File(getDataPath() + File.separator + "Reports" + File.separator + "allReports");
 
             ObjectMapper objectMapper = new ObjectMapper();
-            try(JsonReader reader = new JsonReader(new FileReader(allReports))) {
+            try (JsonReader reader = new JsonReader(new FileReader(allReports))) {
                 Gson gson = new Gson();
                 JsonObject json = gson.fromJson(reader, JsonObject.class);
                 JsonArray reports = json.getAsJsonArray("reports");
@@ -225,41 +231,43 @@ public class FileSystemStorage {
             file.createNewFile();
 
             objectMapper.writeValue(file, report);
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
     public static void updateReport(String reportId, Report newReport) {
 
-        FileSystemStorage u = new FileSystemStorage();
-
-        File reportsFolder = new File(u.getClass().getClassLoader().getResource("Reports").getFile());
-
-        File file = new File(reportsFolder.getAbsolutePath() + File.separator + reportId);
         try {
+            File reportsFolder = new File(getDataPath() + File.separator + "Reports");
+
+            File file = new File(reportsFolder.getAbsolutePath() + File.separator + reportId);
 
             Report oldReport = getReport(reportId);
-            if(!oldReport.getMobile().equals(newReport.getMobile())){
-                updateReportField(reportId,"mobile",newReport.getMobile());
+            if (!oldReport.getMobile().equals(newReport.getMobile())) {
+                updateReportField(reportId, "mobile", newReport.getMobile());
             }
-            if(!oldReport.getLastModified().equals(newReport.getLastModified())){
-                updateReportField(reportId,"lastModified",new SimpleDateFormat().format(newReport.getLastModified()));
+            if (!oldReport.getLastModified().equals(newReport.getLastModified())) {
+                updateReportField(reportId, "lastModified", new SimpleDateFormat().format(newReport.getLastModified()));
             }
 
             ObjectMapper objectMapper = new ObjectMapper();
             objectMapper.writeValue(file, newReport);
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
     public static JsonObject getAllReports() {
-        FileSystemStorage u = new FileSystemStorage();
-        File file = new File(u.getClass().getClassLoader().getResource("Reports" + File.separator + "allReports").getFile());
+        File file = null;
+        try {
+            file = new File(getDataPath() + File.separator + "Reports" + File.separator + "allReports");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         JsonObject json = new JsonObject();
-        try(JsonReader reader = new JsonReader(new FileReader(file))) {
+        try (JsonReader reader = new JsonReader(new FileReader(file))) {
             Gson gson = new Gson();
             json = gson.fromJson(reader, JsonObject.class);
 
@@ -270,13 +278,9 @@ public class FileSystemStorage {
     }
 
     public static Report getReport(String reportName) {
-        FileSystemStorage u = new FileSystemStorage();
 
-        String path = u.getClass().getClassLoader().getResource("Reports" + File.separator + reportName).getPath();
-
-
-        ObjectMapper objectMapper = new ObjectMapper();
         try {
+            String path = getDataPath() + File.separator + "Reports" + File.separator + reportName;
             File file = new File(URLDecoder.decode(path, "UTF-8"));
 
             JsonReader reader = new JsonReader(new FileReader(file));
@@ -285,15 +289,14 @@ public class FileSystemStorage {
             Report report = gson.fromJson(reader, Report.class);
             reader.close();
             return report;
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return null;
     }
 
-    public static String saveReport(String reportName, InputStream is) throws IOException {
-        FileSystemStorage u = new FileSystemStorage();
-        File reportsFolder = new File(u.getClass().getClassLoader().getResource("Reports").getFile());
+    public static String saveReport(String reportName, InputStream is) throws Exception {
+        File reportsFolder = new File(getDataPath() + File.separator + "Reports");
 
         return saveFile(reportsFolder.getPath(), reportName, is);
     }
@@ -308,8 +311,7 @@ public class FileSystemStorage {
     }
 
     public static InputStream downloadReport(String reportId) throws Exception {
-        FileSystemStorage u = new FileSystemStorage();
-        File reportsFolder = new File(u.getClass().getClassLoader().getResource("Reports").getFile());
+        File reportsFolder = new File(getDataPath() + File.separator + "Reports");
 
         File report = new File(reportsFolder.getPath() + "/" + reportId);
         if (!report.exists()) {
@@ -322,11 +324,14 @@ public class FileSystemStorage {
 
     private static void updateReportField(String reportId, String key, String value) {
 
-        FileSystemStorage u = new FileSystemStorage();
-        File allReports = new File(u.getClass().getClassLoader().getResource("Reports" + File.separator + "allReports").getFile());
+        File allReports = null;
+        try {
+            allReports = new File(getDataPath() + File.separator + "Reports" + File.separator + "allReports");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
-        ObjectMapper objectMapper = new ObjectMapper();
-        try (JsonReader reader = new JsonReader(new FileReader(allReports))){
+        try (JsonReader reader = new JsonReader(new FileReader(allReports))) {
             Gson gson = new Gson();
             JsonObject json = gson.fromJson(reader, JsonObject.class);
             JsonArray reports = json.getAsJsonArray("reports");
