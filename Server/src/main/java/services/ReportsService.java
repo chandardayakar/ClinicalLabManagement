@@ -127,13 +127,19 @@ public class ReportsService {
             IOUtils.copy(is, writer, StandardCharsets.UTF_8);
             String payload = writer.toString();
 
-            ObjectMapper mapper = new ObjectMapper();
+            ObjectMapper mapper = new ObjectMapper()
+                    .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
             Report report = mapper.readValue(payload, Report.class);
-            Test test = report.getTest();
 
+            Test test = mapper.readValue(payload, Test.class);
 
             Report storedReport = FileSystemStorage.getReport(reportId);
             Test storedTest = storedReport.getTest();
+
+            // as we dont get test from here we populate it with existing values
+            // fields we get so no need to populate them
+            test.setTestName(storedTest.getTestName());
+            test.setCost(storedTest.getCost());
 
             if (report.getMobile() != null) {
                 storedReport.setMobile(report.getMobile());
