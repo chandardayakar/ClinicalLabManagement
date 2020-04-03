@@ -16,7 +16,7 @@ export class EditReportComponent implements OnInit {
   public testName;
   public testFields = [];
   public reportId;
-  public genders = ["male", "female"];
+  public genders = ["Male", "Female", "Others"];
   @ViewChild("loading", { read: ElementRef }) loading: ElementRef;
   constructor(
     private fb: FormBuilder,
@@ -42,17 +42,26 @@ export class EditReportComponent implements OnInit {
     );
     this.reportForm = this.fb.group({
       patientName: [{ value: "", disabled: true }],
-      age: [{ value: null, disabled: true }],
-      gender: [{ value: null, disabled: true }],
-      mobile: [{ value: null, disabled: true }]
+      age: [null, [Validators.required]],
+      gender: [null, [Validators.required]],
+      sampleCollectionDate: [null, [Validators.required]],
+      reportingDate: [null, [Validators.required]],
+      mobile: [
+        "",
+        [
+          Validators.required,
+          Validators.minLength(10),
+          Validators.maxLength(10),
+          Validators.pattern("^[0-9]*$")
+        ]
+      ],
+      referredBy: [null]
     });
   }
   saveReport() {
     this.loading.nativeElement.style.display = "block";
-    this.testFields.forEach(function(v) {
-      delete v.id;
-    });
-    let data = { fields: this.testFields };
+    let data = this.reportForm.getRawValue();
+    data.fields = this.testFields;
     this.reportsService.saveReport(this.reportId, data).subscribe(
       response => {
         this.loading.nativeElement.style.display = "none";
@@ -73,12 +82,10 @@ export class EditReportComponent implements OnInit {
       patientName: response.patientName,
       age: response.age,
       gender: response.gender,
-      mobile: response.mobile
-    });
-    let fieldCounter = 1;
-    response.test.fields.forEach(element => {
-      element.id = fieldCounter;
-      fieldCounter++;
+      mobile: response.mobile,
+      sampleCollectionDate: response.sampleCollectionDate,
+      reportingDate: response.reportingDate,
+      referredBy: response.referredBy
     });
     this.testFields = response.test.fields;
     this.testName = response.testName;
@@ -86,7 +93,7 @@ export class EditReportComponent implements OnInit {
   updateField(ev, fieldId) {
     this.testFields[
       this.testFields.findIndex(ele => {
-        return ele.id === fieldId;
+        return ele.fieldId === fieldId;
       })
     ].value = ev.currentTarget.value;
   }
@@ -101,8 +108,8 @@ export class EditReportComponent implements OnInit {
     WinPrint.document.close();
     WinPrint.setTimeout(function() {
       WinPrint.focus();
-      WinPrint.print();
-      WinPrint.close();
+      // WinPrint.print();
+      // WinPrint.close();
     }, 1000);
   }
   get patientName() {
@@ -116,5 +123,27 @@ export class EditReportComponent implements OnInit {
   }
   get mobile() {
     return this.reportForm.get("mobile");
+  }
+  get sampleCollectionDate() {
+    return this.reportForm.get("sampleCollectionDate");
+  }
+  get reportingDate() {
+    return this.reportForm.get("reportingDate");
+  }
+  get referredBy() {
+    return this.reportForm.get("referredBy");
+  }
+  getformattedDate(dateObject) {
+    let formattedDate;
+    if (!!dateObject) {
+      formattedDate =
+        dateObject.day + "-" + dateObject.month + "-" + dateObject.year;
+    }
+    return formattedDate;
+  }
+  changeGender(e) {
+    this.reportForm.get("gender").setValue(e.target.value, {
+      onlySelf: true
+    });
   }
 }

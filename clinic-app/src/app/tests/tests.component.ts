@@ -1,3 +1,4 @@
+import { KeyboardUtil } from "./../shared/keyboard.accesibilty.service";
 import { Component, OnInit, ElementRef, ViewChild } from "@angular/core";
 import { TestsService } from "../services/tests.service";
 import { Router } from "@angular/router";
@@ -36,7 +37,9 @@ export class TestsComponent implements OnInit {
   filterTests(event) {
     if (event.target.value.length > 0)
       this.displayTests = this.tests.filter(value => {
-        return value.name.includes(event.target.value);
+        return value.name
+          .toLowerCase()
+          .includes(event.target.value.toLowerCase());
       });
     else {
       this.displayTests = [...this.tests];
@@ -45,24 +48,26 @@ export class TestsComponent implements OnInit {
   getTest(id) {
     this.router.navigate(["/test", id]);
   }
-  deleteTest(id) {
-    this.loading.nativeElement.style.display = "block";
-    this._testService.deleteTest(id).subscribe(
-      response => {
-        this.loading.nativeElement.style.display = "none";
-        this.tests.splice(
-          this.tests.findIndex(ele => {
-            return ele.name === id;
-          }),
-          1
-        );
-      },
-      error => {
-        this.loading.nativeElement.style.display = "none";
-        this.toastService.show(error, {
-          classname: "bg-danger text-light"
-        });
-      }
-    );
+  deleteTest(event, id) {
+    if (KeyboardUtil.buttonClick(event)) {
+      this.loading.nativeElement.style.display = "block";
+      this._testService.deleteTest(id).subscribe(
+        response => {
+          this.loading.nativeElement.style.display = "none";
+          this.tests.splice(
+            this.tests.findIndex(ele => {
+              return ele.name === id;
+            }),
+            1
+          );
+        },
+        error => {
+          this.loading.nativeElement.style.display = "none";
+          this.toastService.show(error, {
+            classname: "bg-danger text-light"
+          });
+        }
+      );
+    }
   }
 }

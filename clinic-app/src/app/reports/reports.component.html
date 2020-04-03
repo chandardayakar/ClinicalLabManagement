@@ -4,11 +4,19 @@
       <div class="report-title col">
         Reports vault
       </div>
+      <div class="filter col-2">
+        <select class="form-control" id="filter_param">
+          <option value="reportId" default>ReportId</option>
+          <option value="name">Name</option>
+          <option value="contact">Contact</option>
+          <option value="test">Test</option>
+        </select>
+      </div>
       <div class="filter col">
         <input
           class="form-control mr-sm-2"
           type="search"
-          placeholder="Search by reportid/patient name"
+          placeholder="enter search value"
           aria-label="Search"
           (keyup)="filterReports($event)"
           (search)="filterReports($event)"

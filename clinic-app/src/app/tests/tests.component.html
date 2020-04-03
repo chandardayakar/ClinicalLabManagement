@@ -33,11 +33,17 @@
               <td (click)="getTest(test.name)">{{ test.name }}</td>
               <td>{{ test.price }}</td>
               <td style="text-align: end; width:8%;">
-                <img
-                  class="icon pull-right"
-                  src="../../assets/remove.png"
-                  (click)="deleteTest(test.name)"
-                />
+                <a
+                  (click)="deleteTest($event, test.name)"
+                  (keydown)="deleteTest($event, test.name)"
+                >
+                  <img
+                    tabindex="0"
+                    tabindex="0"
+                    class="icon pull-right"
+                    src="../../assets/remove.png"
+                  />
+                </a>
               </td>
             </tr>
           </ng-template>

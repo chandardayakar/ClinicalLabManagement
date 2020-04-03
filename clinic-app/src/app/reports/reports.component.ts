@@ -38,14 +38,36 @@ export class ReportsComponent implements OnInit {
     this.router.navigate(["/report", id]);
   }
   filterReports(event) {
-    if (event.target.value.length > 0)
-      this.displayReports = this.reports.filter(value => {
-        return (
-          value.patientName.includes(event.target.value) ||
-          value.reportId.includes(event.target.value)
+    if (event.target.value.length > 0) {
+      // this.displayReports = this.reports.filter(value => {
+      //   return (
+      //     value.patientName
+      //       .toLowerCase()
+      //       .includes(event.target.value.toLowerCase()) ||
+      //     value.reportId
+      //       .toLowerCase()
+      //       .includes(event.target.value.toLowerCase())
+      //   );
+      // });
+      let filter = document.getElementById("filter_param") as HTMLSelectElement;
+      let test = filter.options[filter.selectedIndex].value;
+      this.loading.nativeElement.style.display = "block";
+      this._reportsService
+        .getReports({ filter: test, value: event.target.value })
+        .subscribe(
+          response => {
+            this.loading.nativeElement.style.display = "none";
+            this.reports = response.reports;
+            this.displayReports = response.reports;
+          },
+          error => {
+            this.loading.nativeElement.style.display = "none";
+            this.toastService.show(error, {
+              classname: "bg-danger text-light"
+            });
+          }
         );
-      });
-    else {
+    } else {
       this.displayReports = [...this.reports];
     }
   }

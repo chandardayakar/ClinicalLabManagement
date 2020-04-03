@@ -1,3 +1,4 @@
+import { KeyboardUtil } from "./../shared/keyboard.accesibilty.service";
 import { ReportsService } from "./../services/reports.service";
 import { ToastService } from "./../shared/toast-service";
 import { TestsService } from "./../services/tests.service";
@@ -16,7 +17,7 @@ export class CreateReportComponent implements OnInit {
   public selectedTests = [];
   public availableTests = [];
   public printTests = [];
-  public genders = ["male", "female", "Others"];
+  public genders = ["Male", "Female", "Others"];
   public today = new Date().toDateString();
   public reportIds = [];
   @ViewChild("loading", { read: ElementRef }) loading: ElementRef;
@@ -33,14 +34,18 @@ export class CreateReportComponent implements OnInit {
       patientName: ["", [Validators.required, Validators.minLength(3)]],
       age: [null, [Validators.required]],
       gender: [null, [Validators.required]],
+      sampleCollectionDate: [null, [Validators.required]],
+      reportingDate: [null, [Validators.required]],
       mobile: [
         "",
         [
           Validators.required,
           Validators.minLength(10),
-          Validators.maxLength(10)
+          Validators.maxLength(10),
+          Validators.pattern("^[0-9]*$")
         ]
-      ]
+      ],
+      referredBy: [null]
     });
     this._testService.getTests().subscribe(
       response => {
@@ -60,17 +65,21 @@ export class CreateReportComponent implements OnInit {
       onlySelf: true
     });
   }
-  removeTest(test) {
-    this.selectedTests.splice(this.selectedTests.indexOf(test.name), 1);
+  removeTest(event, test) {
+    if (KeyboardUtil.buttonClick(event)) {
+      this.selectedTests.splice(this.selectedTests.indexOf(test.name), 1);
+    }
   }
-  addTest() {
-    const modalRef = this.modalService.open(TestsListComponent, {
-      scrollable: true,
-      centered: true,
-      size: "lg"
-    });
-    modalRef.componentInstance.selectedTests = this.selectedTests;
-    modalRef.componentInstance.availableTests = this.availableTests;
+  addTest(event) {
+    if (KeyboardUtil.buttonClick(event)) {
+      const modalRef = this.modalService.open(TestsListComponent, {
+        scrollable: true,
+        centered: true,
+        size: "lg"
+      });
+      modalRef.componentInstance.selectedTests = this.selectedTests;
+      modalRef.componentInstance.availableTests = this.availableTests;
+    }
   }
   getSelectedTests() {
     return this.availableTests.filter(element => {
@@ -140,9 +149,21 @@ export class CreateReportComponent implements OnInit {
   get mobile() {
     return this.reportForm.get("mobile");
   }
-  getDate() {
-    var d = new Date();
-    var n = d.toLocaleDateString();
-    return n;
+  get sampleCollectionDate() {
+    return this.reportForm.get("sampleCollectionDate");
+  }
+  get reportingDate() {
+    return this.reportForm.get("reportingDate");
+  }
+  get referredBy() {
+    return this.reportForm.get("referredBy");
+  }
+  getformattedDate(dateObject) {
+    let formattedDate;
+    if (!!dateObject) {
+      formattedDate =
+        dateObject.day + "-" + dateObject.month + "-" + dateObject.year;
+    }
+    return formattedDate;
   }
 }

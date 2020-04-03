@@ -20,7 +20,7 @@
     <div class="create-report-form-wrapper">
       <form [formGroup]="reportForm" class="create-report-form">
         <div class="row form-user-details">
-          <div class="form-group col">
+          <div class="form-group col-3">
             <label>Name</label>
             <input
               formControlName="patientName"
@@ -38,7 +38,39 @@
               >
             </div>
           </div>
-          <div class="form-group col">
+          <div class="form-group col-3">
+            <label>Gender</label>
+            <select
+              formControlName="gender"
+              (change)="changeGender($event)"
+              class="form-control"
+              [class.is-invalid]="gender.invalid && gender.touched"
+            >
+              <option value="" default>Choose gender</option>
+              <option *ngFor="let gender of genders">{{ gender }}</option>
+            </select>
+            <div *ngIf="gender.invalid && gender.touched">
+              <small class="text-danger" *ngIf="gender.errors?.required"
+                >Gender is required</small
+              >
+            </div>
+          </div>
+          <div class="form-group col-3">
+            <label>Age</label>
+            <input
+              formControlName="age"
+              type="text"
+              class="form-control"
+              placeholder="Enter Age"
+              [class.is-invalid]="age.invalid && age.touched"
+            />
+            <div *ngIf="age.invalid && age.touched">
+              <small class="text-danger" *ngIf="age.errors?.required"
+                >Age is required</small
+              >
+            </div>
+          </div>
+          <div class="form-group col-3">
             <label>Phone number</label>
             <input
               formControlName="mobile"
@@ -58,36 +90,63 @@
           </div>
         </div>
         <div class="row form-user-details">
-          <div class="form-group col">
-            <label>Age</label>
-            <input
-              formControlName="age"
-              type="text"
-              class="form-control"
-              placeholder="Enter Age"
-              [class.is-invalid]="age.invalid && age.touched"
-            />
-            <div *ngIf="age.invalid && age.touched">
-              <small class="text-danger" *ngIf="age.errors?.required"
-                >Age is required</small
-              >
+          <div class="form-group col-3">
+            <label>Sample received:</label>
+            <div class="input-group">
+              <input
+                tabindex="0"
+                formControlName="sampleCollectionDate"
+                type="text"
+                class="form-control"
+                placeholder="yyyy-mm-dd"
+                ngbDatepicker
+                #d="ngbDatepicker"
+                [class.is-invalid]="
+                  sampleCollectionDate.invalid && sampleCollectionDate.touched
+                "
+              />
+              <div class="input-group-append">
+                <button
+                  class="btn btn-outline-secondary calendar"
+                  (click)="d.toggle()"
+                  type="button"
+                ></button>
+              </div>
             </div>
           </div>
-          <div class="form-group col">
-            <label>Gender</label>
-            <select
-              formControlName="gender"
-              (change)="changeGender($event)"
-              class="form-control"
-              [class.is-invalid]="gender.invalid && gender.touched"
-            >
-              <option value="">Choose gender</option>
-              <option *ngFor="let gender of genders">{{ gender }}</option>
-            </select>
-            <div *ngIf="gender.invalid && gender.touched">
-              <small class="text-danger" *ngIf="gender.errors?.required"
-                >Gender is required</small
-              >
+          <div class="form-group col-3">
+            <label>Report collection:</label>
+            <div class="input-group">
+              <input
+                tabindex="0"
+                formControlName="reportingDate"
+                type="text"
+                class="form-control"
+                placeholder="yyyy-mm-dd"
+                ngbDatepicker
+                #d2="ngbDatepicker"
+                [class.is-invalid]="
+                  reportingDate.invalid && reportingDate.touched
+                "
+              />
+              <div class="input-group-append">
+                <button
+                  class="btn btn-outline-secondary calendar"
+                  (click)="d2.toggle()"
+                  type="button"
+                ></button>
+              </div>
+            </div>
+          </div>
+          <div class="form-group col-3">
+            <label>Reffered by:</label>
+            <div class="input-group">
+              <input
+                formControlName="referredBy"
+                type="text"
+                class="form-control"
+                placeholder="Doctor name"
+              />
             </div>
           </div>
         </div>
@@ -100,11 +159,13 @@
                   <th><label>Name</label></th>
                   <th><label>Price</label></th>
                   <th style="text-align: end;width:8%;">
-                    <img
-                      class="icon"
-                      src="../../assets/plus.png"
-                      (click)="addTest()"
-                    />
+                    <a (click)="addTest($event)" (keydown)="addTest($event)">
+                      <img
+                        tabindex="0"
+                        class="icon"
+                        src="../../assets/plus.png"
+                      />
+                    </a>
                   </th>
                 </tr>
               </thead>
@@ -121,11 +182,16 @@
                     <td>{{ test.name }}</td>
                     <td>{{ test.price }}</td>
                     <td style="text-align: end;width:8%;">
-                      <img
-                        class="icon pull-right"
-                        src="../../assets/remove.png"
-                        (click)="removeTest(test)"
-                      />
+                      <a
+                        (click)="removeTest($event, test)"
+                        (keydown)="removeTest($event, test)"
+                      >
+                        <img
+                          tabindex="0"
+                          class="icon pull-right"
+                          src="../../assets/remove.png"
+                        />
+                      </a>
                     </td>
                   </tr>
                 </ng-template>
@@ -144,9 +210,23 @@
 </div>
 <div id="print">
   <div
-    style="border-bottom: black;border-bottom-width: thick;border-bottom-style: solid;"
+    style="border-bottom: black;border-bottom-width: thick;border-bottom-style: solid;text-align: center;"
   >
-    <h1>Report Summary</h1>
+    <div
+      style="display: block;font-size: 2em;font-weight: bold;color: #e47171;"
+    >
+      SSS CLINICAL LABORATORY
+    </div>
+    <div
+      style="display: block;font-size: 1.5em;font-weight: bold;color: #898181;"
+    >
+      CLINICAL BIOCHEMISTRY LABORATORIES
+    </div>
+    <div
+      style="display: block;font-size: 1.17em;font-weight:bold; padding-bottom:25px;color: #898181;"
+    >
+      Ph: 9182516181, 9177551052
+    </div>
   </div>
   <div style="padding-top: 25px; max-height: 100px;">
     <div
@@ -183,9 +263,25 @@
       <div style="min-width: 50%;">
         <table>
           <tr>
-            <td><label> Date:</label></td>
+            <td><label>Sample received:</label></td>
             <td>
-              <span style="font-weight: bold;">{{ getDate() }}</span>
+              <span style="font-weight: bold;">{{
+                getformattedDate(sampleCollectionDate.value)
+              }}</span>
+            </td>
+          </tr>
+          <tr>
+            <td><label>Report collection:</label></td>
+            <td>
+              <span style="font-weight: bold;">{{
+                getformattedDate(reportingDate.value)
+              }}</span>
+            </td>
+          </tr>
+          <tr>
+            <td><label>Reffered by:</label></td>
+            <td>
+              <span style="font-weight: bold;">{{ referredBy.value }}</span>
             </td>
           </tr>
           <tr>
@@ -205,10 +301,24 @@
   </div>
   <div>
     <table style="display:table;width: 100%;border: black solid;">
-      <tr *ngFor="let test of getSelectedTests()">
-        <td>{{ test.name }}</td>
-        <td>{{ test.price }}</td>
-        <td id="{{ test.name }}"></td>
+      <thead>
+        <tr>
+          <th><label style="font-weight: normal;">Test</label></th>
+          <th><label style="font-weight: normal;">Cost</label></th>
+          <th><label style="font-weight: normal;">ReportId</label></th>
+        </tr>
+      </thead>
+      <tr *ngFor="let test of getSelectedTests()" style="text-align: center;">
+        <td style="padding-bottom: 15px;font-weight: bold;font-size: large;">
+          {{ test.name }}
+        </td>
+        <td style="padding-bottom: 15px;font-weight: bold;font-size: large;">
+          {{ test.price }}
+        </td>
+        <td
+          id="{{ test.name }}"
+          style="padding-bottom: 15px;font-weight: bold;font-size: large;"
+        ></td>
       </tr>
     </table>
   </div>

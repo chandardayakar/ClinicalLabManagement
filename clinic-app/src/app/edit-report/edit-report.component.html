@@ -18,41 +18,132 @@
     <div class="create-report-form-wrapper">
       <form [formGroup]="reportForm" class="create-report-form">
         <div class="row form-user-details">
-          <div class="form-group col">
+          <div class="form-group col-3">
             <label>Name</label>
             <input
               formControlName="patientName"
               type="text"
               class="form-control"
               placeholder="Enter name"
+              [class.is-invalid]="patientName.invalid && patientName.touched"
             />
+            <div *ngIf="patientName.invalid && patientName.touched">
+              <small class="text-danger" *ngIf="patientName.errors?.required"
+                >Patient name is required</small
+              >
+              <small class="text-danger" *ngIf="patientName.errors?.minlength"
+                >Patient name must be at least 3 characters</small
+              >
+            </div>
           </div>
-          <div class="form-group col">
-            <label>Phone number</label>
-            <input
-              formControlName="mobile"
-              type="text"
+          <div class="form-group col-3">
+            <label>Gender</label>
+            <select
+              formControlName="gender"
+              (change)="changeGender($event)"
               class="form-control"
-              placeholder="Enter a valid phone number"
-            />
+              [class.is-invalid]="gender.invalid && gender.touched"
+            >
+              <option value="" default>Choose gender</option>
+              <option *ngFor="let gender of genders">{{ gender }}</option>
+            </select>
+            <div *ngIf="gender.invalid && gender.touched">
+              <small class="text-danger" *ngIf="gender.errors?.required"
+                >Gender is required</small
+              >
+            </div>
           </div>
-        </div>
-        <div class="row form-user-details">
-          <div class="form-group col">
+          <div class="form-group col-3">
             <label>Age</label>
             <input
               formControlName="age"
               type="text"
               class="form-control"
               placeholder="Enter Age"
+              [class.is-invalid]="age.invalid && age.touched"
             />
+            <div *ngIf="age.invalid && age.touched">
+              <small class="text-danger" *ngIf="age.errors?.required"
+                >Age is required</small
+              >
+            </div>
           </div>
-          <div class="form-group col">
-            <label>Gender</label>
-            <select formControlName="gender" class="form-control">
-              <option value="">Choose gender</option>
-              <option *ngFor="let gender of genders">{{ gender }}</option>
-            </select>
+          <div class="form-group col-3">
+            <label>Phone number</label>
+            <input
+              formControlName="mobile"
+              type="text"
+              class="form-control"
+              placeholder="Enter a valid phone number"
+              [class.is-invalid]="mobile.invalid && mobile.touched"
+            />
+            <div *ngIf="mobile.invalid && mobile.touched">
+              <small class="text-danger" *ngIf="mobile.errors?.required"
+                >Mobile number is required</small
+              >
+              <small class="text-danger" *ngIf="mobile.errors?.minlength"
+                >Mobile number must be at least 10 digits</small
+              >
+            </div>
+          </div>
+        </div>
+        <div class="row form-user-details">
+          <div class="form-group col-3">
+            <label>Sample received:</label>
+            <div class="input-group">
+              <input
+                formControlName="sampleCollectionDate"
+                type="text"
+                class="form-control"
+                placeholder="yyyy-mm-dd"
+                ngbDatepicker
+                #d="ngbDatepicker"
+                [class.is-invalid]="
+                  sampleCollectionDate.invalid && sampleCollectionDate.touched
+                "
+              />
+              <div class="input-group-append">
+                <button
+                  class="btn btn-outline-secondary calendar"
+                  (click)="d.toggle()"
+                  type="button"
+                ></button>
+              </div>
+            </div>
+          </div>
+          <div class="form-group col-3">
+            <label>Report collection:</label>
+            <div class="input-group">
+              <input
+                formControlName="reportingDate"
+                type="text"
+                class="form-control"
+                placeholder="yyyy-mm-dd"
+                ngbDatepicker
+                #d2="ngbDatepicker"
+                [class.is-invalid]="
+                  reportingDate.invalid && reportingDate.touched
+                "
+              />
+              <div class="input-group-append">
+                <button
+                  class="btn btn-outline-secondary calendar"
+                  (click)="d2.toggle()"
+                  type="button"
+                ></button>
+              </div>
+            </div>
+          </div>
+          <div class="form-group col-3">
+            <label>Reffered by:</label>
+            <div class="input-group">
+              <input
+                formControlName="referredBy"
+                type="text"
+                class="form-control"
+                placeholder="Doctor name"
+              />
+            </div>
           </div>
         </div>
         <div class="row">
@@ -78,7 +169,7 @@
                     <input
                       class="form-control"
                       value="{{ field.value }}"
-                      (change)="updateField($event, field.id)"
+                      (change)="updateField($event, field.fieldId)"
                     />
                   </td>
                   <td>{{ field.unit }}</td>
@@ -94,15 +185,29 @@
 </div>
 <div id="print">
   <div
-    style="border-bottom: black;border-bottom-width: thick;border-bottom-style: solid;"
+    style="border-bottom: black;border-bottom-width: thick;border-bottom-style: solid;text-align: center;"
   >
-    <h1>Report Summary</h1>
+    <div
+      style="display: block;font-size: 2em;font-weight: bold;color: #e47171;"
+    >
+      SSS CLINICAL LABORATORY
+    </div>
+    <div
+      style="display: block;font-size: 1.5em;font-weight: bold;color: #898181;"
+    >
+      CLINICAL BIOCHEMISTRY LABORATORIES
+    </div>
+    <div
+      style="display: block;font-size: 1.17em;font-weight:bold; padding-bottom:25px;color: #898181;"
+    >
+      Ph: 9182516181, 9177551052
+    </div>
   </div>
   <div style="padding-top: 25px; max-height: 100px;">
     <div
       style="display: flex;height: 600px;flex-wrap: wrap;align-content: space-between;"
     >
-      <div style="min-width: 100%;">
+      <div style="min-width: 50%;">
         <table>
           <tr>
             <td><label>Name:</label></td>
@@ -130,6 +235,32 @@
           </tr>
         </table>
       </div>
+      <div style="min-width: 50%;">
+        <table>
+          <tr>
+            <td><label>Sample received:</label></td>
+            <td>
+              <span style="font-weight: bold;">{{
+                getformattedDate(sampleCollectionDate.value)
+              }}</span>
+            </td>
+          </tr>
+          <tr>
+            <td><label>Report collection:</label></td>
+            <td>
+              <span style="font-weight: bold;">{{
+                getformattedDate(reportingDate.value)
+              }}</span>
+            </td>
+          </tr>
+          <tr>
+            <td><label>Reffered by:</label></td>
+            <td>
+              <span style="font-weight: bold;">{{ referredBy.value }}</span>
+            </td>
+          </tr>
+        </table>
+      </div>
     </div>
   </div>
   <div
@@ -141,18 +272,30 @@
     <table style="display:table;width: 100%;border: black solid;">
       <thead>
         <tr>
-          <th><label>Name</label></th>
-          <th><label>Observed values</label></th>
-          <th><label>Units</label></th>
-          <th><label>Biological Reference Intervals</label></th>
+          <th><label style="font-weight: normal;">Name</label></th>
+          <th><label style="font-weight: normal;">Observed values</label></th>
+          <th><label style="font-weight: normal;">Units</label></th>
+          <th>
+            <label style="font-weight: normal;"
+              >Biological Reference Intervals</label
+            >
+          </th>
         </tr>
       </thead>
       <tbody>
         <tr *ngFor="let field of testFields" style="text-align: center;">
-          <td>{{ field.name }}</td>
-          <td>{{ field.value }}</td>
-          <td>{{ field.unit }}</td>
-          <td>{{ field.refValue }}</td>
+          <td style="padding:15px;font-weight: bold;font-size: large;">
+            {{ field.name }}
+          </td>
+          <td style="padding:15px;font-weight: bold;font-size: large;">
+            {{ field.value }}
+          </td>
+          <td style="padding:15px;font-weight: bold;font-size: large;">
+            {{ field.unit }}
+          </td>
+          <td style="padding:15px;font-weight: bold;font-size: large;">
+            {{ field.refValue }}
+          </td>
         </tr>
       </tbody>
     </table>

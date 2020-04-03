@@ -1,3 +1,4 @@
+import { KeyboardUtil } from "./../shared/keyboard.accesibilty.service";
 import { ToastService } from "./../shared/toast-service";
 import { TestsService } from "./../services/tests.service";
 import { Component, OnInit, ViewChild, ElementRef } from "@angular/core";
@@ -22,14 +23,12 @@ export class CreateTestComponent implements OnInit {
   ngOnInit(): void {
     this.testForm = this.fb.group({
       testName: ["", [Validators.required, Validators.minLength(3)]],
-      cost: [null, [Validators.required]]
+      cost: [null, [Validators.required, Validators.pattern("^[0-9]*$")]]
     });
   }
   saveTest() {
     this.loading.nativeElement.style.display = "block";
-    this.fields.forEach(function(v) {
-      delete v.id;
-    });
+    this.fieldCounter = 1;
     let data = this.testForm.getRawValue();
     data.fields = this.fields;
     this.testsService.saveTest(data).subscribe(
@@ -49,44 +48,53 @@ export class CreateTestComponent implements OnInit {
       }
     );
   }
-  addField() {
-    this.fields.push({
-      id: this.fieldCounter,
-      value: 0,
-      refValue: "",
-      name: ""
-    });
-    this.fieldCounter++;
+  addField(event) {
+    if (KeyboardUtil.buttonClick(event)) {
+      this.fields.push({
+        fieldId: this.fieldCounter,
+        value: 0,
+        refValue: "",
+        name: ""
+      });
+      this.fieldCounter++;
+    }
   }
   updateField(ev, fieldId) {
     if (ev.currentTarget.classList.contains("field-name")) {
       this.fields[
         this.fields.findIndex(ele => {
-          return ele.id === fieldId;
+          return ele.fieldId === fieldId;
         })
       ].name = ev.currentTarget.value;
     } else if (ev.currentTarget.classList.contains("field-refValue")) {
       this.fields[
         this.fields.findIndex(ele => {
-          return ele.id === fieldId;
+          return ele.fieldId === fieldId;
         })
       ].refValue = ev.currentTarget.value;
     } else if (ev.currentTarget.classList.contains("field-unit")) {
       this.fields[
         this.fields.findIndex(ele => {
-          return ele.id === fieldId;
+          return ele.fieldId === fieldId;
         })
       ].unit = ev.currentTarget.value;
     }
   }
-  removeField(field) {
-    this.fieldCounter--;
-    this.fields.splice(
-      this.fields.findIndex(ele => {
-        return ele.id === field.id;
-      }),
-      1
-    );
+  removeField(event, field) {
+    if (KeyboardUtil.buttonClick(event)) {
+      let i;
+      this.fieldCounter--;
+      this.fields.splice(
+        this.fields.findIndex(ele => {
+          i = field.fieldId;
+          return ele.fieldId === field.fieldId;
+        }),
+        1
+      );
+      this.fields.forEach(function(v) {
+        if (v.fieldId > i) v.fieldId = v.fieldId - 1;
+      });
+    }
   }
   get testName() {
     return this.testForm.get("testName");

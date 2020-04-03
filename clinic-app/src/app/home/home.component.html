@@ -5,19 +5,11 @@
     <label>{{ status }}</label>
   </p>
   <div class="row">
-    <div class="col">
-      <button class="btn btn-success" (click)="startSync()">
-        start
-      </button>
-      <label>Click the button to start google sync </label>
-    </div>
-  </div>
-  <div class="row">
-    <div class="col">
-      <button class="btn btn-danger" (click)="stopSync()">
-        stop
-      </button>
-      <label>Click the button to start google sync </label>
-    </div>
+    <button class="btn btn-success" (click)="startSync()">
+      start
+    </button>
+    <button class="btn btn-danger" (click)="stopSync()">
+      stop
+    </button>
   </div>
 </div>

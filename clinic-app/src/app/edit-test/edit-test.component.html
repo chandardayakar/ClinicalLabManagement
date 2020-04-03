@@ -43,14 +43,16 @@
               <thead>
                 <tr>
                   <th><label>Name</label></th>
-                  <th><label>Units</label></th>
                   <th><label>Biological Reference Intervals</label></th>
+                  <th><label>Units</label></th>
                   <th style="text-align: end; width:8%;">
-                    <img
-                      class="icon"
-                      src="../../assets/plus.png"
-                      (click)="addField()"
-                    />
+                    <a (click)="addField($event)" (keydown)="addField($event)">
+                      <img
+                        tabindex="0"
+                        class="icon"
+                        src="../../assets/plus.png"
+                      />
+                    </a>
                   </th>
                 </tr>
               </thead>
@@ -58,31 +60,36 @@
                 <tr *ngFor="let field of testFields">
                   <td>
                     <input
-                      class="form-control"
+                      class="field-name form-control"
                       value="{{ field.name }}"
-                      (change)="updateField($event, field.id)"
+                      (change)="updateField($event, field.fieldId)"
                     />
                   </td>
                   <td>
                     <input
-                      class="form-control"
-                      value="{{ field.unit }}"
-                      (change)="updateField($event, field.id)"
-                    />
-                  </td>
-                  <td>
-                    <input
-                      class="form-control"
+                      class="field-refValue form-control"
                       value="{{ field.refValue }}"
-                      (change)="updateField($event, field.id)"
+                      (change)="updateField($event, field.fieldId)"
+                    />
+                  </td>
+                  <td>
+                    <input
+                      class=" field-unit form-control"
+                      value="{{ field.unit }}"
+                      (change)="updateField($event, field.fieldId)"
                     />
                   </td>
                   <td style="text-align: end; width:8%;">
-                    <img
-                      class="icon pull-right"
-                      src="../../assets/remove.png"
-                      (click)="removeField(field)"
-                    />
+                    <a
+                      (click)="removeField($event, field)"
+                      (keydown)="removeField($event, field)"
+                    >
+                      <img
+                        tabindex="0"
+                        class="icon pull-right"
+                        src="../../assets/remove.png"
+                      />
+                    </a>
                   </td>
                 </tr>
               </tbody>

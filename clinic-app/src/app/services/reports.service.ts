@@ -8,8 +8,12 @@ export class ReportsService {
   public reports = "/reports";
 
   constructor(private _http: HttpClient) {}
-  getReports() {
-    return this._http.get<any>(this.reports);
+  getReports(param = undefined) {
+    if (!!param)
+      return this._http.get<any>(
+        this.reports + "/Search?" + param.filter + " eq " + param.value
+      );
+    else return this._http.get<any>(this.reports);
   }
 
   getReport(id) {
