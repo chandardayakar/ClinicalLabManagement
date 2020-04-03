@@ -128,10 +128,36 @@ public class ReportsService {
             String payload = writer.toString();
 
             ObjectMapper mapper = new ObjectMapper();
-            Test test = mapper.readValue(payload, Test.class);
+            Report report = mapper.readValue(payload, Report.class);
+            Test test = report.getTest();
+
 
             Report storedReport = FileSystemStorage.getReport(reportId);
             Test storedTest = storedReport.getTest();
+
+            if (report.getMobile() != null) {
+                storedReport.setMobile(report.getMobile());
+            }
+
+            if(report.getAge() != null){
+                storedReport.setAge(report.getAge());
+            }
+
+            if(report.getGender() != null){
+                storedReport.setGender(storedReport.getGender());
+            }
+
+            if(report.getReportingDate() != null){
+                storedReport.setReportingDate(report.getReportingDate());
+            }
+
+            if(report.getSampleCollectionDate() != null){
+                storedReport.setSampleCollectionDate(report.getSampleCollectionDate());
+            }
+
+            if(report.getReferredBy() != null){
+                storedReport.setReferredBy(report.getReferredBy());
+            }
 
             storedTest.setFields(test.getFields());
 

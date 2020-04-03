@@ -230,7 +230,7 @@ public class FileSystemStorage {
         }
     }
 
-    public static void updateReport(String reportId, Report report) {
+    public static void updateReport(String reportId, Report newReport) {
 
         FileSystemStorage u = new FileSystemStorage();
 
@@ -239,9 +239,16 @@ public class FileSystemStorage {
         File file = new File(reportsFolder.getAbsolutePath() + File.separator + reportId);
         try {
 
-            updateReportLastModifiedDate(reportId, new SimpleDateFormat().format(report.getLastModified()));
+            Report oldReport = getReport(reportId);
+            if(!oldReport.getMobile().equals(newReport.getMobile())){
+                updateReportField(reportId,"mobile",newReport.getMobile());
+            }
+            if(!oldReport.getLastModified().equals(newReport.getLastModified())){
+                updateReportField(reportId,"lastModified",new SimpleDateFormat().format(newReport.getLastModified()));
+            }
+
             ObjectMapper objectMapper = new ObjectMapper();
-            objectMapper.writeValue(file, report);
+            objectMapper.writeValue(file, newReport);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -313,7 +320,7 @@ public class FileSystemStorage {
         return is;
     }
 
-    private static void updateReportLastModifiedDate(String reportId, String lastmodified) {
+    private static void updateReportField(String reportId, String key, String value) {
 
         FileSystemStorage u = new FileSystemStorage();
         File allReports = new File(u.getClass().getClassLoader().getResource("Reports" + File.separator + "allReports").getFile());
@@ -330,7 +337,7 @@ public class FileSystemStorage {
             while (itr.hasNext()) {
                 JsonObject next = (JsonObject) itr.next();
                 if (next.get("reportId").getAsString().equals(reportId))
-                    next.addProperty("lastModified", lastmodified);
+                    next.addProperty(key, value);
 
             }
             json.add("reports", reports);
