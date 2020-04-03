@@ -160,7 +160,7 @@ public class ReportsService {
             }
 
             if (report.getGender() != null) {
-                storedReport.setGender(storedReport.getGender());
+                storedReport.setGender(report.getGender());
             }
 
             if (report.getReportingDate() != null) {
