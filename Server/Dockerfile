@@ -1,11 +1,9 @@
 ### STAGE 1: Build ###
-FROM maven AS build
-RUN apt-get update
-RUN apt-get install -y maven
+FROM maven:3.6.3-jdk-11-openj9 AS build
 COPY pom.xml /usr/local/server/pom.xml
 COPY src /usr/local/server/src
 WORKDIR /usr/local/server
-RUN mvm package
+RUN mvn clean package
 
 ### STAGE 2: Run ###
 FROM tomcat:latest
