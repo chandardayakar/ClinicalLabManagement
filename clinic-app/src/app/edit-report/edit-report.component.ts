@@ -8,7 +8,7 @@ import { ToastService } from "../shared/toast-service";
 @Component({
   selector: "app-edit-report",
   templateUrl: "./edit-report.component.html",
-  styleUrls: ["./edit-report.component.css"]
+  styleUrls: ["./edit-report.component.css"],
 })
 export class EditReportComponent implements OnInit {
   public reportForm;
@@ -29,14 +29,14 @@ export class EditReportComponent implements OnInit {
       window.location.href.lastIndexOf("/") + 1
     );
     this.reportsService.getReport(this.reportId).subscribe(
-      response => {
+      (response) => {
         this.loading.nativeElement.style.display = "none";
         this.updateValues(response);
       },
-      error => {
+      (error) => {
         this.loading.nativeElement.style.display = "none";
         this.toastService.show(error, {
-          classname: "bg-danger text-light"
+          classname: "bg-danger text-light",
         });
       }
     );
@@ -52,10 +52,10 @@ export class EditReportComponent implements OnInit {
           Validators.required,
           Validators.minLength(10),
           Validators.maxLength(10),
-          Validators.pattern("^[0-9]*$")
-        ]
+          Validators.pattern("^[0-9]*$"),
+        ],
       ],
-      referredBy: [null]
+      referredBy: [null],
     });
   }
   saveReport() {
@@ -63,21 +63,26 @@ export class EditReportComponent implements OnInit {
     let data = this.reportForm.getRawValue();
     data.fields = this.testFields;
     this.reportsService.saveReport(this.reportId, data).subscribe(
-      response => {
+      (response) => {
         this.loading.nativeElement.style.display = "none";
         this.toastService.show("Report updated!!", {
-          classname: "bg-success text-light"
+          classname: "bg-success text-light",
         });
       },
-      error => {
+      (error) => {
         this.loading.nativeElement.style.display = "none";
         this.toastService.show(error, {
-          classname: "bg-danger text-light"
+          classname: "bg-danger text-light",
         });
       }
     );
   }
   updateValues(response) {
+    response.test.fields.sort((a, b) => {
+      if (a.fieldId > b.fieldId) return 1;
+      if (b.fieldId > a.fieldId) return -1;
+      return 0;
+    });
     this.reportForm.setValue({
       patientName: response.patientName,
       age: response.age,
@@ -85,14 +90,14 @@ export class EditReportComponent implements OnInit {
       mobile: response.mobile,
       sampleCollectionDate: response.sampleCollectionDate,
       reportingDate: response.reportingDate,
-      referredBy: response.referredBy
+      referredBy: response.referredBy,
     });
     this.testFields = response.test.fields;
     this.testName = response.testName;
   }
   updateField(ev, fieldId) {
     this.testFields[
-      this.testFields.findIndex(ele => {
+      this.testFields.findIndex((ele) => {
         return ele.fieldId === fieldId;
       })
     ].value = ev.currentTarget.value;
@@ -106,10 +111,10 @@ export class EditReportComponent implements OnInit {
     );
     WinPrint.document.write(prtContent.innerHTML);
     WinPrint.document.close();
-    WinPrint.setTimeout(function() {
+    WinPrint.setTimeout(function () {
       WinPrint.focus();
-      // WinPrint.print();
-      // WinPrint.close();
+      WinPrint.print();
+      WinPrint.close();
     }, 1000);
   }
   get patientName() {
@@ -143,7 +148,7 @@ export class EditReportComponent implements OnInit {
   }
   changeGender(e) {
     this.reportForm.get("gender").setValue(e.target.value, {
-      onlySelf: true
+      onlySelf: true,
     });
   }
 }

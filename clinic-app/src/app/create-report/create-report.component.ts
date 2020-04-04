@@ -10,7 +10,7 @@ import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
 @Component({
   selector: "app-create-report",
   templateUrl: "./create-report.component.html",
-  styleUrls: ["./create-report.component.css"]
+  styleUrls: ["./create-report.component.css"],
 })
 export class CreateReportComponent implements OnInit {
   public reportForm;
@@ -42,27 +42,27 @@ export class CreateReportComponent implements OnInit {
           Validators.required,
           Validators.minLength(10),
           Validators.maxLength(10),
-          Validators.pattern("^[0-9]*$")
-        ]
+          Validators.pattern("^[0-9]*$"),
+        ],
       ],
-      referredBy: [null]
+      referredBy: [null],
     });
     this._testService.getTests().subscribe(
-      response => {
+      (response) => {
         this.loading.nativeElement.style.display = "none";
         this.availableTests = response.tests;
       },
-      error => {
+      (error) => {
         this.loading.nativeElement.style.display = "none";
         this.toastService.show(error, {
-          classname: "bg-danger text-light"
+          classname: "bg-danger text-light",
         });
       }
     );
   }
   changeGender(e) {
     this.reportForm.get("gender").setValue(e.target.value, {
-      onlySelf: true
+      onlySelf: true,
     });
   }
   removeTest(event, test) {
@@ -75,14 +75,14 @@ export class CreateReportComponent implements OnInit {
       const modalRef = this.modalService.open(TestsListComponent, {
         scrollable: true,
         centered: true,
-        size: "lg"
+        size: "lg",
       });
       modalRef.componentInstance.selectedTests = this.selectedTests;
       modalRef.componentInstance.availableTests = this.availableTests;
     }
   }
   getSelectedTests() {
-    return this.availableTests.filter(element => {
+    return this.availableTests.filter((element) => {
       return this.selectedTests.indexOf(element.name) >= 0;
     });
   }
@@ -92,10 +92,10 @@ export class CreateReportComponent implements OnInit {
       this.reportService
         .createReport(this.reportForm.getRawValue(), this.selectedTests)
         .subscribe(
-          response => {
+          (response) => {
             this.loading.nativeElement.style.display = "none";
             this.toastService.show("Report generated!!", {
-              classname: "bg-success text-light"
+              classname: "bg-success text-light",
             });
             var prtContent = document.getElementById("print");
             var self = this;
@@ -111,7 +111,7 @@ export class CreateReportComponent implements OnInit {
               ).innerHTML = response.reportIds[index].toString();
             });
             WinPrint.document.close();
-            WinPrint.setTimeout(function() {
+            WinPrint.setTimeout(function () {
               WinPrint.focus();
               WinPrint.print();
               WinPrint.close();
@@ -119,10 +119,10 @@ export class CreateReportComponent implements OnInit {
               self.selectedTests.splice(0, self.selectedTests.length);
             }, 1000);
           },
-          error => {
+          (error) => {
             this.loading.nativeElement.style.display = "none";
             this.toastService.show(error, {
-              classname: "bg-danger text-light"
+              classname: "bg-danger text-light",
             });
           }
         );
@@ -130,7 +130,7 @@ export class CreateReportComponent implements OnInit {
   }
   getTotalAmount() {
     let total = 0;
-    this.availableTests.forEach(test => {
+    this.availableTests.forEach((test) => {
       if (this.selectedTests.includes(test.name)) {
         total += parseInt(test.price);
       }

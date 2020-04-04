@@ -158,7 +158,7 @@
                 <tr>
                   <th><label>Name</label></th>
                   <th><label>Price</label></th>
-                  <th style="text-align: end;width:8%;">
+                  <th style="text-align: end; width: 8%;">
                     <a (click)="addTest($event)" (keydown)="addTest($event)">
                       <img
                         tabindex="0"
@@ -181,7 +181,7 @@
                   <tr *ngFor="let test of getSelectedTests()">
                     <td>{{ test.name }}</td>
                     <td>{{ test.price }}</td>
-                    <td style="text-align: end;width:8%;">
+                    <td style="text-align: end; width: 8%;">
                       <a
                         (click)="removeTest($event, test)"
                         (keydown)="removeTest($event, test)"
@@ -208,118 +208,291 @@
     </div>
   </div>
 </div>
-<div id="print">
-  <div
-    style="border-bottom: black;border-bottom-width: thick;border-bottom-style: solid;text-align: center;"
-  >
-    <div
-      style="display: block;font-size: 2em;font-weight: bold;color: #e47171;"
-    >
-      SSS CLINICAL LABORATORY
-    </div>
-    <div
-      style="display: block;font-size: 1.5em;font-weight: bold;color: #898181;"
-    >
-      CLINICAL BIOCHEMISTRY LABORATORIES
-    </div>
-    <div
-      style="display: block;font-size: 1.17em;font-weight:bold; padding-bottom:25px;color: #898181;"
-    >
-      Ph: 9182516181, 9177551052
-    </div>
-  </div>
-  <div style="padding-top: 25px; max-height: 100px;">
-    <div
-      style="display: flex;height: 600px;flex-wrap: wrap;align-content: space-between;"
-    >
-      <div style="min-width: 50%;">
-        <table>
-          <tr>
-            <td><label>Name:</label></td>
-            <td>
-              <span style="font-weight: bold;">{{ patientName.value }}</span>
-            </td>
-          </tr>
-          <tr>
-            <td><label>Age:</label></td>
-            <td>
-              <span style="font-weight: bold;">{{ age.value }}</span>
-            </td>
-          </tr>
-          <tr>
-            <td><label>Contact:</label></td>
-            <td>
-              <span style="font-weight: bold;">{{ mobile.value }}</span>
-            </td>
-          </tr>
-          <tr>
-            <td><label>Gender:</label></td>
-            <td>
-              <span style="font-weight: bold;">{{ gender.value }}</span>
-            </td>
-          </tr>
-        </table>
-      </div>
-      <div style="min-width: 50%;">
-        <table>
-          <tr>
-            <td><label>Sample received:</label></td>
-            <td>
-              <span style="font-weight: bold;">{{
-                getformattedDate(sampleCollectionDate.value)
-              }}</span>
-            </td>
-          </tr>
-          <tr>
-            <td><label>Report collection:</label></td>
-            <td>
-              <span style="font-weight: bold;">{{
-                getformattedDate(reportingDate.value)
-              }}</span>
-            </td>
-          </tr>
-          <tr>
-            <td><label>Reffered by:</label></td>
-            <td>
-              <span style="font-weight: bold;">{{ referredBy.value }}</span>
-            </td>
-          </tr>
-          <tr>
-            <td><label> Total:</label></td>
-            <td>
-              <span style="font-weight: bold;">{{ getTotalAmount() }}</span>
-            </td>
-          </tr>
-        </table>
-      </div>
-    </div>
-  </div>
-  <div
-    style="display: flex;align-items: center;justify-content: center;max-height: 20px;border-bottom: black;border-bottom-width: thin;border-bottom-style: solid;"
-  >
-    <h2 style="padding-bottom:10px">Tests</h2>
-  </div>
-  <div>
-    <table style="display:table;width: 100%;border: black solid;">
-      <thead>
-        <tr>
-          <th><label style="font-weight: normal;">Test</label></th>
-          <th><label style="font-weight: normal;">Cost</label></th>
-          <th><label style="font-weight: normal;">ReportId</label></th>
-        </tr>
-      </thead>
-      <tr *ngFor="let test of getSelectedTests()" style="text-align: center;">
-        <td style="padding-bottom: 15px;font-weight: bold;font-size: large;">
-          {{ test.name }}
+<div id="print" style="display: none;">
+  <table style="width: 100%;">
+    <thead>
+      <tr>
+        <td>
+          <div class="print-header">
+            <div
+              style="
+                display: flex;
+                flex-wrap: wrap;
+                align-content: space-between;
+              "
+            >
+              <div style="min-width: 50%;">
+                <div
+                  style="
+                    display: flex;
+                    flex-wrap: wrap;
+                    align-content: space-between;
+                  "
+                >
+                  <img
+                    src="../../assets/logo.png"
+                    style="width: 50px; height: 50px;"
+                  />
+                  <div style="padding-top: 6px;">
+                    <div
+                      style="
+                        font-size: 1.25em;
+                        font-weight: bold;
+                        color: #898181;
+                        font-style: italic;
+                      "
+                    >
+                      SSS CLINICAL LABORATORY
+                    </div>
+                    <div
+                      style="
+                        font-size: 0.75em;
+                        font-weight: bold;
+                        color: #e47171;
+                        font-style: italic;
+                      "
+                    >
+                      CLINICAL BIOCHEMISTRY LABORATORIES
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div style="min-width: 50%;">
+                <div
+                  style="
+                    display: flex;
+                    flex-wrap: wrap;
+                    align-content: space-between;
+                    flex-direction: column;
+                  "
+                >
+                  <div
+                    style="
+                      font-size: 1.25em;
+                      font-weight: bold;
+                      color: #898181;
+                    "
+                  >
+                    SSS CLINICAL LABORATORY
+                  </div>
+                  <div
+                    style="
+                      font-size: 0.75em;
+                      font-weight: bold;
+                      color: #898181;
+                    "
+                  >
+                    Ph: 9182516181, 9177551052
+                  </div>
+                  <div
+                    style="
+                      font-size: 0.75em;
+                      font-weight: bold;
+                      color: #898181;
+                    "
+                  >
+                    <Address>
+                      Kakinada-Andhra Pradesh
+                    </Address>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <hr size="2" color="green" />
+            <div
+              style="
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                max-height: 20px;
+              "
+            >
+              <h2>Report</h2>
+            </div>
+            <div
+              style="
+                margin-top: 10px;
+                max-height: 100px;
+                border: #676768 thin solid;
+                padding: 10px;
+              "
+            >
+              <div
+                style="
+                  display: flex;
+                  flex-wrap: wrap;
+                  align-content: space-between;
+                "
+              >
+                <div style="min-width: 50%;">
+                  <table>
+                    <tr>
+                      <td><label>Name:</label></td>
+                      <td>
+                        <span style="font-weight: bold;">{{
+                          patientName.value
+                        }}</span>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td><label>Age:</label></td>
+                      <td>
+                        <span style="font-weight: bold;">{{ age.value }}</span>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td><label>Contact:</label></td>
+                      <td>
+                        <span style="font-weight: bold;">{{
+                          mobile.value
+                        }}</span>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td><label>Gender:</label></td>
+                      <td>
+                        <span style="font-weight: bold;">{{
+                          gender.value
+                        }}</span>
+                      </td>
+                    </tr>
+                  </table>
+                </div>
+                <div style="min-width: 50%;">
+                  <table>
+                    <tr>
+                      <td><label>Sample received:</label></td>
+                      <td>
+                        <span style="font-weight: bold;">{{
+                          getformattedDate(sampleCollectionDate.value)
+                        }}</span>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td><label>Report collection:</label></td>
+                      <td>
+                        <span style="font-weight: bold;">{{
+                          getformattedDate(reportingDate.value)
+                        }}</span>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td><label>Reffered by:</label></td>
+                      <td>
+                        <span style="font-weight: bold;">{{
+                          referredBy.value
+                        }}</span>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td><label> Total:</label></td>
+                      <td>
+                        <span style="font-weight: bold;">{{
+                          getTotalAmount()
+                        }}</span>
+                      </td>
+                    </tr>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
         </td>
-        <td style="padding-bottom: 15px;font-weight: bold;font-size: large;">
-          {{ test.price }}
-        </td>
-        <td
-          id="{{ test.name }}"
-          style="padding-bottom: 15px;font-weight: bold;font-size: large;"
-        ></td>
       </tr>
-    </table>
-  </div>
+    </thead>
+    <tbody>
+      <tr>
+        <td>
+          <div class="print-content">
+            <div style="margin-top: 10px;">
+              <div
+                style="
+                  display: flex;
+                  align-items: center;
+                  justify-content: center;
+                  max-height: 20px;
+                  border: #676768 thin solid;
+                  margin: 10px 0;
+                  padding: 5px;
+                "
+              >
+                <h2>Tests</h2>
+              </div>
+              <table
+                style="
+                  display: table;
+                  width: 100%;
+                  border-collapse: collapse;
+                  margin: 20px 0;
+                "
+              >
+                <thead style="border-bottom: #676768 thin solid;">
+                  <tr>
+                    <th><label style="font-weight: normal;">Name</label></th>
+                    <th>
+                      <label style="font-weight: normal;">Cost</label>
+                    </th>
+                    <th>
+                      <label style="font-weight: normal;">ReportId</label>
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr
+                    *ngFor="let test of getSelectedTests()"
+                    style="text-align: center;"
+                  >
+                    <td
+                      style="
+                        padding: 15px;
+                        font-weight: bold;
+                        font-size: large;
+                      "
+                    >
+                      {{ test.name }}
+                    </td>
+                    <td
+                      style="
+                        padding: 15px;
+                        font-weight: bold;
+                        font-size: large;
+                      "
+                    >
+                      {{ test.price }}
+                    </td>
+                    <td
+                      id="{{ test.name }}"
+                      style="
+                        padding: 15px;
+                        font-weight: bold;
+                        font-size: large;
+                      "
+                    ></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </td>
+      </tr>
+    </tbody>
+    <tfoot>
+      <tr>
+        <td>
+          <div class="print-footer" style="height: 5px;">
+            <div
+              style="
+                position: fixed;
+                bottom: 0;
+                width: 100%;
+                background-color: white;
+              "
+            >
+              Doctor Name
+            </div>
+          </div>
+        </td>
+      </tr>
+    </tfoot>
+  </table>
 </div>

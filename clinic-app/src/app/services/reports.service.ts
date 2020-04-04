@@ -2,18 +2,14 @@ import { Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 
 @Injectable({
-  providedIn: "root"
+  providedIn: "root",
 })
 export class ReportsService {
   public reports = "/reports";
 
   constructor(private _http: HttpClient) {}
-  getReports(param = undefined) {
-    if (!!param)
-      return this._http.get<any>(
-        this.reports + "/Search?" + param.filter + " eq " + param.value
-      );
-    else return this._http.get<any>(this.reports);
+  getReports() {
+    return this._http.get<any>(this.reports);
   }
 
   getReport(id) {

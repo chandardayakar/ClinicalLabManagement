@@ -5,15 +5,20 @@
         Reports vault
       </div>
       <div class="filter col-2">
-        <select class="form-control" id="filter_param">
+        <select
+          class="form-control"
+          id="filter_param"
+          (change)="filterReports($event)"
+        >
           <option value="reportId" default>ReportId</option>
-          <option value="name">Name</option>
-          <option value="contact">Contact</option>
-          <option value="test">Test</option>
+          <option value="patientName">Name</option>
+          <option value="mobile">Contact</option>
+          <option value="testName">Test</option>
         </select>
       </div>
       <div class="filter col">
         <input
+          id="filter_value"
           class="form-control mr-sm-2"
           type="search"
           placeholder="enter search value"

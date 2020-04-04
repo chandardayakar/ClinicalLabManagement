@@ -7,7 +7,7 @@ import { KeyboardUtil } from "../shared/keyboard.accesibilty.service";
 @Component({
   selector: "app-edit-test",
   templateUrl: "./edit-test.component.html",
-  styleUrls: ["./edit-test.component.css"]
+  styleUrls: ["./edit-test.component.css"],
 })
 export class EditTestComponent implements OnInit {
   public testId;
@@ -27,49 +27,54 @@ export class EditTestComponent implements OnInit {
       window.location.href.lastIndexOf("/") + 1
     );
     this.testService.getTest(this.testId).subscribe(
-      response => {
+      (response) => {
         this.loading.nativeElement.style.display = "none";
         this.updateValues(response);
       },
-      error => {
+      (error) => {
         this.loading.nativeElement.style.display = "none";
         this.toastService.show(error, {
-          classname: "bg-danger text-light"
+          classname: "bg-danger text-light",
         });
       }
     );
     this.testForm = this.fb.group({
       testName: [{ value: "", disabled: true }],
-      cost: [null, [Validators.pattern("^[0-9]*$")]]
+      cost: [null, [Validators.pattern("^[0-9]*$")]],
     });
   }
   saveTest() {
     this.loading.nativeElement.style.display = "block";
     let data = {
       fields: this.testFields,
-      cost: this.testForm.get("cost").value
+      cost: this.testForm.get("cost").value,
     };
     this.testService.updateTest(this.testId, data).subscribe(
-      response => {
+      (response) => {
         this.loading.nativeElement.style.display = "none";
         this.toastService.show("Test updated!!", {
-          classname: "bg-success text-light"
+          classname: "bg-success text-light",
         });
       },
-      error => {
+      (error) => {
         this.loading.nativeElement.style.display = "none";
         this.toastService.show(error, {
-          classname: "bg-danger text-light"
+          classname: "bg-danger text-light",
         });
       }
     );
   }
 
   updateValues(response) {
+    response.fields.sort((a, b) => {
+      if (a.fieldId > b.fieldId) return 1;
+      if (b.fieldId > a.fieldId) return -1;
+      return 0;
+    });
     this.testName = response.testName;
     this.testForm.setValue({
       testName: response.testName,
-      cost: response.cost
+      cost: response.cost,
     });
     this.fieldCounter = response.fields.length + 1;
     this.testFields = response.fields;
@@ -78,19 +83,19 @@ export class EditTestComponent implements OnInit {
   updateField(ev, fieldId) {
     if (ev.currentTarget.classList.contains("field-name")) {
       this.testFields[
-        this.testFields.findIndex(ele => {
+        this.testFields.findIndex((ele) => {
           return ele.fieldId === fieldId;
         })
       ].name = ev.currentTarget.value;
     } else if (ev.currentTarget.classList.contains("field-refValue")) {
       this.testFields[
-        this.testFields.findIndex(ele => {
+        this.testFields.findIndex((ele) => {
           return ele.fieldId === fieldId;
         })
       ].refValue = ev.currentTarget.value;
     } else if (ev.currentTarget.classList.contains("field-unit")) {
       this.testFields[
-        this.testFields.findIndex(ele => {
+        this.testFields.findIndex((ele) => {
           return ele.fieldId === fieldId;
         })
       ].unit = ev.currentTarget.value;
@@ -103,7 +108,7 @@ export class EditTestComponent implements OnInit {
         fieldId: this.fieldCounter,
         value: 0,
         refValue: "",
-        name: ""
+        name: "",
       });
       this.fieldCounter++;
     }
@@ -113,13 +118,13 @@ export class EditTestComponent implements OnInit {
       let i;
       this.fieldCounter--;
       this.testFields.splice(
-        this.testFields.findIndex(ele => {
+        this.testFields.findIndex((ele) => {
           i = field.fieldId;
           return ele.fieldId === field.fieldId;
         }),
         1
       );
-      this.testFields.forEach(function(v) {
+      this.testFields.forEach(function (v) {
         if (v.fieldId > i) v.fieldId = v.fieldId - 1;
       });
     }
