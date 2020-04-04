@@ -16,7 +16,7 @@ import { EditReportComponent } from "./edit-report/edit-report.component";
 import {
   SocialLoginModule,
   AuthServiceConfig,
-  LoginOpt
+  LoginOpt,
 } from "angularx-social-login";
 import { GoogleLoginProvider } from "angularx-social-login";
 import { ErrorInterceptor } from "./interceptors/error.interceptor";
@@ -26,17 +26,17 @@ import { TestsComponent } from "./tests/tests.component";
 import { EditTestComponent } from "./edit-test/edit-test.component";
 
 const googleLoginOptions: LoginOpt = {
-  scope: "https://www.googleapis.com/auth/drive"
+  scope: "https://www.googleapis.com/auth/drive",
 };
 
 let config = new AuthServiceConfig([
   {
     id: GoogleLoginProvider.PROVIDER_ID,
     provider: new GoogleLoginProvider(
-      "838886148448-v8mumj7hida3kn4tdr945o8gbhriu2kd.apps.googleusercontent.com",
+      "838886148448-vv5ri97504u3sd4cgq0fpcg9pgvfg4mn.apps.googleusercontent.com",
       googleLoginOptions
-    )
-  }
+    ),
+  },
 ]);
 
 export function provideConfig() {
@@ -56,7 +56,7 @@ export function provideConfig() {
     EditReportComponent,
     CreateTestComponent,
     TestsComponent,
-    EditTestComponent
+    EditTestComponent,
   ],
   imports: [
     BrowserModule,
@@ -64,16 +64,16 @@ export function provideConfig() {
     ReactiveFormsModule,
     HttpClientModule,
     NgbModule,
-    SocialLoginModule
+    SocialLoginModule,
   ],
   providers: [
     {
       provide: AuthServiceConfig,
-      useFactory: provideConfig
+      useFactory: provideConfig,
     },
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
-    { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true }
+    { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
   ],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
 export class AppModule {}

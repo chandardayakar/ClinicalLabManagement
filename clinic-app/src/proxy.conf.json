@@ -1,6 +1,6 @@
 {
   "/Server/rest": {
-    "target": "http://localhost:8888",
+    "target": "http://35.239.65.5:8888",
     "secure": true,
     "logLevel": "debug"
   }

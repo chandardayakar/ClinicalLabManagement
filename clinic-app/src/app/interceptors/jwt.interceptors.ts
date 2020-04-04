@@ -4,7 +4,7 @@ import {
   HttpHandler,
   HttpEvent,
   HttpInterceptor,
-  HttpHeaders
+  HttpHeaders,
 } from "@angular/common/http";
 import { Observable } from "rxjs";
 
@@ -12,7 +12,7 @@ import { AuthenticationService } from "./../services/auth-service.service";
 
 @Injectable()
 export class JwtInterceptor implements HttpInterceptor {
-  public baseUrl = "http://localhost:8888/Server/rest";
+  public baseUrl = "http://35.239.65.5:8888/Server/rest";
   constructor(private authenticationService: AuthenticationService) {}
 
   intercept(
@@ -30,7 +30,7 @@ export class JwtInterceptor implements HttpInterceptor {
       headerSettings["Content-Type"] = "application/json";
       const newHeader = new HttpHeaders(headerSettings);
       request = request.clone({
-        headers: newHeader
+        headers: newHeader,
       });
     }
 
