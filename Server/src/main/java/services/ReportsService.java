@@ -17,7 +17,9 @@ import javax.ws.rs.core.Response;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringWriter;
+import java.io.UnsupportedEncodingException;
 import java.net.URI;
+import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 import java.util.Date;
 import java.util.Iterator;
@@ -27,20 +29,26 @@ public class ReportsService {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getAllReports(@QueryParam("Search") String searchQuery) {
+    public Response getAllReports(@QueryParam("search") String searchQueryEncoded) throws UnsupportedEncodingException {
 
         JsonObject allReports = FileSystemStorage.getAllReports();
-        if (searchQuery != null) {
-            Search search = Utils.parseSearch(searchQuery);
+        if (searchQueryEncoded != null) {
+            String searchQuery = URLDecoder.decode(searchQueryEncoded,"UTF-8");
+            Search search = null;
+            try {
+                search = Utils.parseSearch(searchQuery);
+            } catch (Exception e) {
+                e.printStackTrace();
+                JsonObject err = Utils.errorMessageToJson(e.getMessage());
+                return Response.serverError().entity(err.toString()).build();
+            }
             JsonObject reports = FileSystemStorage.searchReports(search);
 
             return Response.ok(reports.toString()).build();
         } else {
-
             return Response.ok(allReports.toString())
                     .build();
         }
-
     }
 
 
@@ -79,9 +87,7 @@ public class ReportsService {
                         .build();
             }
 
-            Iterator<JsonElement> iterator = tests.iterator();
-            while (iterator.hasNext()) {
-                JsonElement element = iterator.next();
+            for (JsonElement element : tests) {
                 Test test = null;
                 String testName = element.getAsString();
                 try {

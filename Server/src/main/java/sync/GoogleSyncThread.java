@@ -7,6 +7,7 @@ import com.google.api.client.http.FileContent;
 import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.jackson2.JacksonFactory;
 import com.google.api.services.drive.Drive;
+import storage.FileSystemStorage;
 
 import java.io.*;
 import java.security.GeneralSecurityException;
@@ -34,15 +35,15 @@ public class GoogleSyncThread implements Runnable {
       while (!SyncStatus.getSyncStatus().equals("STOP")) {
         SyncStatus.setSyncStatus("RUNNING");
 
-        String reportsFolderPath = getClass().getClassLoader().getResource("Reports").getFile();
+        String reportsFolderPath = FileSystemStorage.getDataPath() + File.separator +  "Reports";
         File reportsFolder = new File(reportsFolderPath);
 
         long lastModifiedTime = reportsFolder.lastModified();
-        File reportsLastSynced = new File(this.getClass().getClassLoader().getResource("Reports" + File.separator + "lastSynced").getFile());
+        File reportsLastSynced = new File(FileSystemStorage.getDataPath() + File.separator + "Reports" + File.separator + "lastSynced");
         FileReader fr = new FileReader(reportsLastSynced);
         BufferedReader br = new BufferedReader(fr);
         String value = br.readLine();
-        long lastSyncedTime = Long.valueOf(value!=null?value:"0");
+        long lastSyncedTime = Long.parseLong(value!=null?value:"0");
 
         if (lastModifiedTime != lastSyncedTime) {
           syncToGdrive(reportsFolder, "Reports");
@@ -51,16 +52,16 @@ public class GoogleSyncThread implements Runnable {
           fw.close();
         }
 
-        String testsFolderPath = this.getClass().getClassLoader().getResource("Tests").getFile();
+        String testsFolderPath = FileSystemStorage.getDataPath() + File.separator + "Tests";
         File testsFolder = new File(testsFolderPath);
 
         lastModifiedTime = reportsFolder.lastModified();
 
-        File testsLastSynced = new File(this.getClass().getClassLoader().getResource("Tests" + File.separator + "lastSynced").getFile());
+        File testsLastSynced = new File(FileSystemStorage.getDataPath() + File.separator + "Tests" + File.separator + "lastSynced");
         fr = new FileReader(reportsLastSynced);
         br = new BufferedReader(fr);
         value = br.readLine();
-        lastSyncedTime = Long.valueOf(value!=null?value:"0");
+        lastSyncedTime = Long.parseLong(value!=null?value:"0");
 
         if (lastModifiedTime != lastSyncedTime) {
           syncToGdrive(testsFolder, "Tests");
@@ -70,7 +71,7 @@ public class GoogleSyncThread implements Runnable {
         }
 
         SyncStatus.setSyncStatus("DONE");
-        wait(30 * 60 * 1000);
+        this.wait(30 * 60 * 1000);
       }
 
     } catch (Exception e) {

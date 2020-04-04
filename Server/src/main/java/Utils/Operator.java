@@ -5,7 +5,7 @@ public enum Operator {
 
     public static Operator fromString(String operator) {
         switch (operator) {
-            case "eq":
+            case "=":
                 return Operator.eq;
             default:
                 return null;

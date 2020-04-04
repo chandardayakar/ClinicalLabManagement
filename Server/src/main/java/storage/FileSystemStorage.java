@@ -1,6 +1,7 @@
 package storage;
 
 import Utils.DateDeserializer;
+import beans.DateObj;
 import beans.Report;
 import beans.Search;
 import beans.Test;
@@ -17,10 +18,7 @@ import java.lang.reflect.Type;
 import java.net.URI;
 import java.net.URLDecoder;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
@@ -377,13 +375,20 @@ public class FileSystemStorage {
 
         List<Report> filteredArray = reportsArray.parallelStream().filter(a -> {
             try {
-                String value = (String) PropertyUtils.getProperty(a, search.getKey());
+                Object value = PropertyUtils.getProperty(a, search.getKey());
                 switch (search.getOperator()) {
                     case eq: {
-                        if (value.contains(search.getValue())) {
-                            return true;
-                        } else {
-                            return false;
+                        if(value instanceof Date){
+                            Calendar valueAsCal = Calendar.getInstance();
+                            valueAsCal.setTime((Date)value);
+
+                            DateObj dateObj = DateObj.fromString(search.getValue());
+                            Calendar refCal = dateObj.convertToCalender();
+
+                            return valueAsCal.equals(refCal);
+
+                        }else {
+                            return ((String) value).contains(search.getValue());
                         }
                     }
                     default:
