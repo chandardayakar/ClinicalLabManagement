@@ -1,0 +1,16 @@
+version: "3.7"
+services:
+  app:
+    image: mkhasim/clinic-ui:latest
+    ports:
+      - 4200:80
+    depends_on:
+      - server
+  server:
+    image: mkhasim/clinic-server:latest
+    ports:
+      - 8888:8080
+    volumes:
+      - app_data:/usr/local/
+volumes:
+  app_data:

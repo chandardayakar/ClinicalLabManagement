@@ -7,5 +7,6 @@ RUN mvn clean package
 
 ### STAGE 2: Run ###
 FROM tomcat:latest
-ENV clinic_app_data_folder="/var/tmp/"
+RUN mkdir /usr/local/clinicdata
+COPY setenv.sh /usr/local/tomcat/bin/setenv.sh
 COPY --from=build /usr/local/server/target/Server-1.0-SNAPSHOT.war /usr/local/tomcat/webapps/Server.war

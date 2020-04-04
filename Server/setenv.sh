@@ -1,0 +1,1 @@
+export clinic_app_data_folder="/usr/local/clinicdata"
