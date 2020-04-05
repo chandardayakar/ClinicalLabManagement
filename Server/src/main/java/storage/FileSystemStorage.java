@@ -392,7 +392,8 @@ public class FileSystemStorage {
                             return valueAsCal.equals(refCal);
 
                         }else {
-                            return ((String) value).contains(search.getValue());
+                            String valueStr = (String)value;
+                            return valueStr.toLowerCase().contains(search.getValue().toLowerCase());
                         }
                     }
                     default:
