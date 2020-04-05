@@ -33,7 +33,7 @@ public class ReportsService {
 
         JsonObject allReports = FileSystemStorage.getAllReports();
         if (searchQueryEncoded != null) {
-            String searchQuery = URLDecoder.decode(searchQueryEncoded,"UTF-8");
+            String searchQuery = URLDecoder.decode(searchQueryEncoded, "UTF-8");
             Search search = null;
             try {
                 search = Utils.parseSearch(searchQuery);
@@ -168,7 +168,9 @@ public class ReportsService {
             if (report.getGender() != null) {
                 storedReport.setGender(report.getGender());
             }
-
+            if (report.getReportStatus() != null) {
+                storedReport.setReportStatus(report.getReportStatus());
+            }
             if (report.getReportingDate() != null) {
                 storedReport.setReportingDate(report.getReportingDate());
             }
