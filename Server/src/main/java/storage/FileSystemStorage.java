@@ -255,7 +255,7 @@ public class FileSystemStorage {
                 updateReportField(reportId, "lastModified", new SimpleDateFormat().format(newReport.getLastModified()));
             }
             if (!oldReport.getReportStatus().equals(newReport.getReportStatus())) {
-                updateReportField(reportId, "reportStatus", new SimpleDateFormat().format(newReport.getLastModified()));
+                updateReportField(reportId, "reportStatus", new SimpleDateFormat().format(newReport.getReportStatus()));
             }
 
             ObjectMapper objectMapper = new ObjectMapper();
@@ -392,7 +392,8 @@ public class FileSystemStorage {
                             return valueAsCal.equals(refCal);
 
                         }else {
-                            return ((String) value).contains(search.getValue());
+                            String valueStr = (String)value;
+                            return valueStr.toLowerCase().contains(search.getValue().toLowerCase());
                         }
                     }
                     default:
