@@ -3,6 +3,7 @@ package services;
 import Utils.DateSerializer;
 import Utils.Utils;
 import beans.Report;
+import beans.ReportStatus;
 import beans.Search;
 import beans.Test;
 import com.fasterxml.jackson.databind.DeserializationFeature;
@@ -33,7 +34,7 @@ public class ReportsService {
 
         JsonObject allReports = FileSystemStorage.getAllReports();
         if (searchQueryEncoded != null) {
-            String searchQuery = URLDecoder.decode(searchQueryEncoded,"UTF-8");
+            String searchQuery = URLDecoder.decode(searchQueryEncoded, "UTF-8");
             Search search = null;
             try {
                 search = Utils.parseSearch(searchQuery);
@@ -114,6 +115,10 @@ public class ReportsService {
                 report.setCreated(new Date(System.currentTimeMillis()));
                 report.setLastModified(new Date(System.currentTimeMillis()));
 
+                if(report.getReportStatus() == null){
+                    report.setReportStatus(ReportStatus.SAMPLES_NOT_YET_COLLECTED);
+                }
+
                 String reportId = report.getPatientName() + "_" + report.getTestName() + "_" + System.currentTimeMillis();
 
                 FileSystemStorage.storeReport(reportId, report);
@@ -168,7 +173,9 @@ public class ReportsService {
             if (report.getGender() != null) {
                 storedReport.setGender(report.getGender());
             }
-
+            if (report.getReportStatus() != null) {
+                storedReport.setReportStatus(report.getReportStatus());
+            }
             if (report.getReportingDate() != null) {
                 storedReport.setReportingDate(report.getReportingDate());
             }
