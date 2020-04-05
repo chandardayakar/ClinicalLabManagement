@@ -3,6 +3,7 @@ package services;
 import Utils.DateSerializer;
 import Utils.Utils;
 import beans.Report;
+import beans.ReportStatus;
 import beans.Search;
 import beans.Test;
 import com.fasterxml.jackson.databind.DeserializationFeature;
@@ -113,6 +114,10 @@ public class ReportsService {
 
                 report.setCreated(new Date(System.currentTimeMillis()));
                 report.setLastModified(new Date(System.currentTimeMillis()));
+
+                if(report.getReportStatus() == null){
+                    report.setReportStatus(ReportStatus.SAMPLES_NOT_YET_COLLECTED);
+                }
 
                 String reportId = report.getPatientName() + "_" + report.getTestName() + "_" + System.currentTimeMillis();
 
