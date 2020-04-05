@@ -28,6 +28,8 @@ public class Report {
 
     private String referredBy;
 
+    private ReportStatus reportStatus;
+
     public String getReportId() {
         return reportId;
     }
@@ -122,5 +124,13 @@ public class Report {
 
     public void setReferredBy(String referredBy) {
         this.referredBy = referredBy;
+    }
+
+    public ReportStatus getReportStatus() {
+        return reportStatus;
+    }
+
+    public void setReportStatus(ReportStatus reportStatus) {
+        this.reportStatus = reportStatus;
     }
 }

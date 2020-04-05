@@ -216,6 +216,7 @@ public class FileSystemStorage {
                 temp.addProperty("patientName", report.getPatientName());
                 temp.addProperty("mobile", report.getMobile());
                 temp.addProperty("reportId", reportName);
+                temp.addProperty("reportStatus", report.getReportStatus().toString());
                 temp.addProperty("testName", report.getTestName());
                 temp.addProperty("created", new SimpleDateFormat().format(report.getCreated()));
                 temp.addProperty("lastModified", new SimpleDateFormat().format(report.getLastModified()));
