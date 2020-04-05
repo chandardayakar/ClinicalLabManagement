@@ -18,6 +18,11 @@ export class CreateReportComponent implements OnInit {
   public availableTests = [];
   public printTests = [];
   public genders = ["Male", "Female", "Others"];
+  public reportStatuses = [
+    "SAMPLES_NOT_YET_COLLECTED",
+    "SAMPLES_COLLECTED",
+    "REPORT_COMPLETE",
+  ];
   public today = new Date().toDateString();
   public reportIds = [];
   @ViewChild("loading", { read: ElementRef }) loading: ElementRef;
@@ -33,9 +38,9 @@ export class CreateReportComponent implements OnInit {
     this.reportForm = this.fb.group({
       patientName: ["", [Validators.required, Validators.minLength(3)]],
       age: [null, [Validators.required]],
-      gender: [null, [Validators.required]],
-      sampleCollectionDate: [null, [Validators.required]],
-      reportingDate: [null, [Validators.required]],
+      gender: ["Male", [Validators.required]],
+      sampleCollectionDate: [null],
+      reportingDate: [null],
       mobile: [
         "",
         [
@@ -46,6 +51,7 @@ export class CreateReportComponent implements OnInit {
         ],
       ],
       referredBy: [null],
+      reportStatus: ["SAMPLES_NOT_YET_COLLECTED"],
     });
     this._testService.getTests().subscribe(
       (response) => {
@@ -62,6 +68,11 @@ export class CreateReportComponent implements OnInit {
   }
   changeGender(e) {
     this.reportForm.get("gender").setValue(e.target.value, {
+      onlySelf: true,
+    });
+  }
+  changeStatus(e) {
+    this.reportForm.get("reportStatus").setValue(e.target.value, {
       onlySelf: true,
     });
   }
@@ -157,6 +168,9 @@ export class CreateReportComponent implements OnInit {
   }
   get referredBy() {
     return this.reportForm.get("referredBy");
+  }
+  get reportStatus() {
+    return this.reportForm.get("reportStatus");
   }
   getformattedDate(dateObject) {
     let formattedDate;

@@ -17,6 +17,11 @@ export class EditReportComponent implements OnInit {
   public testFields = [];
   public reportId;
   public genders = ["Male", "Female", "Others"];
+  public reportStatuses = [
+    "SAMPLES_NOT_YET_COLLECTED",
+    "SAMPLES_COLLECTED",
+    "REPORT_COMPLETE",
+  ];
   @ViewChild("loading", { read: ElementRef }) loading: ElementRef;
   constructor(
     private fb: FormBuilder,
@@ -44,8 +49,8 @@ export class EditReportComponent implements OnInit {
       patientName: [{ value: "", disabled: true }],
       age: [null, [Validators.required]],
       gender: [null, [Validators.required]],
-      sampleCollectionDate: [null, [Validators.required]],
-      reportingDate: [null, [Validators.required]],
+      sampleCollectionDate: [null],
+      reportingDate: [null],
       mobile: [
         "",
         [
@@ -56,6 +61,7 @@ export class EditReportComponent implements OnInit {
         ],
       ],
       referredBy: [null],
+      reportStatus: ["SAMPLES_NOT_YET_COLLECTED"],
     });
   }
   saveReport() {
@@ -83,15 +89,17 @@ export class EditReportComponent implements OnInit {
       if (b.fieldId > a.fieldId) return -1;
       return 0;
     });
-    this.reportForm.setValue({
-      patientName: response.patientName,
-      age: response.age,
-      gender: response.gender,
-      mobile: response.mobile,
-      sampleCollectionDate: response.sampleCollectionDate,
-      reportingDate: response.reportingDate,
-      referredBy: response.referredBy,
-    });
+    let data = this.reportForm.getRawValue();
+    data.patientName = response.patientName;
+    data.age = response.age;
+    data.gender = response.gender;
+    data.mobile = response.mobile;
+    if (!!response.sampleCollectionDate)
+      data.sampleCollectionDate = response.sampleCollectionDate;
+    if (!!response.reportingDate) data.reportingDate = response.reportingDate;
+    if (!!response.referredBy) data.referredBy = response.referredBy;
+    if (!!response.reportStatus) data.reportStatus = response.reportStatus;
+    this.reportForm.setValue(data);
     this.testFields = response.test.fields;
     this.testName = response.testName;
   }
@@ -146,8 +154,16 @@ export class EditReportComponent implements OnInit {
     }
     return formattedDate;
   }
+  get reportStatus() {
+    return this.reportForm.get("reportStatus");
+  }
   changeGender(e) {
     this.reportForm.get("gender").setValue(e.target.value, {
+      onlySelf: true,
+    });
+  }
+  changeStatus(e) {
+    this.reportForm.get("reportStatus").setValue(e.target.value, {
       onlySelf: true,
     });
   }

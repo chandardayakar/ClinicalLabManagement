@@ -33,6 +33,7 @@
       <table class="table table-hover">
         <thead>
           <tr>
+            <th><label>Status</label></th>
             <th><label>ReportId</label></th>
             <th><label>Name</label></th>
             <th><label>Contact</label></th>
@@ -50,6 +51,27 @@
               *ngFor="let report of displayReports"
               (click)="getReport(report.reportId)"
             >
+              <td *ngIf="!!report.reportStatus" width="5%">
+                <img
+                  *ngIf="report.reportStatus === reportStatuses[0]"
+                  src="../../assets/pending.png"
+                  width="30px"
+                  height="30px"
+                />
+                <img
+                  *ngIf="report.reportStatus === reportStatuses[1]"
+                  src="../../assets/inprogress.png"
+                  width="30px"
+                  height="30px"
+                />
+                <img
+                  *ngIf="report.reportStatus === reportStatuses[2]"
+                  src="../../assets/completed.png"
+                  width="30px"
+                  height="30px"
+                />
+              </td>
+              <td *ngIf="!report.reportStatus"></td>
               <td>{{ report.reportId }}</td>
               <td>{{ report.patientName }}</td>
               <td>{{ report.mobile }}</td>

@@ -46,7 +46,6 @@
               class="form-control"
               [class.is-invalid]="gender.invalid && gender.touched"
             >
-              <option value="" default>Choose gender</option>
               <option *ngFor="let gender of genders">{{ gender }}</option>
             </select>
             <div *ngIf="gender.invalid && gender.touched">
@@ -91,6 +90,19 @@
         </div>
         <div class="row form-user-details">
           <div class="form-group col-3">
+            <label>Status</label>
+            <select
+              formControlName="reportStatus"
+              (change)="changeStatus($event)"
+              class="form-control"
+              [class.is-invalid]="reportStatus.invalid && reportStatus.touched"
+            >
+              <option *ngFor="let status of reportStatuses">{{
+                status
+              }}</option>
+            </select>
+          </div>
+          <div class="form-group col-3">
             <label>Sample received:</label>
             <div class="input-group">
               <input
@@ -115,7 +127,7 @@
             </div>
           </div>
           <div class="form-group col-3">
-            <label>Report collection:</label>
+            <label>Reporting date:</label>
             <div class="input-group">
               <input
                 tabindex="0"

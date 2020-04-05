@@ -14,6 +14,11 @@ export class ReportsComponent implements OnInit {
   public reports = [];
   public displayReports = [];
   public delayTimer;
+  public reportStatuses = [
+    "SAMPLES_NOT_YET_COLLECTED",
+    "SAMPLES_COLLECTED",
+    "REPORT_COMPLETE",
+  ];
   @ViewChild("loading", { read: ElementRef }) loading: ElementRef;
   constructor(
     private _reportsService: ReportsService,
