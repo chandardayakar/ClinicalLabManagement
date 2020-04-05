@@ -39,7 +39,7 @@ public class SyncService {
     public Response startSync(@HeaderParam("g_access_token") String accessToken,
                               @HeaderParam("g_refresh_token") String refreshToken) {
 
-        if (SyncStatus.getSyncStatus().equals("RUNNING") || SyncStatus.getSyncStatus().equals("RUNNING")) {
+        if (SyncStatus.getSyncStatus().equals("RUNNING")) {
             JsonObject jsonRes = new JsonObject();
             jsonRes.addProperty("result", "Sync already running");
             return Response.ok(jsonRes.toString())
