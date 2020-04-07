@@ -255,7 +255,7 @@ public class FileSystemStorage {
                 updateReportField(reportId, "lastModified", new SimpleDateFormat().format(newReport.getLastModified()));
             }
             if (!oldReport.getReportStatus().equals(newReport.getReportStatus())) {
-                updateReportField(reportId, "reportStatus", newReport.getReportStatus());
+                updateReportField(reportId, "reportStatus", newReport.getReportStatus().toString());
             }
 
             ObjectMapper objectMapper = new ObjectMapper();
