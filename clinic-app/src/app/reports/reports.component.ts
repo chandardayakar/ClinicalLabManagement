@@ -49,6 +49,7 @@ export class ReportsComponent implements OnInit {
   getReport(id) {
     this.router.navigate(["/report", id]);
   }
+
   filterReports(event) {
     clearTimeout(this.delayTimer);
     let self = this;
@@ -81,5 +82,19 @@ export class ReportsComponent implements OnInit {
         if (event.type !== "change") self.getReports();
       }
     }, 1000);
+  }
+
+  filterBasedOnReportStatus(event) {
+    if (event.target.value.length > 0)
+      if (event.target.value !== "All") {
+        this.displayReports = this.reports.filter((value) => {
+          return value.reportStatus.includes(event.target.value);
+        });
+      } else {
+        this.displayReports = [...this.reports];
+      }
+    else {
+      this.displayReports = [...this.reports];
+    }
   }
 }

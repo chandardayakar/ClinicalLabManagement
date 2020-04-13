@@ -8,6 +8,20 @@
         <select
           class="form-control"
           id="filter_param"
+          (change)="filterBasedOnReportStatus($event)"
+        >
+          <option value="All" default>All</option>
+          <option value="SAMPLES_NOT_YET_COLLECTED"
+            >Samples not collected</option
+          >
+          <option value="SAMPLES_COLLECTED">Samples collected</option>
+          <option value="REPORT_COMPLETE">Report complete</option>
+        </select>
+      </div>
+      <div class="filter col-2">
+        <select
+          class="form-control"
+          id="filter_param"
           (change)="filterReports($event)"
         >
           <option value="reportId" default>ReportId</option>
